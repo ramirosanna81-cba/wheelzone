@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-race-black: #0B0B0B;
+  --color-race-red: #E51937;
+  --color-race-yellow: #FFC200;
+  --color-race-titanium: #94A3B8;
+  --color-surface-dark: #131313;
+}
+
+/* Base Body Styles */
+body {
+  background-color: #0B0B0B;
+  color: #E5E2E1;
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Carbon Fiber Texture Pattern */
+.bg-carbon-pattern {
+  background-color: #0B0B0B;
+  background-image: 
+    linear-gradient(45deg, #111111 25%, transparent 25%), 
+    linear-gradient(-45deg, #111111 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #111111 75%), 
+    linear-gradient(-45deg, transparent 75%, #111111 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+}
+
+.bg-telemetry-grid {
+  background-image: radial-gradient(#2a2a2a 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Aggressive Chamfered Corner Cuts (Racing Aero Panels) */
+.chamfer-tr {
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+}
+
+.chamfer-br {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+}
+
+.chamfer-diagonal {
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+/* Glow effects */
+.glow-ignite {
+  box-shadow: 0 0 25px rgba(255, 194, 0, 0.25);
+}
+
+.glow-redline {
+  box-shadow: 0 0 25px rgba(229, 25, 55, 0.3);
+}
+
+.text-gradient-flame {
+  background: linear-gradient(135deg, #FFC200 0%, #FF8C00 50%, #E51937 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #FFE5B0 0%, #FFC200 60%, #B8860B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Racing stripe accents */
+.racing-stripes-sm {
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 6px,
+    rgba(255, 194, 0, 0.2) 6px,
+    rgba(255, 194, 0, 0.2) 12px
+  );
+}
+
+.racing-stripes-hazard {
+  background: repeating-linear-gradient(
+    -45deg,
+    #E51937,
+    #E51937 8px,
+    #0B0B0B 8px,
+    #0B0B0B 16px
+  );
+}
+
+/* Material symbols utility */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Scrollbar for racing telemetry */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0B0B;
+}
+::-webkit-scrollbar-thumb {
+  background: #2A2A2A;
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FFC200;
+}
