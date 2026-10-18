@@ -10,12 +10,13 @@ export default function Footer() {
         {/* Brand & Manifesto */}
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
-            <div className="relative h-12 w-36 overflow-hidden bg-white/5 p-1 border border-surface-container-high">
+            <div className="relative h-12 w-48 transition-transform duration-200 hover:scale-105">
               <Image
-                src="/images/logos/logo-swoosh-banner.jpg"
-                alt="Wheels Zone Banner"
+                src="/images/logos/logo-swoosh-transparent.png"
+                alt="Wheels Zone Flame Logo"
                 fill
-                className="object-contain"
+                className="object-contain object-left"
+                priority
               />
             </div>
           </div>
