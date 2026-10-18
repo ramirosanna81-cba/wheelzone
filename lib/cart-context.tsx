@@ -92,7 +92,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const closeCart = () => setIsCartOpen(false);
 
   const getWhatsAppCheckoutUrl = (customerName = '', shippingCity = '', deliveryMethod: 'envio' | 'retiro' = 'envio') => {
-    const phone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || '5491122334455';
+    const phone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || '5492364275322';
     let message = `🔥 *ORDEN DE COMPRA // WHEELS ZONE*\n\n`;
     message += `¡Hola Wheels Zone! Quiero confirmar la compra de las siguientes piezas de colección:\n\n`;
 

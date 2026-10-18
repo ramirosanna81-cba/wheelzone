@@ -27,7 +27,7 @@ export default function HomePage() {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
-  const phone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || '5491122334455';
+  const phone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || '5492364275322';
 
   useEffect(() => {
     async function loadData() {
@@ -738,10 +738,21 @@ export default function HomePage() {
 
                 {/* Address Box */}
                 <div className="flex flex-col gap-1.5 p-3.5 bg-surface-container border border-surface-container-high">
-                  <span className="font-label-telemetry text-xs uppercase text-primary-container font-bold flex items-center gap-1">
-                    <span className="material-symbols-outlined text-sm text-secondary">location_on</span>
-                    DIRECCIÓN DEL SHOWROOM
-                  </span>
+                  <div className="flex items-center justify-between flex-wrap gap-1">
+                    <span className="font-label-telemetry text-xs uppercase text-primary-container font-bold flex items-center gap-1">
+                      <span className="material-symbols-outlined text-sm text-secondary">location_on</span>
+                      DIRECCIÓN DEL SHOWROOM
+                    </span>
+                    <a
+                      href={`https://wa.me/${phone}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-label-telemetry text-xs uppercase text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1 transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-sm">chat</span>
+                      +54 9 2364 27-5322
+                    </a>
+                  </div>
                   <p className="font-headline-sm text-lg uppercase text-on-surface leading-snug">
                     Rioja 281, B6022 Junín, Argentina
                   </p>

@@ -69,7 +69,8 @@ Para conectar tu proyecto a Supabase en la nube:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=tu-clave-anon-publica
-NEXT_PUBLIC_WHATSAPP_PHONE=5491122334455
+NEXT_PUBLIC_WHATSAPP_PHONE=5492364275322
+NEXT_PUBLIC_STORE_ADDRESS="Rioja 281, B6022 Junín, Argentina"
 ```
 
 ---

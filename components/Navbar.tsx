@@ -12,7 +12,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const phone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || '5491122334455';
+  const phone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || '5492364275322';
 
   const navLinks = [
     { name: 'Inicio', href: '/' },

@@ -80,6 +80,15 @@ export default function Footer() {
               <span className="material-symbols-outlined text-xs text-secondary">location_on</span>
               Rioja 281, B6022 Junín, Argentina
             </a>
+            <a
+              href="https://wa.me/5492364275322?text=Hola%20Wheels%20Zone!%20Quiero%20hacerles%20una%20consulta."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[11px] text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1 font-bold pt-1 border-t border-surface-container-high"
+            >
+              <span className="material-symbols-outlined text-xs">chat</span>
+              WhatsApp: +54 9 2364 27-5322
+            </a>
             <span className="text-[10px] text-outline">Coordinación previa para entrega en mano</span>
           </div>
         </div>
