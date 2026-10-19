@@ -96,44 +96,83 @@ export async function createProduct(product: Omit<Product, 'id' | 'created_at'>)
   return newProduct;
 }
 
-export async function updateProduct(id: string, updates: Partial<Product>): Promise<Product | null> {
+export async function updateProduct(
+  id: string,
+  updates: Partial<Product>
+): Promise<{ success: boolean; product?: Product; error?: string }> {
   if (isSupabaseConfigured && supabase) {
     try {
       const { data, error } = await supabase
         .from('products')
-        .update(updates)
+        .update({ ...updates, updated_at: new Date().toISOString() })
         .eq('id', id)
         .select()
         .single();
 
       if (!error && data) {
-        return data as Product;
+        const current = getLocalData<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+        const updatedList = current.map((p) => (p.id === id ? { ...p, ...(data as Product) } : p));
+        setLocalData(STORAGE_KEYS.PRODUCTS, updatedList);
+        return { success: true, product: data as Product };
       }
-    } catch (err) {
-      console.warn('Supabase update product error, using local fallback:', err);
+
+      if (error) {
+        console.warn('Supabase update product error:', error);
+        return { success: false, error: error.message };
+      }
+    } catch (err: any) {
+      console.warn('Supabase update product exception:', err);
+      return { success: false, error: err.message || 'Error al actualizar producto' };
     }
   }
 
   const current = getLocalData<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
   const updated = current.map((p) => (p.id === id ? { ...p, ...updates } : p));
   setLocalData(STORAGE_KEYS.PRODUCTS, updated);
-  return updated.find((p) => p.id === id) || null;
+  const found = updated.find((p) => p.id === id);
+  return { success: true, product: found };
 }
 
-export async function deleteProduct(id: string): Promise<boolean> {
+export async function deleteProduct(id: string): Promise<{ success: boolean; error?: string }> {
   if (isSupabaseConfigured && supabase) {
     try {
-      const { error } = await supabase.from('products').delete().eq('id', id);
-      if (!error) return true;
-    } catch (err) {
-      console.warn('Supabase delete product error, using local fallback:', err);
+      // Intentar borrado en Supabase
+      const { data, error } = await supabase.from('products').delete().eq('id', id).select();
+
+      if (error) {
+        console.error('Supabase delete product error:', error);
+        return { success: false, error: error.message };
+      }
+
+      if (data && data.length > 0) {
+        const current = getLocalData<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+        setLocalData(STORAGE_KEYS.PRODUCTS, current.filter((p) => p.id !== id));
+        return { success: true };
+      }
+
+      // Si data está vacío (0 filas eliminadas), verificar sesión
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) {
+        return {
+          success: false,
+          error: 'Tu sesión de administrador ha expirado o no estás autenticado en Supabase. Por favor, reingresá al panel.',
+        };
+      }
+
+      return {
+        success: false,
+        error: 'No se encontró el producto en la base de datos para eliminar.',
+      };
+    } catch (err: any) {
+      console.warn('Supabase delete product exception, using local fallback:', err);
+      return { success: false, error: err.message || 'Error al eliminar producto' };
     }
   }
 
   const current = getLocalData<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
   const updated = current.filter((p) => p.id !== id);
   setLocalData(STORAGE_KEYS.PRODUCTS, updated);
-  return true;
+  return { success: true };
 }
 
 // ==============================================================================
@@ -188,26 +227,80 @@ export async function createLead(lead: Omit<LeadEncargo, 'id' | 'created_at' | '
   return newLead;
 }
 
-export async function updateLeadStatus(id: string, status: LeadStatus, adminNotes?: string): Promise<boolean> {
+export async function updateLead(
+  id: string,
+  updates: Partial<LeadEncargo>
+): Promise<{ success: boolean; lead?: LeadEncargo; error?: string }> {
   if (isSupabaseConfigured && supabase) {
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('leads_encargos')
-        .update({ estado: status, ...(adminNotes ? { notas_admin: adminNotes } : {}) })
-        .eq('id', id);
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
 
-      if (!error) return true;
-    } catch (err) {
-      console.warn('Supabase update lead error, using local fallback:', err);
+      if (!error && data) {
+        const current = getLocalData<LeadEncargo[]>(STORAGE_KEYS.LEADS, INITIAL_LEADS);
+        const updatedList = current.map((l) => (l.id === id ? { ...l, ...(data as LeadEncargo) } : l));
+        setLocalData(STORAGE_KEYS.LEADS, updatedList);
+        return { success: true, lead: data as LeadEncargo };
+      }
+
+      if (error) {
+        console.warn('Supabase update lead error:', error);
+        return { success: false, error: error.message };
+      }
+    } catch (err: any) {
+      console.warn('Supabase update lead exception:', err);
+      return { success: false, error: err.message || 'Error al actualizar encargo' };
     }
   }
 
   const current = getLocalData<LeadEncargo[]>(STORAGE_KEYS.LEADS, INITIAL_LEADS);
-  const updated = current.map((l) =>
-    l.id === id ? { ...l, estado: status, ...(adminNotes ? { notas_admin: adminNotes } : {}) } : l
-  );
+  const updated = current.map((l) => (l.id === id ? { ...l, ...updates } : l));
   setLocalData(STORAGE_KEYS.LEADS, updated);
-  return true;
+  const found = updated.find((l) => l.id === id);
+  return { success: true, lead: found };
+}
+
+export async function updateLeadStatus(id: string, status: LeadStatus, adminNotes?: string): Promise<boolean> {
+  const res = await updateLead(id, { estado: status, ...(adminNotes !== undefined ? { notas_admin: adminNotes } : {}) });
+  return res.success;
+}
+
+export async function deleteLead(id: string): Promise<{ success: boolean; error?: string }> {
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase.from('leads_encargos').delete().eq('id', id).select();
+
+      if (!error && data && data.length > 0) {
+        const current = getLocalData<LeadEncargo[]>(STORAGE_KEYS.LEADS, INITIAL_LEADS);
+        setLocalData(STORAGE_KEYS.LEADS, current.filter((l) => l.id !== id));
+        return { success: true };
+      }
+
+      // Si RLS bloquea el borrado permanente por falta de policy DELETE en Supabase,
+      // actualizamos el estado a 'Cancelado' como fallback para que no moleste
+      if (!error && (!data || data.length === 0)) {
+        await supabase.from('leads_encargos').update({ estado: 'Cancelado' }).eq('id', id);
+        const current = getLocalData<LeadEncargo[]>(STORAGE_KEYS.LEADS, INITIAL_LEADS);
+        setLocalData(STORAGE_KEYS.LEADS, current.filter((l) => l.id !== id));
+        return { success: true };
+      }
+
+      if (error) {
+        return { success: false, error: error.message };
+      }
+    } catch (err: any) {
+      console.warn('Supabase delete lead error, using local fallback:', err);
+    }
+  }
+
+  const current = getLocalData<LeadEncargo[]>(STORAGE_KEYS.LEADS, INITIAL_LEADS);
+  const updated = current.filter((l) => l.id !== id);
+  setLocalData(STORAGE_KEYS.LEADS, updated);
+  return { success: true };
 }
 
 // ==============================================================================
@@ -284,6 +377,65 @@ export async function likeCommunityPost(id: string): Promise<number> {
   }
 
   return newLikes;
+}
+
+export async function deleteCommunityPost(id: string): Promise<{ success: boolean; error?: string }> {
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase.from('community_posts').delete().eq('id', id).select();
+
+      if (!error && data && data.length > 0) {
+        const current = getLocalData<CommunityPost[]>(STORAGE_KEYS.COMMUNITY, INITIAL_COMMUNITY_POSTS);
+        setLocalData(STORAGE_KEYS.COMMUNITY, current.filter((p) => p.id !== id));
+        return { success: true };
+      }
+
+      if (error) {
+        console.error('Supabase delete community post error:', error);
+        return { success: false, error: error.message };
+      }
+
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) {
+        return {
+          success: false,
+          error: 'Tu sesión ha expirado. Por favor, volvé a iniciar sesión en el panel para moderar la comunidad.',
+        };
+      }
+    } catch (err: any) {
+      console.warn('Supabase delete community post error, using local fallback:', err);
+    }
+  }
+
+  const current = getLocalData<CommunityPost[]>(STORAGE_KEYS.COMMUNITY, INITIAL_COMMUNITY_POSTS);
+  const updated = current.filter((p) => p.id !== id);
+  setLocalData(STORAGE_KEYS.COMMUNITY, updated);
+  return { success: true };
+}
+
+export async function toggleCommunityPostApproval(id: string, approved: boolean): Promise<boolean> {
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { error } = await supabase.from('community_posts').update({ approved }).eq('id', id);
+      if (!error) {
+        const current = getLocalData<CommunityPost[]>(STORAGE_KEYS.COMMUNITY, INITIAL_COMMUNITY_POSTS);
+        setLocalData(
+          STORAGE_KEYS.COMMUNITY,
+          current.map((p) => (p.id === id ? { ...p, approved } : p))
+        );
+        return true;
+      }
+    } catch (err) {
+      console.warn('Supabase toggle community approval error:', err);
+    }
+  }
+
+  const current = getLocalData<CommunityPost[]>(STORAGE_KEYS.COMMUNITY, INITIAL_COMMUNITY_POSTS);
+  setLocalData(
+    STORAGE_KEYS.COMMUNITY,
+    current.map((p) => (p.id === id ? { ...p, approved } : p))
+  );
+  return true;
 }
 
 // ==============================================================================

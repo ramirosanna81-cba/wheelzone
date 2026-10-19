@@ -18,7 +18,7 @@ export interface Product {
   created_at?: string;
 }
 
-export type LeadStatus = 'Pendiente' | 'En búsqueda' | 'Contactado';
+export type LeadStatus = 'Pendiente' | 'En búsqueda' | 'Contactado' | 'Completado' | 'Sin respuesta' | 'Cancelado';
 
 export interface LeadEncargo {
   id: string;

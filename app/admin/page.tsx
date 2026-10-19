@@ -12,8 +12,12 @@ import {
   updateProduct,
   deleteProduct,
   fetchLeads,
+  updateLead,
   updateLeadStatus,
+  deleteLead,
   fetchCommunityPosts,
+  deleteCommunityPost,
+  toggleCommunityPostApproval,
   uploadImageToStorage,
 } from '@/lib/supabase';
 
@@ -34,6 +38,15 @@ export default function AdminPage() {
   const [community, setCommunity] = useState<CommunityPost[]>([]);
   const [loadingData, setLoadingData] = useState(true);
 
+  // Toast notification state
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
+  const showToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => {
+      setToast((curr) => (curr?.message === message ? null : curr));
+    }, 4500);
+  };
+
   // New Product Form State
   const [newProd, setNewProd] = useState({
     modelo: '',
@@ -53,12 +66,63 @@ export default function AdminPage() {
   const [savingProduct, setSavingProduct] = useState(false);
   const [productSuccessMsg, setProductSuccessMsg] = useState('');
 
-  // Check existing session or admin token
+  // Edit Product Modal State
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [savingEditProduct, setSavingEditProduct] = useState(false);
+  const [editImageUploading, setEditImageUploading] = useState(false);
+
+  // Edit Lead Modal State
+  const [editingLead, setEditingLead] = useState<LeadEncargo | null>(null);
+  const [savingEditLead, setSavingEditLead] = useState(false);
+
+  // Check and listen to Supabase Auth session
   useEffect(() => {
-    const savedSession = localStorage.getItem('wheelszone_admin_session');
-    if (savedSession === 'true') {
-      setIsAuthenticated(true);
+    let mounted = true;
+
+    async function checkSession() {
+      if (isSupabaseConfigured && supabase) {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user && mounted) {
+            setIsAuthenticated(true);
+            setAuthEmail(session.user.email || 'admin@wheelszone.com');
+            return;
+          }
+        } catch (err) {
+          console.warn('Error checking supabase session:', err);
+        }
+      }
+
+      // Check fallback localStorage
+      const savedSession = localStorage.getItem('wheelszone_admin_session');
+      if (savedSession === 'true' && mounted) {
+        setIsAuthenticated(true);
+      }
     }
+
+    checkSession();
+
+    if (isSupabaseConfigured && supabase) {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        if (!mounted) return;
+        if (session?.user) {
+          setIsAuthenticated(true);
+          setAuthEmail(session.user.email || 'admin@wheelszone.com');
+        } else if (event === 'SIGNED_OUT') {
+          setIsAuthenticated(false);
+          localStorage.removeItem('wheelszone_admin_session');
+        }
+      });
+
+      return () => {
+        mounted = false;
+        subscription.unsubscribe();
+      };
+    }
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   // Fetch all admin data when authenticated
@@ -78,6 +142,7 @@ export default function AdminPage() {
         setCommunity(commData);
       } catch (err) {
         console.error('Error loading admin data:', err);
+        showToast('Error cargando datos del panel.', 'error');
       } finally {
         setLoadingData(false);
       }
@@ -94,19 +159,29 @@ export default function AdminPage() {
 
     if (isSupabaseConfigured && supabase) {
       try {
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email: authEmail,
           password: authPassword,
         });
 
         if (error) {
-          // If Supabase credentials are wrong, report error
-          setAuthError(error.message);
+          setAuthError(`Error de Supabase: ${error.message}`);
           setAuthLoading(false);
           return;
         }
-      } catch (err) {
-        console.warn('Supabase auth failed, fallback to local admin check:', err);
+
+        if (data?.session) {
+          setIsAuthenticated(true);
+          localStorage.setItem('wheelszone_admin_session', 'true');
+          setAuthLoading(false);
+          showToast('Sesión de administrador iniciada correctamente.');
+          return;
+        }
+      } catch (err: any) {
+        console.warn('Supabase auth failed:', err);
+        setAuthError(err?.message || 'Error de conexión con Supabase.');
+        setAuthLoading(false);
+        return;
       }
     }
 
@@ -114,8 +189,9 @@ export default function AdminPage() {
     if (authPassword === 'admin123' || authPassword === 'wheelszone' || authEmail.includes('admin')) {
       setIsAuthenticated(true);
       localStorage.setItem('wheelszone_admin_session', 'true');
+      showToast('Sesión demo iniciada.');
     } else {
-      setAuthError('Credenciales incorrectas. (Para prueba usar: admin@wheelszone.com / admin123)');
+      setAuthError('Credenciales incorrectas. (Usar: admin@wheelszone.com / admin123)');
     }
     setAuthLoading(false);
   };
@@ -126,6 +202,7 @@ export default function AdminPage() {
     }
     setIsAuthenticated(false);
     localStorage.removeItem('wheelszone_admin_session');
+    showToast('Sesión cerrada.', 'info');
   };
 
   // Image Upload handler for new product
@@ -137,8 +214,10 @@ export default function AdminPage() {
     try {
       const url = await uploadImageToStorage(file, 'diecast-media');
       setNewProd((prev) => ({ ...prev, imagen_url: url }));
+      showToast('Imagen cargada correctamente.');
     } catch (err) {
       console.error('Error uploading product image:', err);
+      showToast('Error al subir la imagen.', 'error');
     } finally {
       setUploadingImage(false);
     }
@@ -169,6 +248,7 @@ export default function AdminPage() {
       });
 
       setProductSuccessMsg(`¡${created.modelo} registrado con éxito en el catálogo!`);
+      showToast(`¡${created.modelo} registrado con éxito!`);
       setTimeout(() => setProductSuccessMsg(''), 4000);
 
       // Reset form
@@ -188,6 +268,7 @@ export default function AdminPage() {
       });
     } catch (err) {
       console.error('Error creating product:', err);
+      showToast('Error al crear el producto.', 'error');
     } finally {
       setSavingProduct(false);
     }
@@ -196,35 +277,151 @@ export default function AdminPage() {
   // Quick Stock adjustment
   const handleStockChange = async (product: Product, delta: number) => {
     const newStock = Math.max(0, product.stock + delta);
-    const updated = await updateProduct(product.id, { stock: newStock });
-    if (updated) {
-      setProducts((prev) => prev.map((p) => (p.id === product.id ? updated : p)));
+    const res = await updateProduct(product.id, { stock: newStock });
+    if (res.success && res.product) {
+      setProducts((prev) => prev.map((p) => (p.id === product.id ? res.product! : p)));
+    } else {
+      showToast(res.error || 'Error al actualizar stock.', 'error');
     }
   };
 
   // Toggle Product Active
   const handleToggleActive = async (product: Product) => {
-    const updated = await updateProduct(product.id, { activo: !product.activo });
-    if (updated) {
-      setProducts((prev) => prev.map((p) => (p.id === product.id ? updated : p)));
+    const res = await updateProduct(product.id, { activo: !product.activo });
+    if (res.success && res.product) {
+      setProducts((prev) => prev.map((p) => (p.id === product.id ? res.product! : p)));
+      showToast(res.product.activo ? `"${product.modelo}" activado en tienda.` : `"${product.modelo}" pausado.`);
+    } else {
+      showToast(res.error || 'Error al actualizar estado.', 'error');
     }
   };
 
   // Delete Product
-  const handleDeleteProduct = async (id: string) => {
-    if (!window.confirm('¿Confirmás eliminar este producto del inventario?')) return;
-    const ok = await deleteProduct(id);
-    if (ok) {
+  const handleDeleteProduct = async (id: string, modelo: string) => {
+    if (!window.confirm(`¿Confirmás eliminar permanentemente "${modelo}" del catálogo y base de datos?`)) return;
+    const res = await deleteProduct(id);
+    if (res.success) {
       setProducts((prev) => prev.filter((p) => p.id !== id));
+      showToast(`Producto "${modelo}" eliminado correctamente.`);
+    } else {
+      showToast(res.error || 'No se pudo eliminar el producto.', 'error');
+      alert(res.error || 'No se pudo eliminar el producto.');
     }
   };
 
-  // Update Lead Status
+  // Edit Product Handlers
+  const handleStartEditProduct = (p: Product) => {
+    setEditingProduct({ ...p });
+  };
+
+  const handleEditProductImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || !e.target.files[0] || !editingProduct) return;
+    const file = e.target.files[0];
+    setEditImageUploading(true);
+
+    try {
+      const url = await uploadImageToStorage(file, 'diecast-media');
+      setEditingProduct((prev) => (prev ? { ...prev, imagen_url: url } : null));
+      showToast('Nueva foto cargada para el producto.');
+    } catch (err) {
+      console.error('Error uploading product image:', err);
+      showToast('Error al subir la imagen.', 'error');
+    } finally {
+      setEditImageUploading(false);
+    }
+  };
+
+  const handleSaveProductEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingProduct) return;
+
+    setSavingEditProduct(true);
+    try {
+      const res = await updateProduct(editingProduct.id, editingProduct);
+      if (res.success && res.product) {
+        setProducts((prev) => prev.map((p) => (p.id === editingProduct.id ? res.product! : p)));
+        showToast(`Producto "${editingProduct.modelo}" actualizado con éxito.`);
+        setEditingProduct(null);
+      } else {
+        showToast(res.error || 'Error al guardar cambios del producto.', 'error');
+        alert(res.error || 'Error al guardar cambios.');
+      }
+    } catch (err: any) {
+      showToast(err?.message || 'Error inesperado al guardar.', 'error');
+    } finally {
+      setSavingEditProduct(false);
+    }
+  };
+
+  // Lead Handlers (Update & Delete)
   const handleLeadStatusChange = async (leadId: string, newStatus: LeadStatus) => {
-    await updateLeadStatus(leadId, newStatus);
-    setLeads((prev) =>
-      prev.map((l) => (l.id === leadId ? { ...l, estado: newStatus } : l))
-    );
+    const res = await updateLead(leadId, { estado: newStatus });
+    if (res.success && res.lead) {
+      setLeads((prev) => prev.map((l) => (l.id === leadId ? res.lead! : l)));
+      showToast(`Estado de encargo actualizado a: ${newStatus}`);
+    } else {
+      showToast(res.error || 'Error al actualizar estado del encargo.', 'error');
+    }
+  };
+
+  const handleDeleteLead = async (leadId: string, leadNombre: string) => {
+    if (!window.confirm(`¿Confirmás eliminar el encargo de ${leadNombre}? Esta acción removerá el registro.`)) return;
+    const res = await deleteLead(leadId);
+    if (res.success) {
+      setLeads((prev) => prev.filter((l) => l.id !== leadId));
+      showToast(`Encargo de ${leadNombre} eliminado.`);
+    } else {
+      showToast(res.error || 'Error al eliminar el encargo.', 'error');
+    }
+  };
+
+  const handleStartEditLead = (lead: LeadEncargo) => {
+    setEditingLead({ ...lead });
+  };
+
+  const handleSaveLeadEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingLead) return;
+
+    setSavingEditLead(true);
+    try {
+      const res = await updateLead(editingLead.id, editingLead);
+      if (res.success && res.lead) {
+        setLeads((prev) => prev.map((l) => (l.id === editingLead.id ? res.lead! : l)));
+        showToast('Encargo actualizado correctamente.');
+        setEditingLead(null);
+      } else {
+        showToast(res.error || 'Error al actualizar el encargo.', 'error');
+      }
+    } catch (err: any) {
+      showToast(err?.message || 'Error inesperado.', 'error');
+    } finally {
+      setSavingEditLead(false);
+    }
+  };
+
+  // Community Moderation Handlers (Delete & Toggle Approval)
+  const handleDeleteCommunityPost = async (id: string, author: string) => {
+    if (!window.confirm(`¿Confirmás eliminar la publicación de ${author}? Esta acción es permanente.`)) return;
+    const res = await deleteCommunityPost(id);
+    if (res.success) {
+      setCommunity((prev) => prev.filter((item) => item.id !== id));
+      showToast(`Publicación de ${author} eliminada de la comunidad.`);
+    } else {
+      showToast(res.error || 'Error al eliminar publicación.', 'error');
+      alert(res.error || 'Error al eliminar publicación.');
+    }
+  };
+
+  const handleToggleCommunityApproval = async (item: CommunityPost) => {
+    const nextApproved = !item.approved;
+    const ok = await toggleCommunityPostApproval(item.id, nextApproved);
+    if (ok) {
+      setCommunity((prev) => prev.map((p) => (p.id === item.id ? { ...p, approved: nextApproved } : p)));
+      showToast(nextApproved ? 'Publicación aprobada y visible.' : 'Publicación ocultada.', 'info');
+    } else {
+      showToast('Error al cambiar estado de moderación.', 'error');
+    }
   };
 
   // Generate WhatsApp response for Lead
@@ -871,13 +1068,22 @@ export default function AdminPage() {
 
                     {/* Actions */}
                     <td className="p-3 text-right">
-                      <button
-                        onClick={() => handleDeleteProduct(p.id)}
-                        className="p-1 text-outline hover:text-race-red transition-colors"
-                        title="Eliminar producto"
-                      >
-                        <span className="material-symbols-outlined text-base">delete</span>
-                      </button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => handleStartEditProduct(p)}
+                          className="p-1.5 text-outline hover:text-primary-container hover:bg-surface-container transition-colors border border-transparent hover:border-surface-container-highest"
+                          title="Modificar todos los campos del producto"
+                        >
+                          <span className="material-symbols-outlined text-base">edit</span>
+                        </button>
+                        <button
+                          onClick={() => handleDeleteProduct(p.id, p.modelo)}
+                          className="p-1.5 text-outline hover:text-race-red hover:bg-surface-container transition-colors border border-transparent hover:border-race-red/30"
+                          title="Eliminar producto"
+                        >
+                          <span className="material-symbols-outlined text-base">delete</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -911,7 +1117,7 @@ export default function AdminPage() {
                   className="bg-surface-container border border-surface-container-high p-4 flex flex-col md:flex-row md:items-center justify-between gap-4"
                 >
                   <div className="flex flex-col gap-1 max-w-xl">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-headline-sm uppercase text-base text-on-surface font-bold">
                         {lead.nombre}
                       </span>
@@ -921,6 +1127,10 @@ export default function AdminPage() {
                             ? 'bg-secondary-container text-on-secondary-container border-secondary-container'
                             : lead.estado === 'En búsqueda'
                             ? 'bg-primary-container text-on-primary-container border-primary-container'
+                            : lead.estado === 'Completado'
+                            ? 'bg-emerald-900/40 text-emerald-300 border-emerald-600'
+                            : lead.estado === 'Sin respuesta' || lead.estado === 'Cancelado'
+                            ? 'bg-race-red/20 text-race-red border-race-red/40'
                             : 'bg-surface-container-highest text-outline border-surface-container-highest'
                         }`}
                       >
@@ -930,6 +1140,12 @@ export default function AdminPage() {
 
                     <div className="flex flex-wrap items-center gap-2 text-xs font-label-telemetry text-outline">
                       <span>📱 {lead.telefono}</span>
+                      {lead.email && (
+                        <>
+                          <span>•</span>
+                          <span>✉️ {lead.email}</span>
+                        </>
+                      )}
                       <span>•</span>
                       <span>Línea: {lead.serie || 'Coleccionable'}</span>
                       <span>•</span>
@@ -942,9 +1158,16 @@ export default function AdminPage() {
                     <span className="font-label-telemetry text-[11px] text-on-surface-variant">
                       Condición requerida: {lead.estado_empaque || 'Mint C-10'}
                     </span>
+
+                    {lead.notas_admin && (
+                      <div className="mt-2 p-2 bg-surface-container-lowest border border-surface-container-highest text-xs font-label-telemetry text-amber-300 flex items-start gap-1.5">
+                        <span className="material-symbols-outlined text-sm">note</span>
+                        <span><strong>Nota interna:</strong> {lead.notas_admin}</span>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                     {/* Status Changer */}
                     <select
                       value={lead.estado}
@@ -954,6 +1177,9 @@ export default function AdminPage() {
                       <option value="Pendiente">Pendiente</option>
                       <option value="En búsqueda">En búsqueda</option>
                       <option value="Contactado">Contactado</option>
+                      <option value="Completado">Completado</option>
+                      <option value="Sin respuesta">Sin respuesta</option>
+                      <option value="Cancelado">Cancelado</option>
                     </select>
 
                     {/* WhatsApp Action button */}
@@ -961,11 +1187,30 @@ export default function AdminPage() {
                       href={getWhatsAppLeadUrl(lead)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 bg-primary-container hover:bg-surface-tint text-on-primary-container font-headline-sm text-xs uppercase flex items-center justify-center gap-1.5 font-bold transition-colors whitespace-nowrap"
+                      className="px-3 py-1.5 bg-primary-container hover:bg-surface-tint text-on-primary-container font-headline-sm text-xs uppercase flex items-center justify-center gap-1 font-bold transition-colors whitespace-nowrap"
                     >
-                      <span className="material-symbols-outlined text-base">chat</span>
-                      <span>Contactar WhatsApp</span>
+                      <span className="material-symbols-outlined text-sm">chat</span>
+                      <span>WhatsApp</span>
                     </a>
+
+                    {/* Editar Encargo */}
+                    <button
+                      onClick={() => handleStartEditLead(lead)}
+                      className="px-2.5 py-1.5 bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-surface-container-highest font-label-telemetry text-xs uppercase flex items-center justify-center gap-1 transition-colors"
+                      title="Editar notas y detalles del encargo"
+                    >
+                      <span className="material-symbols-outlined text-sm">edit</span>
+                      <span>Editar</span>
+                    </button>
+
+                    {/* Eliminar Encargo */}
+                    <button
+                      onClick={() => handleDeleteLead(lead.id, lead.nombre)}
+                      className="p-1.5 text-outline hover:text-race-red hover:bg-surface-container-highest transition-colors border border-surface-container-highest"
+                      title="Eliminar encargo"
+                    >
+                      <span className="material-symbols-outlined text-base">delete</span>
+                    </button>
                   </div>
                 </div>
               ))
@@ -990,20 +1235,34 @@ export default function AdminPage() {
             {community.map((item) => (
               <div
                 key={item.id}
-                className="bg-surface-container border border-surface-container-high p-4 flex gap-4"
+                className="bg-surface-container border border-surface-container-high p-4 flex gap-4 relative"
               >
                 <div className="relative w-24 h-24 bg-surface-container-lowest flex-shrink-0 overflow-hidden border border-surface-container">
                   <Image src={item.image_url} alt={item.featured_piece} fill className="object-cover" />
                 </div>
                 <div className="flex flex-col justify-between flex-grow min-w-0">
                   <div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-2">
                       <span className="font-headline-sm uppercase text-sm text-on-surface font-bold truncate">
                         {item.collector_handle}
                       </span>
-                      <span className="font-label-telemetry text-xs text-primary-container">
-                        ★ {item.rating}/5
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-label-telemetry text-xs text-primary-container">
+                          ★ {item.rating}/5
+                        </span>
+                        {/* Approval badge */}
+                        <button
+                          onClick={() => handleToggleCommunityApproval(item)}
+                          className={`text-[10px] uppercase font-label-telemetry px-1.5 py-0.5 border ${
+                            item.approved
+                              ? 'bg-emerald-900/30 text-emerald-400 border-emerald-600'
+                              : 'bg-surface-container-highest text-outline border-surface-container-highest'
+                          }`}
+                          title={item.approved ? 'Hacer clic para ocultar' : 'Hacer clic para aprobar'}
+                        >
+                          {item.approved ? 'Visible' : 'Oculto'}
+                        </button>
+                      </div>
                     </div>
                     <span className="text-[11px] font-label-telemetry text-outline block">
                       {item.featured_piece} // {item.location}
@@ -1014,12 +1273,486 @@ export default function AdminPage() {
                   </div>
                   <div className="flex items-center justify-between pt-2 border-t border-surface-container text-xs font-label-telemetry">
                     <span className="text-secondary font-bold">🔥 {item.likes} Likes</span>
-                    <span className="text-primary-container uppercase">{item.tag}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-primary-container uppercase">{item.tag}</span>
+                      {/* Delete community message button */}
+                      <button
+                        onClick={() => handleDeleteCommunityPost(item.id, item.collector_handle)}
+                        className="p-1 text-outline hover:text-race-red transition-colors"
+                        title="Eliminar publicación permanentemente"
+                      >
+                        <span className="material-symbols-outlined text-sm">delete</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* ==============================================================================
+          MODAL: EDITAR PRODUCTO (GESTIÓN DE INVENTARIO COMPLETA)
+      ============================================================================== */}
+      {editingProduct && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+          <div className="w-full max-w-3xl bg-surface-container-low border border-surface-container p-6 shadow-2xl relative my-8">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-container via-surface-tint to-secondary-container"></div>
+
+            <div className="flex items-center justify-between pb-3 border-b border-surface-container mb-4">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary-container">edit_document</span>
+                <h3 className="font-headline-md uppercase text-lg text-on-surface tracking-wider">
+                  Modificar Artículo // {editingProduct.modelo}
+                </h3>
+              </div>
+              <button
+                onClick={() => setEditingProduct(null)}
+                className="text-outline hover:text-on-surface transition-colors"
+              >
+                <span className="material-symbols-outlined text-2xl">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveProductEdit} className="flex flex-col gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Modelo */}
+                <div className="flex flex-col gap-1 sm:col-span-2">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Nombre del Modelo *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editingProduct.modelo}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, modelo: e.target.value })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
+                  />
+                </div>
+
+                {/* Marca */}
+                <div className="flex flex-col gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Marca
+                  </label>
+                  <select
+                    value={editingProduct.marca}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, marca: e.target.value })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
+                  >
+                    <option value="Hot Wheels">Hot Wheels</option>
+                    <option value="Matchbox">Matchbox</option>
+                    <option value="Kaido House">Kaido House</option>
+                    <option value="Mini GT">Mini GT</option>
+                    <option value="Inno64">Inno64</option>
+                    <option value="Greenlight">Greenlight</option>
+                    <option value="M2 Machines">M2 Machines</option>
+                    <option value="Tarmac Works">Tarmac Works</option>
+                    <option value="Johnny Lightning">Johnny Lightning</option>
+                    <option value="Majorette">Majorette</option>
+                    <option value="Otra">Otra</option>
+                  </select>
+                </div>
+
+                {/* Escala */}
+                <div className="flex flex-col gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Escala
+                  </label>
+                  <select
+                    value={editingProduct.escala}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, escala: e.target.value })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
+                  >
+                    <option value="1:64">1:64 (Estándar)</option>
+                    <option value="1:43">1:43 (Coleccionista)</option>
+                    <option value="1:24">1:24</option>
+                    <option value="1:18">1:18 (Gran Escala)</option>
+                  </select>
+                </div>
+
+                {/* Categoria */}
+                <div className="flex flex-col gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Categoría / Clasificación
+                  </label>
+                  <select
+                    value={editingProduct.categoria}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, categoria: e.target.value })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
+                  >
+                    <option value="Super Treasure Hunt ($TH)">Super Treasure Hunt ($TH)</option>
+                    <option value="Treasure Hunt (TH)">Treasure Hunt (TH)</option>
+                    <option value="Car Culture">Car Culture</option>
+                    <option value="Fast & Furious Premium">Fast & Furious Premium</option>
+                    <option value="Boulevard">Boulevard</option>
+                    <option value="Red Line Club (RLC)">Red Line Club (RLC)</option>
+                    <option value="Mainline / Básicos">Mainline / Básicos</option>
+                    <option value="JDM">JDM</option>
+                    <option value="Muscle Cars">Muscle Cars</option>
+                    <option value="Exóticos / Hiperautos">Exóticos / Hiperautos</option>
+                    <option value="Trucks & Pickups">Trucks & Pickups</option>
+                  </select>
+                </div>
+
+                {/* Serie */}
+                <div className="flex flex-col gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Serie / Colección
+                  </label>
+                  <input
+                    type="text"
+                    value={editingProduct.serie || ''}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, serie: e.target.value })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
+                  />
+                </div>
+
+                {/* Precio */}
+                <div className="flex flex-col gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Precio ($ ARS) *
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    min="1"
+                    value={editingProduct.precio}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, precio: Number(e.target.value) })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
+                  />
+                </div>
+
+                {/* Stock */}
+                <div className="flex flex-col gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Stock Disponible *
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    min="0"
+                    value={editingProduct.stock}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, stock: Number(e.target.value) })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
+                  />
+                </div>
+
+                {/* Año */}
+                <div className="flex flex-col gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Año de Lanzamiento
+                  </label>
+                  <input
+                    type="number"
+                    value={editingProduct.anio}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, anio: Number(e.target.value) })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
+                  />
+                </div>
+
+                {/* Estado del Blister */}
+                <div className="flex flex-col gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Estado del Blíster
+                  </label>
+                  <select
+                    value={editingProduct.estado_blister}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, estado_blister: e.target.value as BlisterCondition })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
+                  >
+                    <option value="Impecable">Impecable (Mint C-10)</option>
+                    <option value="Muy Bueno">Muy Bueno (C-8/9)</option>
+                    <option value="Desgaste / Abrir">Desgaste / Para Abrir</option>
+                    <option value="Loose">Loose (Sin Blíster)</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Toggles: Destacado y Activo */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 bg-surface-container border border-surface-container-high">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={editingProduct.destacado}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, destacado: e.target.checked })}
+                    className="accent-primary-container w-4 h-4 cursor-pointer"
+                  />
+                  <span className="font-label-telemetry text-xs uppercase text-on-surface">
+                    Exhibir en "Destacados" de la Home
+                  </span>
+                </label>
+
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={editingProduct.activo}
+                    onChange={(e) => setEditingProduct({ ...editingProduct, activo: e.target.checked })}
+                    className="accent-secondary-container w-4 h-4 cursor-pointer"
+                  />
+                  <span className="font-label-telemetry text-xs uppercase text-on-surface">
+                    Producto Activo (Visible en Tienda)
+                  </span>
+                </label>
+              </div>
+
+              {/* Imagen del Producto */}
+              <div className="flex flex-col gap-2 p-3 bg-surface-container border border-surface-container-high">
+                <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                  Fotografía de la Pieza
+                </label>
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  <div className="relative w-20 h-20 bg-surface-container-lowest border border-surface-container flex-shrink-0 overflow-hidden">
+                    {editingProduct.imagen_url ? (
+                      <Image src={editingProduct.imagen_url} alt="Preview" fill className="object-cover" />
+                    ) : (
+                      <span className="material-symbols-outlined text-outline text-3xl flex items-center justify-center h-full">
+                        image
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-2 flex-grow w-full">
+                    <input
+                      type="text"
+                      placeholder="URL pública de la imagen"
+                      value={editingProduct.imagen_url}
+                      onChange={(e) => setEditingProduct({ ...editingProduct, imagen_url: e.target.value })}
+                      className="w-full bg-surface-container-lowest border border-surface-container-highest px-3 py-1.5 text-xs text-on-surface focus:outline-none"
+                    />
+                    <div className="flex items-center gap-2">
+                      <label className="px-3 py-1.5 bg-surface-container-high hover:bg-surface-container-highest text-on-surface text-xs font-label-telemetry uppercase cursor-pointer flex items-center gap-1.5 border border-surface-container-highest">
+                        <span className="material-symbols-outlined text-sm">upload</span>
+                        <span>{editImageUploading ? 'Subiendo...' : 'Subir nueva foto'}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleEditProductImageUpload}
+                          disabled={editImageUploading}
+                          className="hidden"
+                        />
+                      </label>
+                      {editImageUploading && <span className="text-xs text-primary-container animate-pulse">Cargando a Supabase...</span>}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Descripción */}
+              <div className="flex flex-col gap-1">
+                <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                  Descripción y Detalles Técnicos (Ruedas, librea, tampografía)
+                </label>
+                <textarea
+                  rows={3}
+                  value={editingProduct.descripcion || ''}
+                  onChange={(e) => setEditingProduct({ ...editingProduct, descripcion: e.target.value })}
+                  className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
+                />
+              </div>
+
+              {/* Botones de acción */}
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-surface-container">
+                <button
+                  type="button"
+                  onClick={() => setEditingProduct(null)}
+                  className="px-4 py-2 bg-surface-container hover:bg-surface-container-high text-on-surface font-label-telemetry text-xs uppercase tracking-wider"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={savingEditProduct}
+                  className="px-6 py-2 bg-primary-container hover:bg-surface-tint text-on-primary-container font-headline-md uppercase text-xs tracking-wider flex items-center gap-2 font-bold shadow-md transition-all disabled:opacity-60"
+                >
+                  {savingEditProduct ? (
+                    <>
+                      <span className="material-symbols-outlined text-base animate-spin">refresh</span>
+                      <span>GUARDANDO...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="material-symbols-outlined text-base">save</span>
+                      <span>GUARDAR CAMBIOS</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ==============================================================================
+          MODAL: EDITAR ENCARGO DE CLIENTE (LEAD)
+      ============================================================================== */}
+      {editingLead && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+          <div className="w-full max-w-xl bg-surface-container-low border border-surface-container p-6 shadow-2xl relative my-8">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary-container via-primary-container to-surface-tint"></div>
+
+            <div className="flex items-center justify-between pb-3 border-b border-surface-container mb-4">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-secondary">assignment</span>
+                <h3 className="font-headline-md uppercase text-lg text-on-surface tracking-wider">
+                  Editar Encargo // {editingLead.nombre}
+                </h3>
+              </div>
+              <button
+                onClick={() => setEditingLead(null)}
+                className="text-outline hover:text-on-surface transition-colors"
+              >
+                <span className="material-symbols-outlined text-2xl">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveLeadEdit} className="flex flex-col gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Nombre del Coleccionista
+                  </label>
+                  <input
+                    type="text"
+                    value={editingLead.nombre}
+                    onChange={(e) => setEditingLead({ ...editingLead, nombre: e.target.value })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Teléfono / WhatsApp
+                  </label>
+                  <input
+                    type="text"
+                    value={editingLead.telefono}
+                    onChange={(e) => setEditingLead({ ...editingLead, telefono: e.target.value })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1 sm:col-span-2">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Modelo Buscado
+                  </label>
+                  <input
+                    type="text"
+                    value={editingLead.modelo_buscado}
+                    onChange={(e) => setEditingLead({ ...editingLead, modelo_buscado: e.target.value })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Línea / Serie
+                  </label>
+                  <input
+                    type="text"
+                    value={editingLead.serie || ''}
+                    onChange={(e) => setEditingLead({ ...editingLead, serie: e.target.value })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Presupuesto Máximo
+                  </label>
+                  <input
+                    type="text"
+                    value={editingLead.presupuesto || ''}
+                    onChange={(e) => setEditingLead({ ...editingLead, presupuesto: e.target.value })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1 sm:col-span-2">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                    Estado del Encargo
+                  </label>
+                  <select
+                    value={editingLead.estado}
+                    onChange={(e) => setEditingLead({ ...editingLead, estado: e.target.value as LeadStatus })}
+                    className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none"
+                  >
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="En búsqueda">En búsqueda</option>
+                    <option value="Contactado">Contactado</option>
+                    <option value="Completado">Completado</option>
+                    <option value="Sin respuesta">Sin respuesta</option>
+                    <option value="Cancelado">Cancelado</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Notas internas del administrador */}
+              <div className="flex flex-col gap-1">
+                <label className="font-label-telemetry text-xs uppercase text-amber-300">
+                  Notas Internas de Gestión (Solo visibles para el administrador)
+                </label>
+                <textarea
+                  rows={3}
+                  placeholder="Ej: Proveedor cotizó $24.000 el 18/10. Esperando respuesta de cliente..."
+                  value={editingLead.notas_admin || ''}
+                  onChange={(e) => setEditingLead({ ...editingLead, notas_admin: e.target.value })}
+                  className="w-full bg-surface-container border border-amber-500/30 px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-amber-400"
+                />
+              </div>
+
+              {/* Botones de acción */}
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-surface-container">
+                <button
+                  type="button"
+                  onClick={() => setEditingLead(null)}
+                  className="px-4 py-2 bg-surface-container hover:bg-surface-container-high text-on-surface font-label-telemetry text-xs uppercase"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={savingEditLead}
+                  className="px-6 py-2 bg-secondary-container hover:bg-secondary text-on-secondary font-headline-md uppercase text-xs tracking-wider flex items-center gap-2 font-bold shadow-md transition-all disabled:opacity-60"
+                >
+                  {savingEditLead ? (
+                    <>
+                      <span className="material-symbols-outlined text-base animate-spin">refresh</span>
+                      <span>GUARDANDO...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="material-symbols-outlined text-base">save</span>
+                      <span>ACTUALIZAR ENCARGO</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ==============================================================================
+          TOAST FEEDBACK FLOTANTE
+      ============================================================================== */}
+      {toast && (
+        <div
+          className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 border shadow-2xl transition-all font-label-telemetry text-xs uppercase tracking-wider ${
+            toast.type === 'error'
+              ? 'bg-race-red/90 text-white border-white/20'
+              : toast.type === 'info'
+              ? 'bg-surface-container-highest text-on-surface border-surface-container'
+              : 'bg-emerald-950/90 text-emerald-200 border-emerald-500/40'
+          }`}
+        >
+          <span className="material-symbols-outlined text-lg">
+            {toast.type === 'error' ? 'error' : toast.type === 'info' ? 'info' : 'check_circle'}
+          </span>
+          <span>{toast.message}</span>
+          <button onClick={() => setToast(null)} className="ml-2 hover:opacity-80">
+            <span className="material-symbols-outlined text-sm">close</span>
+          </button>
         </div>
       )}
     </div>

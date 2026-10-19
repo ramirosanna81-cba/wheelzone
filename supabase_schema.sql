@@ -114,6 +114,10 @@ CREATE POLICY "Solo administradores pueden actualizar estado de encargos"
     ON public.leads_encargos FOR UPDATE
     USING (auth.role() = 'authenticated');
 
+CREATE POLICY "Solo administradores pueden eliminar encargos"
+    ON public.leads_encargos FOR DELETE
+    USING (auth.role() = 'authenticated');
+
 -- Community: Lectura de posts aprobados; Envío público; Moderación por admin
 CREATE POLICY "Cualquiera puede leer publicaciones comunitarias aprobadas"
     ON public.community_posts FOR SELECT
