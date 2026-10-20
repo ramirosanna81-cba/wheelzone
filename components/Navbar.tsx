@@ -110,16 +110,16 @@ export default function Navbar() {
             />
           </form>
 
-          {/* WhatsApp Pit Support Button */}
+          {/* WhatsApp Support Button */}
           <a
             href={`https://wa.me/${phone}?text=${encodeURIComponent('¡Hola Wheels Zone! Quiero consultar por disponibilidad de modelos.')}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="h-9 px-3 bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-surface-container-highest flex items-center gap-1.5 font-label-telemetry text-xs font-bold uppercase tracking-wider transition-colors select-none"
-            title="Soporte WhatsApp Pit Crew"
+            className="h-9 px-3 bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-surface-container-highest flex items-center gap-1.5 font-label-telemetry text-xs font-bold uppercase tracking-wider transition-colors select-none whitespace-nowrap"
+            title="Contactanos por WhatsApp"
           >
             <span className="material-symbols-outlined text-primary-container text-base">support_agent</span>
-            <span className="hidden sm:inline">WHATSAPP PIT</span>
+            <span className="hidden sm:inline">CONTACTANOS POR WHATSAPP</span>
           </a>
 
           {/* Cart Button */}
@@ -176,6 +176,17 @@ export default function Navbar() {
               {link.name}
             </Link>
           ))}
+
+          <a
+            href={`https://wa.me/${phone}?text=${encodeURIComponent('¡Hola Wheels Zone! Quiero consultar por disponibilidad de modelos.')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMobileMenuOpen(false)}
+            className="mt-2 px-3 py-2.5 bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-surface-container-highest flex items-center justify-center gap-2 font-label-telemetry text-xs font-bold uppercase tracking-wider transition-colors"
+          >
+            <span className="material-symbols-outlined text-primary-container text-base">support_agent</span>
+            <span>CONTACTANOS POR WHATSAPP</span>
+          </a>
         </div>
       )}
     </header>
