@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import confetti from 'canvas-confetti';
 import { Product, LeadEncargo, CommunityPost, BlisterCondition, LeadStatus } from '@/lib/types';
@@ -20,6 +20,13 @@ import {
   toggleCommunityPostApproval,
   uploadImageToStorage,
 } from '@/lib/supabase';
+import {
+  CATALOG_BRANDS,
+  CATALOG_SCALES,
+  CATALOG_THEMES,
+  CATALOG_BLISTER_CONDITIONS,
+  matchesBrand,
+} from '@/lib/catalog-constants';
 
 export default function AdminPage() {
   // Authentication State
@@ -38,6 +45,54 @@ export default function AdminPage() {
   const [community, setCommunity] = useState<CommunityPost[]>([]);
   const [loadingData, setLoadingData] = useState(true);
 
+  // Inventory Stock Filter States
+  const [stockSearch, setStockSearch] = useState('');
+  const [stockBrand, setStockBrand] = useState('');
+  const [stockScale, setStockScale] = useState('');
+  const [stockCategory, setStockCategory] = useState('');
+  const [stockBlister, setStockBlister] = useState('');
+  const [stockStatus, setStockStatus] = useState<'all' | 'active' | 'inactive' | 'out_of_stock'>('all');
+
+  const filteredStockProducts = useMemo(() => {
+    return products.filter((p) => {
+      if (stockSearch.trim()) {
+        const q = stockSearch.toLowerCase();
+        const match =
+          p.modelo.toLowerCase().includes(q) ||
+          p.marca.toLowerCase().includes(q) ||
+          p.categoria.toLowerCase().includes(q) ||
+          (p.serie && p.serie.toLowerCase().includes(q));
+        if (!match) return false;
+      }
+      if (stockBrand && !matchesBrand(p, stockBrand)) {
+        return false;
+      }
+      if (stockScale && p.escala !== stockScale) {
+        return false;
+      }
+      if (stockCategory && !p.categoria.toLowerCase().includes(stockCategory.toLowerCase())) {
+        return false;
+      }
+      if (stockBlister && p.estado_blister !== stockBlister) {
+        return false;
+      }
+      if (stockStatus === 'active' && !p.activo) return false;
+      if (stockStatus === 'inactive' && p.activo) return false;
+      if (stockStatus === 'out_of_stock' && p.stock > 0) return false;
+
+      return true;
+    });
+  }, [products, stockSearch, stockBrand, stockScale, stockCategory, stockBlister, stockStatus]);
+
+  const resetStockFilters = () => {
+    setStockSearch('');
+    setStockBrand('');
+    setStockScale('');
+    setStockCategory('');
+    setStockBlister('');
+    setStockStatus('all');
+  };
+
   // Toast notification state
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
   const showToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
@@ -50,7 +105,7 @@ export default function AdminPage() {
   // New Product Form State
   const [newProd, setNewProd] = useState({
     modelo: '',
-    marca: 'Hot Wheels',
+    marca: CATALOG_BRANDS[0].value,
     escala: '1:64',
     serie: '',
     anio: 2024,
@@ -784,20 +839,20 @@ export default function AdminPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Marca */}
                 <div className="flex flex-col gap-1">
-                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                    Marca Fabricante *
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant flex items-center justify-between">
+                    <span>Marca y Categoría Principal *</span>
+                    <span className="text-[10px] text-primary-container">SINCRONIZADO CON TIENDA</span>
                   </label>
                   <select
                     value={newProd.marca}
                     onChange={(e) => setNewProd({ ...newProd, marca: e.target.value })}
                     className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
                   >
-                    <option value="Hot Wheels">Hot Wheels (Mattel)</option>
-                    <option value="Matchbox">Matchbox Collectors</option>
-                    <option value="Mini GT">Mini GT / TSM Model</option>
-                    <option value="Kaido House">Kaido House x MiniGT</option>
-                    <option value="Inno64">Inno64 Premium</option>
-                    <option value="GreenLight">GreenLight Collectibles</option>
+                    {CATALOG_BRANDS.map((b) => (
+                      <option key={b.value} value={b.value}>
+                        {b.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -811,10 +866,11 @@ export default function AdminPage() {
                     onChange={(e) => setNewProd({ ...newProd, escala: e.target.value })}
                     className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
                   >
-                    <option value="1:64">1:64 (Estándar Paddock)</option>
-                    <option value="1:43">1:43 (Colección Pista)</option>
-                    <option value="1:24">1:24 (Exposición)</option>
-                    <option value="1:36">1:36 (Escala 1:36)</option>
+                    {CATALOG_SCALES.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -837,20 +893,18 @@ export default function AdminPage() {
                 {/* Categoría */}
                 <div className="flex flex-col gap-1">
                   <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                    Categoría Temática *
+                    Temática Motorsport / Categoría *
                   </label>
                   <select
                     value={newProd.categoria}
                     onChange={(e) => setNewProd({ ...newProd, categoria: e.target.value })}
                     className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
                   >
-                    <option value="Car Culture">Car Culture (Premium)</option>
-                    <option value="Super Treasure Hunt ($TH)">Super Treasure Hunt ($TH)</option>
-                    <option value="JDM">JDM & Japoneses</option>
-                    <option value="Muscle Cars">Muscle Cars Americanos</option>
-                    <option value="Boulevard">Boulevard Series</option>
-                    <option value="Camionetas Off-Road">Camionetas Off-Road</option>
-                    <option value="Mainline">Mainline Básico</option>
+                    {CATALOG_THEMES.map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -861,7 +915,7 @@ export default function AdminPage() {
                   Condición del Blíster / Empaque *
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  {(['Impecable', 'Muy Bueno', 'Desgaste / Abrir', 'Loose'] as BlisterCondition[]).map((cond) => (
+                  {CATALOG_BLISTER_CONDITIONS.map((cond) => (
                     <button
                       key={cond}
                       type="button"
@@ -969,19 +1023,144 @@ export default function AdminPage() {
       )}
 
       {/* ==============================================================================
-          TAB 2: GESTIÓN DE INVENTARIO & STOCK
+          TAB 2: GESTIÓN DE INVENTARIO & STOCK CON FILTROS SINCRONIZADOS
       ============================================================================== */}
       {activeTab === 'stock' && (
-        <div className="bg-surface-container-low border border-surface-container p-6 flex flex-col gap-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-surface-container">
-            <h2 className="font-headline-lg text-xl uppercase tracking-wider text-on-surface">
-              Inventario de Modelos ({products.length})
-            </h2>
-            <span className="font-label-telemetry text-xs text-outline">
-              Edición rápida de precios, unidades y estado activo
-            </span>
+        <div className="bg-surface-container-low border border-surface-container p-6 flex flex-col gap-5 shadow-2xl">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-surface-container">
+            <div className="flex flex-col gap-0.5">
+              <h2 className="font-headline-lg text-xl uppercase tracking-wider text-on-surface flex items-center gap-2">
+                <span>Inventario de Modelos</span>
+                <span className="text-primary-container text-base font-label-telemetry">
+                  ({filteredStockProducts.length} de {products.length})
+                </span>
+              </h2>
+              <span className="font-label-telemetry text-xs text-outline">
+                Filtros sincronizados con la tienda en tiempo real
+              </span>
+            </div>
+
+            {(stockSearch || stockBrand || stockScale || stockCategory || stockBlister || stockStatus !== 'all') && (
+              <button
+                onClick={resetStockFilters}
+                className="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-on-surface font-label-telemetry text-xs uppercase flex items-center gap-1.5 transition-colors self-start sm:self-auto"
+              >
+                <span className="material-symbols-outlined text-sm">filter_alt_off</span>
+                <span>Restablecer Filtros</span>
+              </button>
+            )}
           </div>
 
+          {/* Synchronized Filter Toolbar */}
+          <div className="bg-surface-container/60 border border-surface-container-high p-4 flex flex-col gap-3">
+            <div className="flex items-center justify-between pb-1 border-b border-surface-container">
+              <span className="font-label-telemetry text-xs uppercase text-primary-container font-bold flex items-center gap-1.5">
+                <span className="material-symbols-outlined text-sm">tune</span>
+                Filtros Telemétricos de Inventario
+              </span>
+              <span className="font-label-telemetry text-[11px] text-outline uppercase">
+                {filteredStockProducts.length} coincidencias
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-3">
+              {/* Search text */}
+              <div className="flex flex-col gap-1 lg:col-span-2">
+                <label className="font-label-telemetry text-[11px] uppercase text-on-surface-variant">
+                  Búsqueda Rápida
+                </label>
+                <div className="relative w-full">
+                  <input
+                    type="text"
+                    placeholder="Casting, modelo, serie..."
+                    value={stockSearch}
+                    onChange={(e) => setStockSearch(e.target.value)}
+                    className="w-full bg-surface-container-lowest border border-surface-container-highest text-on-surface px-3 py-2 pl-8 text-xs focus:outline-none focus:border-primary-container"
+                  />
+                  <span className="material-symbols-outlined absolute left-2 top-2 text-outline text-base pointer-events-none">
+                    search
+                  </span>
+                </div>
+              </div>
+
+              {/* Filter Marca / Linea */}
+              <div className="flex flex-col gap-1">
+                <label className="font-label-telemetry text-[11px] uppercase text-on-surface-variant">
+                  Marca / Línea
+                </label>
+                <select
+                  value={stockBrand}
+                  onChange={(e) => setStockBrand(e.target.value)}
+                  className="w-full bg-surface-container-lowest border border-surface-container-highest text-on-surface px-2.5 py-2 text-xs focus:outline-none focus:border-primary-container"
+                >
+                  <option value="">Todas las marcas</option>
+                  {CATALOG_BRANDS.map((b) => (
+                    <option key={b.value} value={b.value}>
+                      {b.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Filter Escala */}
+              <div className="flex flex-col gap-1">
+                <label className="font-label-telemetry text-[11px] uppercase text-on-surface-variant">
+                  Escala
+                </label>
+                <select
+                  value={stockScale}
+                  onChange={(e) => setStockScale(e.target.value)}
+                  className="w-full bg-surface-container-lowest border border-surface-container-highest text-on-surface px-2.5 py-2 text-xs focus:outline-none focus:border-primary-container"
+                >
+                  <option value="">Todas las escalas</option>
+                  {CATALOG_SCALES.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Filter Categoria / Temática */}
+              <div className="flex flex-col gap-1">
+                <label className="font-label-telemetry text-[11px] uppercase text-on-surface-variant">
+                  Temática Motorsport
+                </label>
+                <select
+                  value={stockCategory}
+                  onChange={(e) => setStockCategory(e.target.value)}
+                  className="w-full bg-surface-container-lowest border border-surface-container-highest text-on-surface px-2.5 py-2 text-xs focus:outline-none focus:border-primary-container"
+                >
+                  <option value="">Todas las categorías</option>
+                  {CATALOG_THEMES.map((t) => (
+                    <option key={t} value={t}>
+                      {t}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Filter Estado Activo / Stock */}
+              <div className="flex flex-col gap-1">
+                <label className="font-label-telemetry text-[11px] uppercase text-on-surface-variant">
+                  Disponibilidad
+                </label>
+                <select
+                  value={stockStatus}
+                  onChange={(e) => setStockStatus(e.target.value as any)}
+                  className="w-full bg-surface-container-lowest border border-surface-container-highest text-on-surface px-2.5 py-2 text-xs focus:outline-none focus:border-primary-container"
+                >
+                  <option value="all">Todos los estados</option>
+                  <option value="active">Solo Activos (En Tienda)</option>
+                  <option value="inactive">Solo Pausados (Ocultos)</option>
+                  <option value="out_of_stock">Solo Sin Stock (0 unid.)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Table */}
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs font-body-sm">
               <thead className="bg-surface-container font-label-telemetry text-[11px] uppercase text-outline border-b border-surface-container-highest">
@@ -997,7 +1176,25 @@ export default function AdminPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-surface-container">
-                {products.map((p) => (
+                {filteredStockProducts.length === 0 ? (
+                  <tr>
+                    <td colSpan={8} className="p-8 text-center text-on-surface-variant">
+                      <div className="flex flex-col items-center gap-2">
+                        <span className="material-symbols-outlined text-3xl text-outline">search_off</span>
+                        <p className="font-headline-sm uppercase text-sm text-on-surface">
+                          No se encontraron modelos con los filtros seleccionados
+                        </p>
+                        <button
+                          onClick={resetStockFilters}
+                          className="mt-2 px-3 py-1.5 bg-primary-container text-on-primary-container text-xs font-label-telemetry uppercase font-bold"
+                        >
+                          Mostrar todos los modelos
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  filteredStockProducts.map((p) => (
                   <tr key={p.id} className="hover:bg-surface-container/50 transition-colors">
                     {/* Thumbnail */}
                     <td className="p-3">
@@ -1086,7 +1283,7 @@ export default function AdminPage() {
                       </div>
                     </td>
                   </tr>
-                ))}
+                )))}
               </tbody>
             </table>
           </div>
@@ -1333,66 +1530,56 @@ export default function AdminPage() {
 
                 {/* Marca */}
                 <div className="flex flex-col gap-1">
-                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                    Marca
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant flex items-center justify-between">
+                    <span>Marca y Categoría Principal *</span>
+                    <span className="text-[10px] text-primary-container">SINCRONIZADO CON TIENDA</span>
                   </label>
                   <select
                     value={editingProduct.marca}
                     onChange={(e) => setEditingProduct({ ...editingProduct, marca: e.target.value })}
                     className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
                   >
-                    <option value="Hot Wheels">Hot Wheels</option>
-                    <option value="Matchbox">Matchbox</option>
-                    <option value="Kaido House">Kaido House</option>
-                    <option value="Mini GT">Mini GT</option>
-                    <option value="Inno64">Inno64</option>
-                    <option value="Greenlight">Greenlight</option>
-                    <option value="M2 Machines">M2 Machines</option>
-                    <option value="Tarmac Works">Tarmac Works</option>
-                    <option value="Johnny Lightning">Johnny Lightning</option>
-                    <option value="Majorette">Majorette</option>
-                    <option value="Otra">Otra</option>
+                    {CATALOG_BRANDS.map((b) => (
+                      <option key={b.value} value={b.value}>
+                        {b.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
                 {/* Escala */}
                 <div className="flex flex-col gap-1">
                   <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                    Escala
+                    Escala *
                   </label>
                   <select
                     value={editingProduct.escala}
                     onChange={(e) => setEditingProduct({ ...editingProduct, escala: e.target.value })}
                     className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
                   >
-                    <option value="1:64">1:64 (Estándar)</option>
-                    <option value="1:43">1:43 (Coleccionista)</option>
-                    <option value="1:24">1:24</option>
-                    <option value="1:36">1:36</option>
+                    {CATALOG_SCALES.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
                 {/* Categoria */}
                 <div className="flex flex-col gap-1">
                   <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                    Categoría / Clasificación
+                    Temática Motorsport / Categoría *
                   </label>
                   <select
                     value={editingProduct.categoria}
                     onChange={(e) => setEditingProduct({ ...editingProduct, categoria: e.target.value })}
                     className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
                   >
-                    <option value="Super Treasure Hunt ($TH)">Super Treasure Hunt ($TH)</option>
-                    <option value="Treasure Hunt (TH)">Treasure Hunt (TH)</option>
-                    <option value="Car Culture">Car Culture</option>
-                    <option value="Fast & Furious Premium">Fast & Furious Premium</option>
-                    <option value="Boulevard">Boulevard</option>
-                    <option value="Red Line Club (RLC)">Red Line Club (RLC)</option>
-                    <option value="Mainline / Básicos">Mainline / Básicos</option>
-                    <option value="JDM">JDM</option>
-                    <option value="Muscle Cars">Muscle Cars</option>
-                    <option value="Exóticos / Hiperautos">Exóticos / Hiperautos</option>
-                    <option value="Trucks & Pickups">Trucks & Pickups</option>
+                    {CATALOG_THEMES.map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -1462,10 +1649,11 @@ export default function AdminPage() {
                     onChange={(e) => setEditingProduct({ ...editingProduct, estado_blister: e.target.value as BlisterCondition })}
                     className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
                   >
-                    <option value="Impecable">Impecable (Mint C-10)</option>
-                    <option value="Muy Bueno">Muy Bueno (C-8/9)</option>
-                    <option value="Desgaste / Abrir">Desgaste / Para Abrir</option>
-                    <option value="Loose">Loose (Sin Blíster)</option>
+                    {CATALOG_BLISTER_CONDITIONS.map((cond) => (
+                      <option key={cond} value={cond}>
+                        {cond}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>

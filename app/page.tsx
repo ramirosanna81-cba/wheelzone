@@ -8,6 +8,7 @@ import FireParticles from '@/components/FireParticles';
 import { Product } from '@/lib/types';
 import { fetchProducts, createLead } from '@/lib/supabase';
 import { useCart } from '@/lib/cart-context';
+import { CATALOG_BRANDS, CATALOG_SCALES } from '@/lib/catalog-constants';
 
 export default function HomePage() {
   const { addItem } = useCart();
@@ -506,24 +507,11 @@ export default function HomePage() {
                       className="w-full px-3 py-2 bg-surface-container border border-surface-container-high text-on-surface font-body-sm text-sm focus:outline-none focus:border-primary-container transition-colors"
                     >
                       <option value="">Seleccioná una línea...</option>
-                      <option value="Hw básicos">Hw básicos</option>
-                      <option value="Hw Silver">Hw Silver</option>
-                      <option value="Hw Premium">Hw Premium</option>
-                      <option value="Hw th">Hw th</option>
-                      <option value="Hw sth">Hw sth</option>
-                      <option value="Hw team transport premium">Hw team transport premium</option>
-                      <option value="Tarmac">Tarmac</option>
-                      <option value="Inno64">Inno64</option>
-                      <option value="Matchbox">Matchbox</option>
-                      <option value="Majorette">Majorette</option>
-                      <option value="Mini GT">Mini GT</option>
-                      <option value="Poster cars">Poster cars</option>
-                      <option value="Burago">Burago</option>
-                      <option value="kaido House/ Mini gt">kaido House/ Mini gt</option>
-                      <option value="Inolvidables">Inolvidables</option>
-                      <option value="Inolvidables 80/90">Inolvidables 80/90</option>
-                      <option value="Inolvidables reparto y servicio">Inolvidables reparto y servicio</option>
-                      <option value="Otra marca o categoría">Otra marca o categoría</option>
+                      {CATALOG_BRANDS.map((brand) => (
+                        <option key={brand.value} value={brand.value}>
+                          {brand.label}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
@@ -537,10 +525,11 @@ export default function HomePage() {
                       onChange={(e) => setFormData({ ...formData, estado_empaque: e.target.value })}
                       className="w-full px-3 py-2 bg-surface-container border border-surface-container-high text-on-surface font-body-sm text-sm focus:outline-none focus:border-primary-container transition-colors"
                     >
-                      <option value="1:64">1:64 (Estándar)</option>
-                      <option value="1:43">1:43 (Colección Pista)</option>
-                      <option value="1:24">1:24 (Exposición)</option>
-                      <option value="1:36">1:36</option>
+                      {CATALOG_SCALES.map((scale) => (
+                        <option key={scale} value={scale}>
+                          {scale}
+                        </option>
+                      ))}
                       <option value="Indiferente">Indiferente / Cualquier escala</option>
                     </select>
                   </div>

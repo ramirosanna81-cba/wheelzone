@@ -6,10 +6,19 @@ import { useSearchParams } from 'next/navigation';
 import { Product, BlisterCondition } from '@/lib/types';
 import { fetchProducts } from '@/lib/supabase';
 import { useCart } from '@/lib/cart-context';
+import {
+  CATALOG_BRANDS,
+  CATALOG_SCALES,
+  CATALOG_THEMES,
+  matchesBrand,
+} from '@/lib/catalog-constants';
 
 function TiendaContent() {
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get('search') || '';
+  const initialBrand = searchParams.get('marca') || searchParams.get('brand') || '';
+  const initialCategory = searchParams.get('categoria') || searchParams.get('category') || '';
+  const initialScale = searchParams.get('escala') || searchParams.get('scale') || '';
 
   const { addItem } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
@@ -17,9 +26,9 @@ function TiendaContent() {
 
   // Filter states
   const [search, setSearch] = useState(initialSearch);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [selectedScales, setSelectedScales] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(initialBrand ? [initialBrand] : []);
+  const [selectedScales, setSelectedScales] = useState<string[]>(initialScale ? [initialScale] : []);
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
   const [maxPrice, setMaxPrice] = useState<number>(65000);
   const [onlyInStock, setOnlyInStock] = useState<boolean>(true);
   const [sortBy, setSortBy] = useState<string>('newest');
@@ -44,12 +53,13 @@ function TiendaContent() {
     load();
   }, []);
 
-  // Update search state if query param changes
+  // Update filter states if query param changes
   useEffect(() => {
-    if (initialSearch) {
-      setSearch(initialSearch);
-    }
-  }, [initialSearch]);
+    if (initialSearch) setSearch(initialSearch);
+    if (initialBrand) setSelectedBrands([initialBrand]);
+    if (initialCategory) setSelectedCategory(initialCategory);
+    if (initialScale) setSelectedScales([initialScale]);
+  }, [initialSearch, initialBrand, initialCategory, initialScale]);
 
   // Brand toggle
   const toggleBrand = (brand: string) => {
@@ -95,53 +105,9 @@ function TiendaContent() {
           if (!match) return false;
         }
 
-        // Brand & Category check
+        // Brand & Category check (synchronized with catalog constants)
         if (selectedBrands.length > 0) {
-          const brandMatch = selectedBrands.some((cat) => {
-            const c = cat.toLowerCase();
-            const text = `${p.marca} ${p.categoria} ${p.serie || ''} ${p.modelo}`.toLowerCase();
-
-            if (c === 'hw básicos') {
-              return text.includes('básico') || text.includes('basico') || text.includes('mainline');
-            }
-            if (c === 'hw silver') {
-              return text.includes('silver');
-            }
-            if (c === 'hw premium') {
-              return text.includes('premium') || text.includes('car culture') || text.includes('boulevard') || text.includes('speed machines') || text.includes('circuit legends');
-            }
-            if (c === 'hw th') {
-              return (text.includes('treasure hunt') && !text.includes('super')) || text.includes(' hw th') || text.includes('th regular');
-            }
-            if (c === 'hw sth') {
-              return text.includes('super treasure hunt') || text.includes('sth') || text.includes('$th');
-            }
-            if (c === 'hw team transport premium') {
-              return text.includes('team transport');
-            }
-            if (c === 'burago') {
-              return text.includes('burago') || text.includes('bburago');
-            }
-            if (c.includes('kaido')) {
-              return text.includes('kaido');
-            }
-            if (c === 'mini gt') {
-              return text.includes('mini gt') || text.includes('minigt');
-            }
-            if (c === 'poster cars') {
-              return text.includes('poster');
-            }
-            if (c === 'inolvidables 80/90') {
-              return text.includes('80/90') || (text.includes('inolvidables') && (text.includes('80') || text.includes('90')));
-            }
-            if (c === 'inolvidables reparto y servicio') {
-              return text.includes('reparto') || text.includes('servicio');
-            }
-            if (c === 'inolvidables') {
-              return text.includes('inolvidable') && !text.includes('80') && !text.includes('90') && !text.includes('reparto');
-            }
-            return text.includes(c);
-          });
+          const brandMatch = selectedBrands.some((cat) => matchesBrand(p, cat));
           if (!brandMatch) return false;
         }
 
@@ -170,29 +136,9 @@ function TiendaContent() {
     return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
   };
 
-  const BRANDS_LIST = [
-    { label: 'Hw básicos', value: 'Hw básicos' },
-    { label: 'Hw Silver', value: 'Hw Silver' },
-    { label: 'Hw Premium', value: 'Hw Premium' },
-    { label: 'Hw th', value: 'Hw th' },
-    { label: 'Hw sth', value: 'Hw sth' },
-    { label: 'Hw team transport premium', value: 'Hw team transport premium' },
-    { label: 'Tarmac', value: 'Tarmac' },
-    { label: 'Inno64', value: 'Inno64' },
-    { label: 'Matchbox', value: 'Matchbox' },
-    { label: 'Majorette', value: 'Majorette' },
-    { label: 'Mini GT', value: 'Mini GT' },
-    { label: 'Poster cars', value: 'Poster cars' },
-    { label: 'Burago', value: 'Burago' },
-    { label: 'kaido House/ Mini gt', value: 'kaido House/ Mini gt' },
-    { label: 'Inolvidables', value: 'Inolvidables' },
-    { label: 'Inolvidables 80/90', value: 'Inolvidables 80/90' },
-    { label: 'Inolvidables reparto y servicio', value: 'Inolvidables reparto y servicio' },
-  ];
-
-  const SCALES_LIST = ['1:64', '1:43', '1:24', '1:36'];
-
-  const THEMES_LIST = ['JDM', 'Muscle Cars', 'Car Culture', 'Boulevard', 'Camionetas Off-Road'];
+  const BRANDS_LIST = CATALOG_BRANDS;
+  const SCALES_LIST = CATALOG_SCALES;
+  const THEMES_LIST = CATALOG_THEMES;
 
   return (
     <div className="flex flex-col w-full pb-20">
