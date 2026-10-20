@@ -14,6 +14,37 @@ export default function HomePage() {
   const { addItem } = useCart();
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
+  const [spotlightAdded, setSpotlightAdded] = useState(false);
+
+  const spotlightProduct: Product = {
+    id: 'spotlight-nissan-gtr-r34',
+    modelo: 'Nissan Skyline GT-R (R34)',
+    marca: 'Hot Wheels',
+    escala: '1:64',
+    anio: 2024,
+    precio: 14990,
+    stock: 3,
+    estado_blister: 'Impecable',
+    descripcion: 'Hot Wheels Premium // Car Culture con carrocería de metal fundido y ruedas Real Riders.',
+    imagen_url:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuDQvZS12mbKb8nmB3EtCJiJFGVrC8KgusEcf8NfnxbrNmoTRwX7Yxzw1u9EtVLnYTfrsjRSYO3ATU-owjBX_Jt-uaSJrJMDKvyVvxlg5A3eajb3_AtPwcMS-WHlSCQyfOwAIaBHtg8tJK2GwCJbgRn6J6gsq45t2aqHvbzhLNwe0kceg2QHxRLFGhfuqRi1TaD3VU6AChARkeYG4ke0XBy1ICk9BO-igcP8TW9y3X_nOG6RIB_mXQbXcA',
+    categoria: 'Premium',
+    destacado: true,
+    activo: true,
+    created_at: new Date().toISOString(),
+  };
+
+  const handleAddSpotlight = () => {
+    addItem(spotlightProduct);
+    setSpotlightAdded(true);
+    confetti({
+      particleCount: 40,
+      spread: 50,
+      origin: { y: 0.6 },
+      colors: ['#FFC200', '#FF9900', '#E51937'],
+    });
+    setTimeout(() => setSpotlightAdded(false), 2000);
+  };
 
   // Form states for Encargos Especiales
   const [formData, setFormData] = useState({
@@ -95,79 +126,72 @@ export default function HomePage() {
       {/* ==============================================================================
           1. HERO SECTION: VELOCIDAD, FIBRA DE CARBONO Y PARTÍCULAS DE FUEGO
       ============================================================================== */}
-      <section className="relative w-full overflow-hidden bg-carbon-pattern py-12 md:py-20 lg:py-28 border-b border-surface-container">
+      <section className="relative w-full overflow-hidden bg-carbon-pattern py-12 md:py-16 lg:py-20 border-b border-surface-container">
         {/* Dynamic Fire Particles Canvas */}
         <FireParticles />
 
         {/* Ambient Telemetry Glows */}
         <div className="absolute -top-32 -left-32 w-96 h-96 bg-secondary-container/20 rounded-full blur-[140px] pointer-events-none"></div>
-        <div className="absolute top-1/2 right-0 w-[32rem] h-[32rem] bg-primary-container/15 rounded-full blur-[150px] pointer-events-none"></div>
+        <div className="absolute top-1/2 right-10 w-[32rem] h-[32rem] bg-secondary-container/25 rounded-full blur-[150px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-primary-container/15 rounded-full blur-[130px] pointer-events-none"></div>
         <div className="absolute inset-0 bg-telemetry-grid opacity-30 pointer-events-none"></div>
 
         <div className="relative w-full px-4 md:px-8 mx-auto max-w-7xl z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* Hero Text Deck */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+            {/* Hero Left Deck */}
             <div className="lg:col-span-7 flex flex-col gap-5">
-              {/* Velocity Status Chips */}
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-secondary-container text-on-secondary-container font-label-telemetry text-xs tracking-widest uppercase">
-                  <span className="material-symbols-outlined text-sm animate-bounce" style={{ fontVariationSettings: '"FILL" 1' }}>
-                    local_fire_department
-                  </span>
-                  STOCK LIMITADO
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container-high text-primary-container font-label-telemetry text-xs tracking-widest uppercase border border-surface-container-highest">
-                  <span className="material-symbols-outlined text-sm">shield</span>
-                  ENVÍO BLINDADO CARD-PROTECT
-                </span>
-                <span className="hidden sm:inline-flex items-center gap-1 px-2 py-1 text-outline font-label-telemetry text-xs">
-                  RADAR: ONLINE // EDICIÓN 2024
+              {/* Eyebrow */}
+              <div className="flex items-center gap-2">
+                <span className="font-label-telemetry text-xs md:text-sm tracking-[0.2em] text-neutral-400 uppercase font-semibold">
+                  COLECCIONABLES A ESCALA
                 </span>
               </div>
 
               {/* Main Impact Title */}
               <div className="flex flex-col">
-                <span className="font-headline-sm text-sm md:text-base uppercase tracking-widest text-primary-container flex items-center gap-2">
-                  <span className="w-8 h-1 bg-primary-container inline-block"></span>
-                  DIVISIÓN PADDOCK 1:64
-                </span>
-                <h1 className="font-display-hero text-4xl sm:text-5xl md:text-6xl uppercase text-on-surface tracking-tight mt-2 leading-[0.95] drop-shadow-md">
-                  LA ZONA DEFINITIVA PARA{' '}
-                  <span className="text-gradient-flame italic">
-                    COLECCIONISTAS
-                  </span>{' '}
-                  DE ALTA VELOCIDAD
+                <h1 className="font-display-hero text-5xl sm:text-6xl md:text-7xl uppercase text-white tracking-tight leading-[0.95] drop-shadow-md">
+                  TU PRÓXIMA{' '}
+                  <span className="text-gradient-flame block">
+                    JOYA ESTÁ ACÁ
+                  </span>
                 </h1>
               </div>
 
-              <p className="font-body-lg text-sm sm:text-base text-on-surface-variant max-w-2xl leading-relaxed">
-                Encontrá piezas únicas, Mainlines seleccionados, líneas Premium, exclusividades RLC y los codiciados Super Treasure Hunts con embalaje de grado industrial blindado a todo el país.
+              {/* Subtitle */}
+              <p className="font-body-md text-base sm:text-lg text-neutral-300 max-w-xl leading-relaxed">
+                Hot Wheels, premium y piezas especiales para tu colección.
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1">
                 <Link
                   href="/tienda"
-                  className="relative group px-6 py-4 bg-gradient-to-r from-primary-container via-surface-tint to-secondary-container text-surface-container-lowest font-headline-md text-base md:text-lg uppercase tracking-wider flex items-center justify-center gap-2 transition-transform duration-200 hover:scale-[1.02] active:scale-95 shadow-xl shadow-primary-container/20 chamfer-tr"
+                  className="px-6 py-3.5 bg-gradient-to-r from-[#FFC200] via-[#FF9900] to-[#E51937] text-black font-extrabold text-sm md:text-base uppercase tracking-wider rounded-lg flex items-center justify-center gap-2.5 hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-orange-500/20"
                 >
-                  <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: '"FILL" 1' }}>
-                    speed
-                  </span>
-                  <span>EXPLORAR CATÁLOGO COMPLETO</span>
+                  <span className="text-lg">🛒</span>
+                  <span>EXPLORAR CATÁLOGO &gt;</span>
                 </Link>
 
                 <a
                   href="#encargos"
-                  className="px-6 py-4 bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-on-surface font-headline-md text-base md:text-lg uppercase tracking-wider flex items-center justify-center gap-2 transition-colors duration-200"
+                  className="px-6 py-3.5 bg-neutral-900/90 hover:bg-neutral-800 border border-neutral-700 text-white font-extrabold text-sm md:text-base uppercase tracking-wider rounded-lg flex items-center justify-center gap-2.5 transition-colors"
                 >
-                  <span className="material-symbols-outlined text-xl text-primary-container">travel_explore</span>
-                  <span>HACER UN ENCARGO ESPECIAL</span>
+                  <span className="text-lg">🚗</span>
+                  <span>PEDIR UN AUTO &gt;</span>
                 </a>
               </div>
 
+              {/* Handwritten Cursive Slogan */}
+              <div className="flex flex-col items-start pt-2">
+                <span className="font-script text-2xl sm:text-3xl text-neutral-200 italic tracking-wide">
+                  La felicidad en diferentes escalas
+                </span>
+                <div className="w-44 h-1 bg-gradient-to-r from-primary-container via-amber-400 to-transparent rounded-full mt-1"></div>
+              </div>
+
               {/* Live Race Counters */}
-              <div className="grid grid-cols-3 gap-3 pt-4 border-t border-surface-container-high">
-                <div className="p-3 bg-surface-container-low border border-surface-container flex flex-col">
+              <div className="grid grid-cols-3 gap-3 pt-4 border-t border-surface-container-high/60 max-w-xl">
+                <div className="p-3 bg-surface-container-low/80 backdrop-blur-sm border border-surface-container flex flex-col">
                   <span className="font-headline-lg text-2xl md:text-3xl text-primary-container tracking-tighter leading-none">
                     +1,250
                   </span>
@@ -175,85 +199,77 @@ export default function HomePage() {
                     Modelos en Stock
                   </span>
                 </div>
-                <div className="p-3 bg-surface-container-low border border-surface-container flex flex-col">
+                <div className="p-3 bg-surface-container-low/80 backdrop-blur-sm border border-surface-container flex flex-col">
                   <span className="font-headline-lg text-2xl md:text-3xl text-secondary tracking-tighter leading-none">
                     100%
                   </span>
                   <span className="font-label-telemetry text-[11px] uppercase text-on-surface-variant mt-1">
-                    Blíster Cuidado C-10
+                    Blíster C-10 Mint
                   </span>
                 </div>
-                <div className="p-3 bg-surface-container-low border border-surface-container flex flex-col">
-                  <span className="font-headline-lg text-2xl md:text-3xl text-tertiary-fixed tracking-tighter leading-none">
+                <div className="p-3 bg-surface-container-low/80 backdrop-blur-sm border border-surface-container flex flex-col">
+                  <span className="font-headline-lg text-2xl md:text-3xl text-amber-400 tracking-tighter leading-none">
                     980+
                   </span>
                   <span className="font-label-telemetry text-[11px] uppercase text-on-surface-variant mt-1">
-                    Coleccionistas Felices
+                    Coleccionistas
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Hero Visual Spotlight Mockup */}
-            <div className="lg:col-span-5 relative flex justify-center items-center">
-              {/* Pulsing Radar Ring */}
-              <div className="absolute w-[300px] h-[300px] md:w-[420px] md:h-[420px] bg-secondary-container/10 rounded-full flex items-center justify-center pointer-events-none animate-pulse">
-                <div className="w-3/4 h-3/4 bg-primary-container/10 rounded-full flex items-center justify-center">
-                  <div className="w-1/2 h-1/2 bg-surface-container-highest/20 rounded-full"></div>
-                </div>
-              </div>
+            {/* Hero Right Deck: Spotlight Blister Pack Mockup with Floating Glass Card */}
+            <div className="lg:col-span-5 relative flex justify-center items-center py-4">
+              {/* Radial red spotlight halo */}
+              <div className="absolute w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] bg-gradient-to-br from-secondary-container/40 via-secondary-container/15 to-transparent rounded-full blur-[80px] pointer-events-none"></div>
 
-              {/* Spotlight Die-Cast Card */}
-              <div className="relative z-10 w-full max-w-md bg-surface-container-low border-2 border-primary-container/40 p-4 shadow-2xl flex flex-col gap-3 group">
-                <div className="flex items-center justify-between pb-1 border-b border-surface-container-highest">
-                  <div className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 bg-secondary-container rounded-full animate-ping"></span>
-                    <span className="font-label-telemetry text-xs uppercase text-primary tracking-widest font-bold">
-                      SPOTLIGHT OFICIAL
-                    </span>
-                  </div>
-                  <span className="font-label-telemetry text-[11px] px-2 py-0.5 bg-surface-container-highest text-outline uppercase">
-                    SERIE PREMIUM CAR CULTURE
-                  </span>
-                </div>
-
-                {/* Showcase Image */}
-                <div className="relative w-full h-72 md:h-80 bg-surface-container-lowest overflow-hidden border border-surface-container flex items-center justify-center">
+              {/* Blister Card Container */}
+              <div className="relative z-10 w-full max-w-sm sm:max-w-md group">
+                {/* Blister Image Frame */}
+                <div className="relative w-full h-[400px] sm:h-[460px] rounded-2xl overflow-hidden border border-neutral-700/80 bg-neutral-950/80 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-sm transition-transform duration-500 group-hover:scale-[1.02]">
                   <Image
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQvZS12mbKb8nmB3EtCJiJFGVrC8KgusEcf8NfnxbrNmoTRwX7Yxzw1u9EtVLnYTfrsjRSYO3ATU-owjBX_Jt-uaSJrJMDKvyVvxlg5A3eajb3_AtPwcMS-WHlSCQyfOwAIaBHtg8tJK2GwCJbgRn6J6gsq45t2aqHvbzhLNwe0kceg2QHxRLFGhfuqRi1TaD3VU6AChARkeYG4ke0XBy1ICk9BO-igcP8TW9y3X_nOG6RIB_mXQbXcA"
-                    alt="Nissan Skyline GT-R BNR34 Nismo Fast and Furious"
+                    src={spotlightProduct.imagen_url}
+                    alt={spotlightProduct.modelo}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover object-center"
                     priority
+                    sizes="(max-width: 768px) 100vw, 500px"
                   />
-                  <div className="absolute top-2 left-2 flex flex-col gap-1">
-                    <span className="bg-secondary-container text-on-secondary-container font-label-telemetry text-[11px] px-2 py-0.5 uppercase font-bold tracking-wider">
-                      SPECTRAFLAME FINISH
-                    </span>
-                    <span className="bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-label-telemetry text-[11px] px-2 py-0.5 uppercase tracking-wider">
-                      REAL RIDERS TIRES
-                    </span>
+                  {/* Subtle lighting sheen */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-white/10 pointer-events-none"></div>
+
+                  {/* Quality Badge */}
+                  <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md border border-neutral-700 text-[11px] font-label-telemetry text-primary-container uppercase font-bold tracking-wider">
+                    <span className="w-2 h-2 rounded-full bg-secondary-container animate-ping"></span>
+                    <span>SPOTLIGHT DESTACADO</span>
                   </div>
-                  <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black via-black/80 to-transparent flex items-end justify-between">
-                    <div>
-                      <span className="font-headline-sm text-base text-white uppercase block leading-tight">
-                        Nissan Skyline R34 Nismo
+                </div>
+
+                {/* Floating Glassmorphism Product Card in Corner */}
+                <div className="absolute -bottom-4 right-2 sm:-right-4 z-20 bg-neutral-900/90 backdrop-blur-md border border-neutral-700/80 rounded-2xl p-3.5 sm:p-4 shadow-2xl flex items-center justify-between gap-4 max-w-xs sm:max-w-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-500 font-extrabold text-xs tracking-tighter shrink-0">
+                      GT-R
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-bold text-white leading-tight">
+                        {spotlightProduct.modelo}
                       </span>
-                      <span className="font-body-sm text-xs text-on-surface-variant">
-                        Chasis Metálico // Edición Limitada
+                      <span className="text-[11px] text-neutral-400">
+                        Hot Wheels Premium // Car Culture
+                      </span>
+                      <span className="text-base font-extrabold text-[#FFC200] mt-0.5">
+                        ${spotlightProduct.precio.toLocaleString('es-AR')}
                       </span>
                     </div>
-                    <span className="font-label-price text-2xl text-primary-container">
-                      $18.500
-                    </span>
                   </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-1 font-label-telemetry text-xs text-outline">
-                  <span>ESC: 1:64 REAL DIE-CAST</span>
-                  <span className="text-primary-container flex items-center gap-1 font-bold">
-                    <span className="material-symbols-outlined text-sm">verified</span> CERTIFICADO MINT 10/10
-                  </span>
+                  <button
+                    onClick={handleAddSpotlight}
+                    title="Agregar al carrito"
+                    className="w-10 h-10 rounded-full bg-primary-container hover:bg-amber-400 text-black flex items-center justify-center font-bold text-lg shadow-lg hover:scale-105 active:scale-95 transition-all shrink-0"
+                  >
+                    {spotlightAdded ? '✓' : '>'}
+                  </button>
                 </div>
               </div>
             </div>
@@ -267,22 +283,21 @@ export default function HomePage() {
       <section className="w-full bg-surface py-16 md:py-24 border-b border-surface-container" id="destacados">
         <div className="w-full px-4 md:px-8 mx-auto max-w-7xl flex flex-col gap-8">
           {/* Section Header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-surface-container">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-surface-container">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
-                <span className="w-3 h-3 bg-secondary-container"></span>
                 <span className="font-label-telemetry text-xs uppercase tracking-widest text-secondary font-bold">
                   CIRCUITO DE RAREZAS // EDICIONES LIMITADAS
                 </span>
               </div>
-              <h2 className="font-display-hero text-3xl md:text-5xl uppercase tracking-tight text-on-surface">
-                DESTACADOS DE LA <span className="text-primary-container italic">SEMANA</span>
-              </h2>
+              <div className="flex flex-col">
+                <h2 className="font-display-hero text-3xl md:text-5xl uppercase tracking-tight text-white flex items-center gap-3">
+                  DESTACADOS
+                </h2>
+                <div className="w-20 h-1 bg-primary-container rounded-full mt-1.5"></div>
+              </div>
             </div>
             <div className="flex items-center gap-4">
-              <p className="font-body-sm text-xs text-on-surface-variant max-w-md hidden md:block">
-                Piezas verificadas bajo el estricto protocolo C-10. Cada unidad cuenta con su protector acrílico rígido incluido sin recargo.
-              </p>
               <Link
                 href="/tienda"
                 className="font-headline-sm text-sm uppercase text-primary-container hover:underline flex items-center gap-1 whitespace-nowrap"
@@ -290,6 +305,30 @@ export default function HomePage() {
                 Ver todo el catálogo
                 <span className="material-symbols-outlined text-base">arrow_forward</span>
               </Link>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const el = document.getElementById('destacados-grid');
+                    if (el) el.scrollBy({ left: -320, behavior: 'smooth' });
+                  }}
+                  className="w-9 h-9 rounded-full border border-neutral-700 bg-neutral-900/80 hover:bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center transition-colors"
+                  aria-label="Anterior"
+                >
+                  <span className="material-symbols-outlined text-lg">chevron_left</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const el = document.getElementById('destacados-grid');
+                    if (el) el.scrollBy({ left: 320, behavior: 'smooth' });
+                  }}
+                  className="w-9 h-9 rounded-full border border-primary-container bg-primary-container/10 hover:bg-primary-container text-primary-container hover:text-black flex items-center justify-center transition-colors font-bold"
+                  aria-label="Siguiente"
+                >
+                  <span className="material-symbols-outlined text-lg">chevron_right</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -301,7 +340,7 @@ export default function HomePage() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div id="destacados-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 overflow-x-auto pb-2 scroll-smooth">
               {featuredProducts.map((product) => (
                 <div
                   key={product.id}
