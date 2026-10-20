@@ -494,10 +494,10 @@ export default function HomePage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Marca o Serie */}
+                  {/* Marca y Categoría */}
                   <div className="flex flex-col gap-1">
                     <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                      Marca / Serie Deseada *
+                      Marca y Categoría Deseada *
                     </label>
                     <select
                       required
@@ -506,31 +506,42 @@ export default function HomePage() {
                       className="w-full px-3 py-2 bg-surface-container border border-surface-container-high text-on-surface font-body-sm text-sm focus:outline-none focus:border-primary-container transition-colors"
                     >
                       <option value="">Seleccioná una línea...</option>
-                      <option value="Hot Wheels RLC (Red Line Club)">Hot Wheels RLC (Red Line Club)</option>
-                      <option value="Hot Wheels Super Treasure Hunt (STH)">Hot Wheels Super Treasure Hunt (STH)</option>
-                      <option value="Hot Wheels Car Culture / Boulevard">Hot Wheels Car Culture / Boulevard</option>
-                      <option value="Kaido House / Mini GT (1:64)">Kaido House / Mini GT (1:64)</option>
-                      <option value="Inno64 / Tarmac Works">Inno64 / Tarmac Works</option>
-                      <option value="Matchbox Collectors">Matchbox Collectors</option>
-                      <option value="Vintage Redline (1968-1977)">Vintage Redline (1968-1977)</option>
+                      <option value="Hw básicos">Hw básicos</option>
+                      <option value="Hw Silver">Hw Silver</option>
+                      <option value="Hw Premium">Hw Premium</option>
+                      <option value="Hw th">Hw th</option>
+                      <option value="Hw sth">Hw sth</option>
+                      <option value="Hw team transport premium">Hw team transport premium</option>
+                      <option value="Tarmac">Tarmac</option>
+                      <option value="Inno64">Inno64</option>
+                      <option value="Matchbox">Matchbox</option>
+                      <option value="Majorette">Majorette</option>
+                      <option value="Mini GT">Mini GT</option>
+                      <option value="Poster cars">Poster cars</option>
+                      <option value="Burago">Burago</option>
+                      <option value="kaido House/ Mini gt">kaido House/ Mini gt</option>
+                      <option value="Inolvidables">Inolvidables</option>
+                      <option value="Inolvidables 80/90">Inolvidables 80/90</option>
+                      <option value="Inolvidables reparto y servicio">Inolvidables reparto y servicio</option>
                       <option value="Otra marca o categoría">Otra marca o categoría</option>
                     </select>
                   </div>
 
-                  {/* Condición de Empaque */}
+                  {/* Escala Automotor */}
                   <div className="flex flex-col gap-1">
                     <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                      Condición requerida
+                      Escala Requerida
                     </label>
                     <select
                       value={formData.estado_empaque}
                       onChange={(e) => setFormData({ ...formData, estado_empaque: e.target.value })}
                       className="w-full px-3 py-2 bg-surface-container border border-surface-container-high text-on-surface font-body-sm text-sm focus:outline-none focus:border-primary-container transition-colors"
                     >
-                      <option value="Blíster Mint C-10 (Perfecto)">Blíster Mint C-10 (Perfecto para vitrina)</option>
-                      <option value="Blíster C-8 / C-9 (Detalles leves)">Blíster C-8 / C-9 (Detalles menores aceptables)</option>
-                      <option value="Loose / Suelto (Para rodar o custom)">Loose / Fuera de blíster (Sin tarjeta)</option>
-                      <option value="Indiferente">Indiferente si el precio conviene</option>
+                      <option value="1:64">1:64 (Estándar)</option>
+                      <option value="1:43">1:43 (Colección Pista)</option>
+                      <option value="1:24">1:24 (Exposición)</option>
+                      <option value="1:36">1:36</option>
+                      <option value="Indiferente">Indiferente / Cualquier escala</option>
                     </select>
                   </div>
                 </div>

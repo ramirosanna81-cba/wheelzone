@@ -19,7 +19,6 @@ function TiendaContent() {
   const [search, setSearch] = useState(initialSearch);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedScales, setSelectedScales] = useState<string[]>([]);
-  const [selectedConditions, setSelectedConditions] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [maxPrice, setMaxPrice] = useState<number>(65000);
   const [onlyInStock, setOnlyInStock] = useState<boolean>(true);
@@ -66,18 +65,10 @@ function TiendaContent() {
     );
   };
 
-  // Condition toggle
-  const toggleCondition = (cond: string) => {
-    setSelectedConditions((prev) =>
-      prev.includes(cond) ? prev.filter((c) => c !== cond) : [...prev, cond]
-    );
-  };
-
   const resetFilters = () => {
     setSearch('');
     setSelectedBrands([]);
     setSelectedScales([]);
-    setSelectedConditions([]);
     setSelectedCategory('');
     setMaxPrice(65000);
     setOnlyInStock(false);
@@ -104,21 +95,58 @@ function TiendaContent() {
           if (!match) return false;
         }
 
-        // Brand check
+        // Brand & Category check
         if (selectedBrands.length > 0) {
-          const brandMatch = selectedBrands.some(
-            (b) => p.marca.toLowerCase().includes(b.toLowerCase()) || p.categoria.toLowerCase().includes(b.toLowerCase())
-          );
+          const brandMatch = selectedBrands.some((cat) => {
+            const c = cat.toLowerCase();
+            const text = `${p.marca} ${p.categoria} ${p.serie || ''} ${p.modelo}`.toLowerCase();
+
+            if (c === 'hw básicos') {
+              return text.includes('básico') || text.includes('basico') || text.includes('mainline');
+            }
+            if (c === 'hw silver') {
+              return text.includes('silver');
+            }
+            if (c === 'hw premium') {
+              return text.includes('premium') || text.includes('car culture') || text.includes('boulevard') || text.includes('speed machines') || text.includes('circuit legends');
+            }
+            if (c === 'hw th') {
+              return (text.includes('treasure hunt') && !text.includes('super')) || text.includes(' hw th') || text.includes('th regular');
+            }
+            if (c === 'hw sth') {
+              return text.includes('super treasure hunt') || text.includes('sth') || text.includes('$th');
+            }
+            if (c === 'hw team transport premium') {
+              return text.includes('team transport');
+            }
+            if (c === 'burago') {
+              return text.includes('burago') || text.includes('bburago');
+            }
+            if (c.includes('kaido')) {
+              return text.includes('kaido');
+            }
+            if (c === 'mini gt') {
+              return text.includes('mini gt') || text.includes('minigt');
+            }
+            if (c === 'poster cars') {
+              return text.includes('poster');
+            }
+            if (c === 'inolvidables 80/90') {
+              return text.includes('80/90') || (text.includes('inolvidables') && (text.includes('80') || text.includes('90')));
+            }
+            if (c === 'inolvidables reparto y servicio') {
+              return text.includes('reparto') || text.includes('servicio');
+            }
+            if (c === 'inolvidables') {
+              return text.includes('inolvidable') && !text.includes('80') && !text.includes('90') && !text.includes('reparto');
+            }
+            return text.includes(c);
+          });
           if (!brandMatch) return false;
         }
 
         // Scale check
         if (selectedScales.length > 0 && !selectedScales.includes(p.escala)) {
-          return false;
-        }
-
-        // Blister Condition check
-        if (selectedConditions.length > 0 && !selectedConditions.includes(p.estado_blister)) {
           return false;
         }
 
@@ -135,30 +163,34 @@ function TiendaContent() {
         if (sortBy === 'name-asc') return a.modelo.localeCompare(b.modelo);
         return (new Date(b.created_at || '').getTime() || 0) - (new Date(a.created_at || '').getTime() || 0);
       });
-  }, [products, search, selectedBrands, selectedScales, selectedConditions, selectedCategory, maxPrice, onlyInStock, sortBy]);
+  }, [products, search, selectedBrands, selectedScales, selectedCategory, maxPrice, onlyInStock, sortBy]);
 
   const getWhatsAppProductUrl = (product: Product) => {
-    const msg = `¡Hola Wheels Zone! Quiero comprar la siguiente pieza:\n*${product.modelo}*\nMarca: ${product.marca} | Escala: ${product.escala}\nPrecio: $${product.precio.toLocaleString('es-AR')}\nEstado de Blíster: ${product.estado_blister}\n¿Me confirman disponibilidad para despacho en caja protegida?`;
+    const msg = `¡Hola Wheels Zone! Quiero comprar la siguiente pieza:\n*${product.modelo}*\nMarca: ${product.marca} | Escala: ${product.escala}\nPrecio: $${product.precio.toLocaleString('es-AR')}\nCondición: Nuevo en empaque original\n¿Me confirman disponibilidad para despacho en caja protegida?`;
     return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
   };
 
   const BRANDS_LIST = [
-    { label: 'Hot Wheels Premium', value: 'Car Culture' },
-    { label: 'Super Treasure Hunt ($TH)', value: 'Super Treasure Hunt' },
-    { label: 'Kaido House / Mini GT', value: 'Kaido House' },
-    { label: 'Matchbox Collectors', value: 'Matchbox' },
-    { label: 'Boulevard Series', value: 'Boulevard' },
-    { label: 'JDM Classics', value: 'JDM' },
+    { label: 'Hw básicos', value: 'Hw básicos' },
+    { label: 'Hw Silver', value: 'Hw Silver' },
+    { label: 'Hw Premium', value: 'Hw Premium' },
+    { label: 'Hw th', value: 'Hw th' },
+    { label: 'Hw sth', value: 'Hw sth' },
+    { label: 'Hw team transport premium', value: 'Hw team transport premium' },
+    { label: 'Tarmac', value: 'Tarmac' },
+    { label: 'Inno64', value: 'Inno64' },
+    { label: 'Matchbox', value: 'Matchbox' },
+    { label: 'Majorette', value: 'Majorette' },
+    { label: 'Mini GT', value: 'Mini GT' },
+    { label: 'Poster cars', value: 'Poster cars' },
+    { label: 'Burago', value: 'Burago' },
+    { label: 'kaido House/ Mini gt', value: 'kaido House/ Mini gt' },
+    { label: 'Inolvidables', value: 'Inolvidables' },
+    { label: 'Inolvidables 80/90', value: 'Inolvidables 80/90' },
+    { label: 'Inolvidables reparto y servicio', value: 'Inolvidables reparto y servicio' },
   ];
 
-  const SCALES_LIST = ['1:64', '1:43', '1:24', '1:18'];
-
-  const CONDITIONS_LIST: { label: string; value: BlisterCondition; desc: string }[] = [
-    { label: '💎 Impecable (10/10 Mint)', value: 'Impecable', desc: 'Burbuja y tarjeta perfectas' },
-    { label: '⭐ Muy Bueno (8.5 a 9.5)', value: 'Muy Bueno', desc: 'Detalles mínimos de góndola' },
-    { label: '📦 Desgaste / Ideal Abrir', value: 'Desgaste / Abrir', desc: 'Pliegue en cartón o burbuja' },
-    { label: '🏎️ Loose (Suelto)', value: 'Loose', desc: 'Casting sin empaque' },
-  ];
+  const SCALES_LIST = ['1:64', '1:43', '1:24', '1:36'];
 
   const THEMES_LIST = ['JDM', 'Muscle Cars', 'Car Culture', 'Boulevard', 'Camionetas Off-Road'];
 
@@ -251,13 +283,13 @@ function TiendaContent() {
           <div className="bg-surface-container-low border border-surface-container p-4 flex flex-col gap-2">
             <div className="flex items-center justify-between pb-1 border-b border-surface-container">
               <span className="font-headline-sm uppercase text-on-surface text-sm tracking-wider">
-                Marca & Tirada
+                Marca y Categoría
               </span>
               <span className="font-label-telemetry text-[11px] text-primary-container">
-                {selectedBrands.length > 0 ? `${selectedBrands.length} activos` : 'TODAS'}
+                {selectedBrands.length > 0 ? `${selectedBrands.length} activas` : 'TODAS'}
               </span>
             </div>
-            <div className="flex flex-col gap-1.5 pt-1">
+            <div className="flex flex-col gap-1.5 pt-1 max-h-72 overflow-y-auto pr-1">
               {BRANDS_LIST.map((b) => (
                 <label
                   key={b.value}
@@ -270,7 +302,7 @@ function TiendaContent() {
                       onChange={() => toggleBrand(b.value)}
                       className="accent-primary-container w-3.5 h-3.5"
                     />
-                    <span className={b.value.includes('Super Treasure') ? 'text-secondary font-bold' : ''}>
+                    <span className={b.value.toLowerCase().includes('sth') ? 'text-secondary font-bold' : ''}>
                       {b.label}
                     </span>
                   </span>
@@ -302,37 +334,6 @@ function TiendaContent() {
                   </button>
                 );
               })}
-            </div>
-          </div>
-
-          {/* Blister Condition Certification */}
-          <div className="bg-surface-container-low border border-surface-container p-4 flex flex-col gap-2">
-            <div className="flex items-center justify-between pb-1 border-b border-surface-container">
-              <span className="font-headline-sm uppercase text-on-surface text-sm tracking-wider">
-                Condición del Blíster
-              </span>
-              <span className="material-symbols-outlined text-primary-container text-base">verified</span>
-            </div>
-            <div className="flex flex-col gap-1.5 pt-1">
-              {CONDITIONS_LIST.map((c) => (
-                <label
-                  key={c.value}
-                  className="flex items-start gap-2 p-1.5 bg-surface-container-lowest border border-surface-container cursor-pointer hover:border-surface-container-highest transition-colors"
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedConditions.includes(c.value)}
-                    onChange={() => toggleCondition(c.value)}
-                    className="accent-primary-container w-3.5 h-3.5 mt-0.5"
-                  />
-                  <div className="flex flex-col min-w-0">
-                    <span className="font-label-telemetry text-xs text-on-surface uppercase">
-                      {c.label}
-                    </span>
-                    <span className="text-[10px] text-outline truncate">{c.desc}</span>
-                  </div>
-                </label>
-              ))}
             </div>
           </div>
 
@@ -515,14 +516,8 @@ function TiendaContent() {
                     </div>
 
                     <div className="absolute top-2 right-2 z-10">
-                      <span
-                        className={`font-label-telemetry text-[11px] px-2 py-0.5 uppercase border ${
-                          product.estado_blister === 'Impecable'
-                            ? 'bg-surface-container-lowest/90 text-primary-container border-primary-container/40'
-                            : 'bg-surface-container-lowest/90 text-on-surface-variant border-surface-container'
-                        }`}
-                      >
-                        {product.estado_blister === 'Impecable' ? 'MINT 10/10' : product.estado_blister}
+                      <span className="font-label-telemetry text-[11px] px-2 py-0.5 uppercase border bg-surface-container-lowest/90 text-primary-container border-primary-container/40">
+                        NUEVO
                       </span>
                     </div>
 
@@ -530,7 +525,7 @@ function TiendaContent() {
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                       <span className="px-3 py-1.5 bg-black/80 text-white font-label-telemetry text-xs uppercase tracking-wider flex items-center gap-1 border border-primary-container">
                         <span className="material-symbols-outlined text-sm text-primary-container">zoom_in</span>
-                        INSPECCIONAR BLÍSTER
+                        VER DETALLE
                       </span>
                     </div>
                   </div>
@@ -646,8 +641,8 @@ function TiendaContent() {
 
                 <div className="p-3 bg-surface-container border border-surface-container-highest flex flex-col gap-1.5 font-label-telemetry text-xs">
                   <div className="flex justify-between border-b border-surface-container-low pb-1">
-                    <span className="text-outline uppercase">Condición de Blíster:</span>
-                    <span className="text-primary font-bold uppercase">{selectedProductModal.estado_blister}</span>
+                    <span className="text-outline uppercase">Condición:</span>
+                    <span className="text-primary font-bold uppercase">NUEVO (EMPAQUE ORIGINAL)</span>
                   </div>
                   <div className="flex justify-between border-b border-surface-container-low pb-1">
                     <span className="text-outline uppercase">Año de Lanzamiento:</span>

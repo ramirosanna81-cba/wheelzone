@@ -814,7 +814,7 @@ export default function AdminPage() {
                     <option value="1:64">1:64 (Estándar Paddock)</option>
                     <option value="1:43">1:43 (Colección Pista)</option>
                     <option value="1:24">1:24 (Exposición)</option>
-                    <option value="1:18">1:18 (Gran Turismo)</option>
+                    <option value="1:36">1:36 (Escala 1:36)</option>
                   </select>
                 </div>
               </div>
@@ -1368,7 +1368,7 @@ export default function AdminPage() {
                     <option value="1:64">1:64 (Estándar)</option>
                     <option value="1:43">1:43 (Coleccionista)</option>
                     <option value="1:24">1:24</option>
-                    <option value="1:18">1:18 (Gran Escala)</option>
+                    <option value="1:36">1:36</option>
                   </select>
                 </div>
 
