@@ -49,16 +49,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items]);
 
   const addItem = (product: Product, quantity = 1) => {
+    const maxAvailable = product.stock ?? 1;
+    if (maxAvailable <= 0) return;
+
     setItems((prev) => {
       const existing = prev.find((item) => item.product.id === product.id);
       if (existing) {
+        const newQty = Math.min(existing.quantity + quantity, maxAvailable);
         return prev.map((item) =>
           item.product.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
+            ? { ...item, quantity: newQty }
             : item
         );
       }
-      return [...prev, { product, quantity }];
+      return [...prev, { product, quantity: Math.min(quantity, maxAvailable) }];
     });
     setIsCartOpen(true);
   };
@@ -73,9 +77,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     setItems((prev) =>
-      prev.map((item) =>
-        item.product.id === productId ? { ...item, quantity } : item
-      )
+      prev.map((item) => {
+        if (item.product.id === productId) {
+          const maxAvailable = item.product.stock ?? 99;
+          return { ...item, quantity: Math.min(quantity, maxAvailable) };
+        }
+        return item;
+      })
     );
   };
 

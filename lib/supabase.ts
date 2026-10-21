@@ -56,6 +56,7 @@ export async function fetchProducts(): Promise<Product[]> {
         .order('created_at', { ascending: false });
 
       if (!error && data && data.length > 0) {
+        setLocalData(STORAGE_KEYS.PRODUCTS, data);
         return data as Product[];
       }
     } catch (err) {

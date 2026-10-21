@@ -29,7 +29,15 @@ function TiendaContent() {
   const [selectedBrands, setSelectedBrands] = useState<string[]>(initialBrand ? [initialBrand] : []);
   const [selectedScales, setSelectedScales] = useState<string[]>(initialScale ? [initialScale] : []);
   const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
-  const [maxPrice, setMaxPrice] = useState<number>(65000);
+
+  // Dynamic maximum price based on inventory
+  const maxCatalogPrice = useMemo(() => {
+    if (products.length === 0) return 100000;
+    const highest = Math.max(...products.map((p) => p.precio || 0));
+    return Math.max(80000, Math.ceil(highest / 10000) * 10000);
+  }, [products]);
+
+  const [maxPrice, setMaxPrice] = useState<number>(100000);
   const [onlyInStock, setOnlyInStock] = useState<boolean>(true);
   const [sortBy, setSortBy] = useState<string>('newest');
 
@@ -44,6 +52,11 @@ function TiendaContent() {
       try {
         const data = await fetchProducts();
         setProducts(data);
+        if (data && data.length > 0) {
+          const highest = Math.max(...data.map((p) => p.precio || 0));
+          const ceiling = Math.max(80000, Math.ceil(highest / 10000) * 10000);
+          setMaxPrice(ceiling);
+        }
       } catch (err) {
         console.error('Error fetching products:', err);
       } finally {
@@ -80,7 +93,7 @@ function TiendaContent() {
     setSelectedBrands([]);
     setSelectedScales([]);
     setSelectedCategory('');
-    setMaxPrice(65000);
+    setMaxPrice(maxCatalogPrice);
     setOnlyInStock(false);
   };
 
@@ -88,11 +101,14 @@ function TiendaContent() {
   const filteredProducts = useMemo(() => {
     return products
       .filter((p) => {
+        // Customer store visibility check
+        if (p.activo === false) return false;
+
         // Stock check
         if (onlyInStock && p.stock <= 0) return false;
 
-        // Price check
-        if (p.precio > maxPrice) return false;
+        // Price check (only filter if slider was moved below catalog ceiling)
+        if (maxPrice < maxCatalogPrice && p.precio > maxPrice) return false;
 
         // Text search
         if (search.trim()) {
@@ -136,7 +152,7 @@ function TiendaContent() {
         if (sortBy === 'name-asc') return a.modelo.localeCompare(b.modelo);
         return (new Date(b.created_at || '').getTime() || 0) - (new Date(a.created_at || '').getTime() || 0);
       });
-  }, [products, search, selectedBrands, selectedScales, selectedCategory, maxPrice, onlyInStock, sortBy]);
+  }, [products, search, selectedBrands, selectedScales, selectedCategory, maxPrice, maxCatalogPrice, onlyInStock, sortBy]);
 
   const getWhatsAppProductUrl = (product: Product) => {
     const msg = `¡Hola Wheels Zone! Quiero comprar la siguiente pieza:\n*${product.modelo}*\nMarca: ${product.marca} | Escala: ${product.escala}\nPrecio: $${product.precio.toLocaleString('es-AR')}\nCondición: Nuevo en empaque original\n¿Me confirman disponibilidad para despacho en caja protegida?`;
@@ -329,21 +345,21 @@ function TiendaContent() {
                 Precio Máximo
               </span>
               <span className="font-label-telemetry text-xs text-primary-container font-bold">
-                Hasta ${maxPrice.toLocaleString('es-AR')}
+                {maxPrice >= maxCatalogPrice ? 'Sin límite de precio' : `Hasta $${maxPrice.toLocaleString('es-AR')}`}
               </span>
             </div>
             <input
               type="range"
               min="5000"
-              max="65000"
-              step="1000"
+              max={maxCatalogPrice}
+              step="2500"
               value={maxPrice}
               onChange={(e) => setMaxPrice(Number(e.target.value))}
               className="w-full accent-primary-container cursor-pointer"
             />
             <div className="flex justify-between font-label-telemetry text-[10px] text-outline">
               <span>$5.000 ARS</span>
-              <span>$65.000+ ARS</span>
+              <span>${maxCatalogPrice.toLocaleString('es-AR')}+ ARS</span>
             </div>
           </div>
 

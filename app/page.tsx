@@ -151,8 +151,9 @@ export default function HomePage() {
     async function loadData() {
       try {
         const products = await fetchProducts();
-        const featured = products.filter((p) => p.destacado);
-        setFeaturedProducts(featured.length > 0 ? featured : products.slice(0, 8));
+        const activeProds = products.filter((p) => p.activo !== false);
+        const featured = activeProds.filter((p) => p.destacado);
+        setFeaturedProducts(featured.length > 0 ? featured : activeProds.slice(0, 8));
       } catch (err) {
         console.error('Error loading featured products:', err);
       } finally {
