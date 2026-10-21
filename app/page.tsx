@@ -212,31 +212,31 @@ export default function HomePage() {
       {/* ==============================================================================
           1. HERO SECTION: VELOCIDAD, FIBRA DE CARBONO Y PARTÍCULAS DE FUEGO
       ============================================================================== */}
-      <section className="relative w-full overflow-hidden bg-carbon-pattern py-12 md:py-16 lg:py-20 border-b border-surface-container">
+      <section className="relative w-full overflow-hidden bg-carbon-pattern py-8 sm:py-12 md:py-16 lg:py-20 border-b border-surface-container">
         {/* Dynamic Fire Particles Canvas */}
         <FireParticles />
 
-        {/* Ambient Telemetry Glows */}
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-secondary-container/20 rounded-full blur-[140px] pointer-events-none"></div>
-        <div className="absolute top-1/2 right-10 w-[32rem] h-[32rem] bg-secondary-container/25 rounded-full blur-[150px] pointer-events-none"></div>
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-primary-container/15 rounded-full blur-[130px] pointer-events-none"></div>
+        {/* Ambient Telemetry Glows (Clipped within section) */}
+        <div className="absolute -top-32 -left-32 w-80 sm:w-96 h-80 sm:h-96 bg-secondary-container/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="absolute top-1/2 right-0 sm:right-10 w-80 sm:w-[32rem] h-80 sm:h-[32rem] bg-secondary-container/25 rounded-full blur-[130px] pointer-events-none"></div>
+        <div className="absolute bottom-0 right-1/4 w-60 sm:w-80 h-60 sm:h-80 bg-primary-container/15 rounded-full blur-[110px] pointer-events-none"></div>
         <div className="absolute inset-0 bg-telemetry-grid opacity-30 pointer-events-none"></div>
 
-        <div className="relative w-full px-4 md:px-8 mx-auto max-w-7xl z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+        <div className="relative w-full px-3 sm:px-6 md:px-8 mx-auto max-w-7xl z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
             {/* Hero Left Deck */}
-            <div className="lg:col-span-7 flex flex-col gap-5">
+            <div className="lg:col-span-7 flex flex-col gap-4 sm:gap-5">
               {/* Eyebrow with gradient accent line */}
-              <div className="flex items-center gap-2.5">
-                <span className="font-label-telemetry text-xs md:text-sm tracking-[0.25em] text-neutral-300 uppercase font-semibold">
+              <div className="flex items-center gap-2 sm:gap-2.5">
+                <span className="font-label-telemetry text-[11px] sm:text-xs md:text-sm tracking-[0.2em] sm:tracking-[0.25em] text-neutral-300 uppercase font-semibold">
                   COLECCIONABLES A ESCALA
                 </span>
-                <div className="w-14 sm:w-16 h-[2.5px] bg-gradient-to-r from-[#FFC200] via-[#FF6A00] to-transparent rounded-full"></div>
+                <div className="w-12 sm:w-16 h-[2.5px] bg-gradient-to-r from-[#FFC200] via-[#FF6A00] to-transparent rounded-full"></div>
               </div>
 
               {/* Main Impact Title - Slanted/Italic Display with Vertical Flame Gradient */}
               <div className="flex flex-col">
-                <h1 className="font-display-hero italic font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.92]">
+                <h1 className="font-display-hero italic font-black text-4xl sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.92]">
                   <span className="text-hero-white block">
                     TU PRÓXIMA
                   </span>
@@ -247,18 +247,18 @@ export default function HomePage() {
               </div>
 
               {/* Subtitle */}
-              <p className="font-body-md text-base sm:text-lg text-neutral-200 max-w-xl leading-relaxed">
+              <p className="font-body-md text-sm sm:text-base md:text-lg text-neutral-200 max-w-xl leading-relaxed">
                 Hot Wheels, premium y piezas especiales para tu colección.
               </p>
 
               {/* Action Buttons with identical rounded-xl corners & crisp SVGs */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
                 <Link
                   href="/tienda"
-                  className="px-6 sm:px-7 py-3.5 bg-gradient-to-r from-[#FFC200] via-[#FF6000] to-[#FF1E27] text-black font-extrabold text-sm sm:text-base uppercase tracking-wider rounded-xl flex items-center justify-center gap-3 hover:brightness-110 active:scale-95 transition-all shadow-[0_8px_20px_rgba(255,96,0,0.35)]"
+                  className="px-5 sm:px-7 py-3 sm:py-3.5 bg-gradient-to-r from-[#FFC200] via-[#FF6000] to-[#FF1E27] text-black font-extrabold text-xs sm:text-sm md:text-base uppercase tracking-wider rounded-xl flex items-center justify-center gap-2.5 sm:gap-3 hover:brightness-110 active:scale-95 transition-all shadow-[0_8px_20px_rgba(255,96,0,0.35)]"
                 >
                   <svg
-                    className="w-5 h-5 text-black shrink-0"
+                    className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-black shrink-0"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -275,10 +275,10 @@ export default function HomePage() {
 
                 <a
                   href="#encargos"
-                  className="px-6 sm:px-7 py-3.5 bg-[#151518]/90 hover:bg-[#202025] border border-neutral-600/90 text-white font-extrabold text-sm sm:text-base uppercase tracking-wider rounded-xl flex items-center justify-center gap-3 transition-colors"
+                  className="px-5 sm:px-7 py-3 sm:py-3.5 bg-[#151518]/90 hover:bg-[#202025] border border-neutral-600/90 text-white font-extrabold text-xs sm:text-sm md:text-base uppercase tracking-wider rounded-xl flex items-center justify-center gap-2.5 sm:gap-3 transition-colors"
                 >
                   <svg
-                    className="w-5 h-5 text-white shrink-0"
+                    className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-white shrink-0"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -298,13 +298,13 @@ export default function HomePage() {
               </div>
 
               {/* Crisp White Handwritten Cursive Slogan with Curved Yellow Underline */}
-              <div className="flex flex-col items-start pt-2">
-                <span className="font-script text-white text-3xl sm:text-4xl italic tracking-wide select-none drop-shadow-md">
+              <div className="flex flex-col items-start pt-1.5 sm:pt-2">
+                <span className="font-script text-white text-2xl xs:text-3xl sm:text-4xl italic tracking-wide select-none drop-shadow-md">
                   La felicidad en diferentes escalas
                 </span>
                 {/* Hand-drawn curved yellow swoosh under 'La felicidad' */}
                 <svg
-                  className="w-36 sm:w-44 h-3.5 text-[#FFC200] -mt-1 sm:-mt-1.5 ml-1"
+                  className="w-32 xs:w-36 sm:w-44 h-3 sm:h-3.5 text-[#FFC200] -mt-1 sm:-mt-1.5 ml-1"
                   viewBox="0 0 160 16"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -319,28 +319,28 @@ export default function HomePage() {
               </div>
 
               {/* Live Race Counters */}
-              <div className="grid grid-cols-3 gap-3 pt-4 border-t border-surface-container-high/60 max-w-xl">
-                <div className="p-3 bg-surface-container-low/80 backdrop-blur-sm border border-surface-container flex flex-col">
-                  <span className="font-headline-lg text-2xl md:text-3xl text-primary-container tracking-tighter leading-none">
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-surface-container-high/60 max-w-xl">
+                <div className="p-2 sm:p-3 bg-surface-container-low/80 backdrop-blur-sm border border-surface-container flex flex-col">
+                  <span className="font-headline-lg text-xl sm:text-2xl md:text-3xl text-primary-container tracking-tighter leading-none">
                     +1,250
                   </span>
-                  <span className="font-label-telemetry text-[11px] uppercase text-on-surface-variant mt-1">
+                  <span className="font-label-telemetry text-[9px] xs:text-[10px] sm:text-[11px] uppercase text-on-surface-variant mt-1 leading-tight">
                     Modelos en Stock
                   </span>
                 </div>
-                <div className="p-3 bg-surface-container-low/80 backdrop-blur-sm border border-surface-container flex flex-col">
-                  <span className="font-headline-lg text-2xl md:text-3xl text-secondary tracking-tighter leading-none">
+                <div className="p-2 sm:p-3 bg-surface-container-low/80 backdrop-blur-sm border border-surface-container flex flex-col">
+                  <span className="font-headline-lg text-xl sm:text-2xl md:text-3xl text-secondary tracking-tighter leading-none">
                     100%
                   </span>
-                  <span className="font-label-telemetry text-[11px] uppercase text-on-surface-variant mt-1">
+                  <span className="font-label-telemetry text-[9px] xs:text-[10px] sm:text-[11px] uppercase text-on-surface-variant mt-1 leading-tight">
                     Blíster C-10 Mint
                   </span>
                 </div>
-                <div className="p-3 bg-surface-container-low/80 backdrop-blur-sm border border-surface-container flex flex-col">
-                  <span className="font-headline-lg text-2xl md:text-3xl text-amber-400 tracking-tighter leading-none">
+                <div className="p-2 sm:p-3 bg-surface-container-low/80 backdrop-blur-sm border border-surface-container flex flex-col">
+                  <span className="font-headline-lg text-xl sm:text-2xl md:text-3xl text-amber-400 tracking-tighter leading-none">
                     980+
                   </span>
-                  <span className="font-label-telemetry text-[11px] uppercase text-on-surface-variant mt-1">
+                  <span className="font-label-telemetry text-[9px] xs:text-[10px] sm:text-[11px] uppercase text-on-surface-variant mt-1 leading-tight">
                     Coleccionistas
                   </span>
                 </div>
@@ -348,20 +348,20 @@ export default function HomePage() {
             </div>
 
             {/* Hero Right Deck: Spotlight Blister Pack Mockup with Dynamic Interactive Carousel */}
-            <div className="lg:col-span-5 relative flex flex-col justify-center items-center py-4">
+            <div className="lg:col-span-5 relative flex flex-col justify-center items-center py-2 sm:py-4 w-full">
               {/* Radial dynamic reactive spotlight halo */}
               <div
-                className={`absolute w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] bg-gradient-to-br ${haloClass} to-transparent rounded-full blur-[80px] pointer-events-none transition-all duration-700`}
+                className={`absolute w-[260px] h-[260px] sm:w-[420px] sm:h-[420px] bg-gradient-to-br ${haloClass} to-transparent rounded-full blur-[70px] sm:blur-[80px] pointer-events-none transition-all duration-700`}
               ></div>
 
               {/* Blister Card Container with Pause on Hover */}
               <div
                 onMouseEnter={() => setIsHeroPaused(true)}
                 onMouseLeave={() => setIsHeroPaused(false)}
-                className="relative z-10 w-full max-w-sm sm:max-w-[420px] flex flex-col items-center gap-3 group select-none"
+                className="relative z-10 w-full max-w-[320px] xs:max-w-sm sm:max-w-[420px] flex flex-col items-center gap-2.5 sm:gap-3 group select-none"
               >
                 {/* Blister Image Frame (100% Clean, Unobstructed Art & Bubble) */}
-                <div className="relative w-full h-[400px] sm:h-[450px] md:h-[470px] rounded-2xl overflow-hidden border border-neutral-700/80 bg-neutral-950/90 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-sm transition-transform duration-500 group-hover:scale-[1.01]">
+                <div className="relative w-full h-[320px] xs:h-[370px] sm:h-[440px] md:h-[470px] rounded-2xl overflow-hidden border border-neutral-700/80 bg-neutral-950/90 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-sm transition-transform duration-500 group-hover:scale-[1.01]">
                   
                   {/* Telemetry RPM Progress Bar at Top */}
                   <div className="absolute top-0 left-0 right-0 h-1 bg-neutral-800/80 z-30 overflow-hidden">
@@ -384,26 +384,26 @@ export default function HomePage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10 pointer-events-none"></div>
 
                   {/* Quality / Rarity Badge Top Left */}
-                  <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-md border border-neutral-700 text-[11px] font-label-telemetry text-primary-container uppercase font-bold tracking-wider shadow-lg">
-                    <span className="w-2 h-2 rounded-full bg-secondary-container animate-ping"></span>
-                    <span>{badgeText}</span>
+                  <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-20 flex items-center gap-1.5 bg-black/80 backdrop-blur-md px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border border-neutral-700 text-[10px] sm:text-[11px] font-label-telemetry text-primary-container uppercase font-bold tracking-wider shadow-lg max-w-[85%] truncate">
+                    <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-secondary-container animate-ping shrink-0"></span>
+                    <span className="truncate">{badgeText}</span>
                   </div>
 
                   {/* Auto-play pause indicator */}
                   {isHeroPaused && (
-                    <div className="absolute top-3 right-3 z-20 bg-black/80 backdrop-blur-md px-2.5 py-0.5 rounded text-[10px] font-label-telemetry text-neutral-300 uppercase tracking-widest border border-neutral-700/60 shadow">
+                    <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 z-20 bg-black/80 backdrop-blur-md px-2 sm:px-2.5 py-0.5 rounded text-[9px] sm:text-[10px] font-label-telemetry text-neutral-300 uppercase tracking-widest border border-neutral-700/60 shadow">
                       PAUSADO
                     </div>
                   )}
 
-                  {/* Manual Arrow Controls (< and >) on hover */}
+                  {/* Manual Arrow Controls (< and >) - Visible on touch/mobile, hover on desktop */}
                   <button
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       handlePrevHero();
                     }}
-                    className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/70 hover:bg-black text-white/80 hover:text-white border border-neutral-700/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg cursor-pointer"
+                    className="absolute left-2 sm:left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/75 hover:bg-black text-white border border-neutral-700/80 flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg cursor-pointer"
                     aria-label="Anterior modelo"
                   >
                     <span className="material-symbols-outlined text-base">chevron_left</span>
@@ -414,7 +414,7 @@ export default function HomePage() {
                       e.stopPropagation();
                       handleNextHero();
                     }}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/70 hover:bg-black text-white/80 hover:text-white border border-neutral-700/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg cursor-pointer"
+                    className="absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/75 hover:bg-black text-white border border-neutral-700/80 flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg cursor-pointer"
                     aria-label="Siguiente modelo"
                   >
                     <span className="material-symbols-outlined text-base">chevron_right</span>
@@ -422,32 +422,32 @@ export default function HomePage() {
                 </div>
 
                 {/* Dedicated Lower Information Bar (Anchored and perfectly centered under the blister image) */}
-                <div className="w-full bg-[#121214]/90 backdrop-blur-md border border-neutral-800/90 hover:border-neutral-700 rounded-xl sm:rounded-2xl px-4 py-2.5 sm:py-3 shadow-xl flex items-center justify-between gap-3 transition-all duration-300">
-                  <div className="flex items-center gap-3 min-w-0">
+                <div className="w-full bg-[#121214]/90 backdrop-blur-md border border-neutral-800/90 hover:border-neutral-700 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2 sm:py-3 shadow-xl flex items-center justify-between gap-2.5 sm:gap-3 transition-all duration-300">
+                  <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                     {/* Model Acronym Chip */}
-                    <div className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-lg bg-red-600/15 border border-red-500/30 flex items-center justify-center text-red-500 font-extrabold text-[11px] sm:text-xs tracking-tighter shrink-0 font-sans">
+                    <div className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-lg bg-red-600/15 border border-red-500/30 flex items-center justify-center text-red-500 font-extrabold text-[10px] sm:text-xs tracking-tighter shrink-0 font-sans">
                       {modelAcronym}
                     </div>
                     {/* Model Name & Serie/Category */}
                     <div className="flex flex-col min-w-0">
-                      <span className="font-sans font-bold text-sm sm:text-[15px] text-white leading-tight truncate">
+                      <span className="font-sans font-bold text-xs sm:text-[15px] text-white leading-tight truncate">
                         {activeSpotlight.modelo}
                       </span>
-                      <span className="font-sans text-[11px] text-neutral-400 truncate mt-0.5">
+                      <span className="font-sans text-[10px] sm:text-[11px] text-neutral-400 truncate mt-0.5">
                         {activeSpotlight.serie || `${activeSpotlight.marca} // ${activeSpotlight.categoria}`}
                       </span>
                     </div>
                   </div>
 
                   {/* Price & Compact Harmonious CTA Button */}
-                  <div className="flex items-center gap-3 shrink-0">
-                    <span className="font-sans font-extrabold text-[#FFC200] text-base sm:text-lg whitespace-nowrap">
+                  <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                    <span className="font-sans font-extrabold text-[#FFC200] text-sm sm:text-lg whitespace-nowrap">
                       ${activeSpotlight.precio.toLocaleString('es-AR')}
                     </span>
                     <button
                       onClick={handleAddSpotlight}
                       title={spotlightAdded ? '¡Agregado al carrito!' : 'Agregar al carrito'}
-                      className={`w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold transition-all shrink-0 shadow-md ${
+                      className={`w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold transition-all shrink-0 shadow-md ${
                         spotlightAdded
                           ? 'bg-emerald-500 text-white scale-105'
                           : 'bg-primary-container hover:bg-amber-400 text-black hover:scale-105 active:scale-95'
@@ -455,9 +455,9 @@ export default function HomePage() {
                       aria-label="Agregar al carrito"
                     >
                       {spotlightAdded ? (
-                        <span className="material-symbols-outlined text-base">check</span>
+                        <span className="material-symbols-outlined text-sm sm:text-base">check</span>
                       ) : (
-                        <span className="material-symbols-outlined text-base">shopping_cart</span>
+                        <span className="material-symbols-outlined text-sm sm:text-base">shopping_cart</span>
                       )}
                     </button>
                   </div>
@@ -471,53 +471,53 @@ export default function HomePage() {
       {/* ==============================================================================
           2. SECCIÓN DESTACADOS DE LA SEMANA (CIRCUITO DE RAREZAS)
       ============================================================================== */}
-      <section className="w-full bg-surface py-16 md:py-24 border-b border-surface-container" id="destacados">
-        <div className="w-full px-4 md:px-8 mx-auto max-w-7xl flex flex-col gap-8">
+      <section className="w-full bg-surface py-10 sm:py-16 md:py-24 border-b border-surface-container overflow-hidden" id="destacados">
+        <div className="w-full px-3 sm:px-6 md:px-8 mx-auto max-w-7xl flex flex-col gap-6 sm:gap-8">
           {/* Section Header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-surface-container">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4 pb-3 sm:pb-4 border-b border-surface-container">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
-                <span className="font-label-telemetry text-xs uppercase tracking-widest text-secondary font-bold">
+                <span className="font-label-telemetry text-[11px] sm:text-xs uppercase tracking-widest text-secondary font-bold">
                   CIRCUITO DE RAREZAS // EDICIONES LIMITADAS
                 </span>
               </div>
               <div className="flex flex-col">
-                <h2 className="font-display-hero text-3xl md:text-5xl uppercase tracking-tight text-white flex items-center gap-3">
+                <h2 className="font-display-hero text-2xl sm:text-3xl md:text-5xl uppercase tracking-tight text-white flex items-center gap-3">
                   DESTACADOS
                 </h2>
-                <div className="w-20 h-1 bg-primary-container rounded-full mt-1.5"></div>
+                <div className="w-16 sm:w-20 h-1 bg-primary-container rounded-full mt-1 sm:mt-1.5"></div>
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 w-full sm:w-auto pt-1 sm:pt-0">
               <Link
                 href="/tienda"
-                className="font-headline-sm text-sm uppercase text-primary-container hover:underline flex items-center gap-1 whitespace-nowrap"
+                className="font-headline-sm text-xs sm:text-sm uppercase text-primary-container hover:underline flex items-center gap-1 whitespace-nowrap"
               >
                 Ver todo el catálogo
-                <span className="material-symbols-outlined text-base">arrow_forward</span>
+                <span className="material-symbols-outlined text-sm sm:text-base">arrow_forward</span>
               </Link>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <button
                   type="button"
                   onClick={() => {
                     const el = document.getElementById('destacados-grid');
-                    if (el) el.scrollBy({ left: -320, behavior: 'smooth' });
+                    if (el) el.scrollBy({ left: -280, behavior: 'smooth' });
                   }}
-                  className="w-9 h-9 rounded-full border border-neutral-700 bg-neutral-900/80 hover:bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center transition-colors"
+                  className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full border border-neutral-700 bg-neutral-900/80 hover:bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center transition-colors"
                   aria-label="Anterior"
                 >
-                  <span className="material-symbols-outlined text-lg">chevron_left</span>
+                  <span className="material-symbols-outlined text-base sm:text-lg">chevron_left</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => {
                     const el = document.getElementById('destacados-grid');
-                    if (el) el.scrollBy({ left: 320, behavior: 'smooth' });
+                    if (el) el.scrollBy({ left: 280, behavior: 'smooth' });
                   }}
-                  className="w-9 h-9 rounded-full border border-primary-container bg-primary-container/10 hover:bg-primary-container text-primary-container hover:text-black flex items-center justify-center transition-colors font-bold"
+                  className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full border border-primary-container bg-primary-container/10 hover:bg-primary-container text-primary-container hover:text-black flex items-center justify-center transition-colors font-bold"
                   aria-label="Siguiente"
                 >
-                  <span className="material-symbols-outlined text-lg">chevron_right</span>
+                  <span className="material-symbols-outlined text-base sm:text-lg">chevron_right</span>
                 </button>
               </div>
             </div>
@@ -535,15 +535,15 @@ export default function HomePage() {
               id="destacados-grid"
               onMouseEnter={() => setDestacadosHovered(true)}
               onMouseLeave={() => setDestacadosHovered(false)}
-              className="flex items-stretch gap-4 overflow-x-auto pb-4 scroll-smooth no-scrollbar"
+              className="flex items-stretch gap-3 sm:gap-4 overflow-x-auto pb-4 scroll-smooth no-scrollbar -mx-3 px-3 sm:mx-0 sm:px-0"
             >
               {featuredProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="w-[280px] sm:w-[300px] lg:w-[285px] xl:w-[298px] shrink-0 group bg-surface-container-low hover:bg-surface-container transition-all duration-300 flex flex-col border border-surface-container hover:border-primary-container relative overflow-hidden"
+                  className="w-[240px] xs:w-[260px] sm:w-[280px] lg:w-[285px] xl:w-[298px] shrink-0 group bg-surface-container-low hover:bg-surface-container transition-all duration-300 flex flex-col border border-surface-container hover:border-primary-container relative overflow-hidden"
                 >
                   {/* Photo area */}
-                  <div className="relative w-full h-64 bg-surface-container-lowest overflow-hidden">
+                  <div className="relative w-full h-56 sm:h-64 bg-surface-container-lowest overflow-hidden">
                     <Image
                       src={product.imagen_url}
                       alt={product.modelo}
@@ -640,52 +640,52 @@ export default function HomePage() {
       {/* ==============================================================================
           3. SECCIÓN DE ENCARGOS ESPECIALES & CACERÍA TELEMÉTRICA
       ============================================================================== */}
-      <section className="w-full bg-carbon-pattern py-16 md:py-24 border-b border-surface-container relative" id="encargos">
-        <div className="absolute top-0 right-10 w-96 h-96 bg-primary-container/10 rounded-full blur-[140px] pointer-events-none"></div>
+      <section className="w-full bg-carbon-pattern py-10 sm:py-16 md:py-24 border-b border-surface-container relative overflow-hidden" id="encargos">
+        <div className="absolute top-0 right-10 w-80 sm:w-96 h-80 sm:h-96 bg-primary-container/10 rounded-full blur-[130px] pointer-events-none"></div>
 
-        <div className="w-full px-4 md:px-8 mx-auto max-w-7xl relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="w-full px-3 sm:px-6 md:px-8 mx-auto max-w-7xl relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
             {/* Information Column */}
-            <div className="lg:col-span-5 flex flex-col gap-6">
-              <div className="flex flex-col gap-3">
+            <div className="lg:col-span-5 flex flex-col gap-5 sm:gap-6">
+              <div className="flex flex-col gap-2.5 sm:gap-3">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 bg-primary-container rounded-sm shadow-[0_0_8px_rgba(255,194,0,0.6)]"></span>
-                  <span className="font-label-telemetry text-xs uppercase tracking-widest text-primary-container font-bold">
+                  <span className="font-label-telemetry text-[11px] sm:text-xs uppercase tracking-widest text-primary-container font-bold">
                     GARAJE DE BÚSQUEDA & IMPORTACIÓN
                   </span>
                 </div>
-                <h2 className="font-display-hero text-3xl md:text-5xl uppercase tracking-tight text-white leading-none">
+                <h2 className="font-display-hero text-2xl sm:text-3xl md:text-5xl uppercase tracking-tight text-white leading-none">
                   ¿BUSCÁS UNA PIEZA <span className="text-primary-container italic font-black drop-shadow-[0_2px_12px_rgba(255,194,0,0.35)]">INCONSEGUIBLE</span>?
                 </h2>
-                <p className="font-body-md text-sm md:text-base text-neutral-300 leading-relaxed">
+                <p className="font-body-md text-xs sm:text-sm md:text-base text-neutral-300 leading-relaxed">
                   Nosotros la rastreamos, verificamos su autenticidad y estado de blíster bajo lupa, y la traemos directo a tus manos a través de nuestra red de coleccionistas internacionales en Japón, Estados Unidos y Europa.
                 </p>
               </div>
 
               {/* Protocol steps - High-end modern card */}
-              <div className="flex flex-col gap-4 bg-gradient-to-b from-surface-container/90 to-surface-container-low/95 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/10 border-l-4 border-l-primary-container shadow-xl">
+              <div className="flex flex-col gap-3.5 sm:gap-4 bg-gradient-to-b from-surface-container/90 to-surface-container-low/95 backdrop-blur-md p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-white/10 border-l-4 border-l-primary-container shadow-xl">
                 <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
                   <span className="material-symbols-outlined text-primary-container text-xl">verified</span>
-                  <span className="font-headline-sm text-base uppercase text-white font-bold tracking-wide">
+                  <span className="font-headline-sm text-sm sm:text-base uppercase text-white font-bold tracking-wide">
                     Protocolo de Cacería Wheels Zone
                   </span>
                 </div>
-                <div className="flex flex-col gap-3.5 font-body-sm text-xs sm:text-sm">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0">
-                      <span className="material-symbols-outlined text-primary-container text-base">radar</span>
+                <div className="flex flex-col gap-3 font-body-sm text-xs sm:text-sm">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0">
+                      <span className="material-symbols-outlined text-primary-container text-sm sm:text-base">radar</span>
                     </div>
                     <span className="text-neutral-200 leading-snug">Escaneo en subastas RLC y clubes cerrados de coleccionistas</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0">
-                      <span className="material-symbols-outlined text-primary-container text-base">saved_search</span>
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0">
+                      <span className="material-symbols-outlined text-primary-container text-sm sm:text-base">saved_search</span>
                     </div>
                     <span className="text-neutral-200 leading-snug">Verificación fotográfica de esquinas, tampografía y burbuja</span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0">
-                      <span className="material-symbols-outlined text-primary-container text-base">lock</span>
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <div className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0">
+                      <span className="material-symbols-outlined text-primary-container text-sm sm:text-base">lock</span>
                     </div>
                     <span className="text-neutral-200 leading-snug">Seña congelada hasta aprobación de fotos reales en mano</span>
                   </div>
@@ -693,15 +693,15 @@ export default function HomePage() {
               </div>
 
               {/* Guarantee alert box - Reassuring sober dark gray with amber/gold shield */}
-              <div className="p-4 sm:p-4.5 bg-[#18181b]/95 backdrop-blur-md rounded-xl border border-primary-container/25 border-l-4 border-l-primary-container flex items-center gap-3.5 shadow-md">
-                <div className="w-9 h-9 rounded-full bg-primary-container/15 flex items-center justify-center shrink-0 text-primary-container">
-                  <span className="material-symbols-outlined text-xl">shield</span>
+              <div className="p-3.5 sm:p-4.5 bg-[#18181b]/95 backdrop-blur-md rounded-xl border border-primary-container/25 border-l-4 border-l-primary-container flex items-center gap-3 sm:gap-3.5 shadow-md">
+                <div className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full bg-primary-container/15 flex items-center justify-center shrink-0 text-primary-container">
+                  <span className="material-symbols-outlined text-lg sm:text-xl">shield</span>
                 </div>
                 <div className="flex flex-col gap-0.5">
-                  <span className="font-label-telemetry text-[11px] uppercase tracking-wider text-primary-container font-extrabold">
+                  <span className="font-label-telemetry text-[10px] sm:text-[11px] uppercase tracking-wider text-primary-container font-extrabold">
                     Garantía y Tranquilidad Total
                   </span>
-                  <p className="font-label-telemetry text-xs text-neutral-300 uppercase leading-snug">
+                  <p className="font-label-telemetry text-[11px] sm:text-xs text-neutral-300 uppercase leading-snug">
                     Sin compromiso de compra si el estado del blíster no coincide exactamente con el acordado previamente.
                   </p>
                 </div>
@@ -709,13 +709,13 @@ export default function HomePage() {
             </div>
 
             {/* Custom Request Form connected to Supabase */}
-            <div className="lg:col-span-7 bg-surface-container-low/95 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col gap-5 shadow-2xl relative">
-              <div className="flex items-center justify-between pb-4 border-b border-white/10">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-primary-container/15 border border-primary-container/30 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-primary-container text-lg">assignment</span>
+            <div className="lg:col-span-7 bg-surface-container-low/95 backdrop-blur-md border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 flex flex-col gap-4 sm:gap-5 shadow-2xl relative">
+              <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-white/10">
+                <div className="flex items-center gap-2 sm:gap-2.5">
+                  <div className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg bg-primary-container/15 border border-primary-container/30 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-primary-container text-base sm:text-lg">assignment</span>
                   </div>
-                  <span className="font-headline-sm text-lg md:text-xl uppercase text-white font-bold tracking-wide">
+                  <span className="font-headline-sm text-base sm:text-lg md:text-xl uppercase text-white font-bold tracking-wide">
                     FORMULARIO DE CACERÍA TELEMÉTRICA
                   </span>
                 </div>
@@ -874,31 +874,31 @@ export default function HomePage() {
       {/* ==============================================================================
           4. SECCIÓN DE CONFIANZA Y BLINDAJE DE BLÍSTERS
       ============================================================================== */}
-      <section className="w-full bg-surface py-16 md:py-24 border-b border-surface-container">
-        <div className="w-full px-4 md:px-8 mx-auto max-w-7xl flex flex-col gap-10">
+      <section className="w-full bg-surface py-10 sm:py-16 md:py-24 border-b border-surface-container overflow-hidden">
+        <div className="w-full px-3 sm:px-6 md:px-8 mx-auto max-w-7xl flex flex-col gap-8 sm:gap-10">
           <div className="flex flex-col items-center text-center gap-1">
-            <span className="font-label-telemetry text-xs uppercase tracking-widest text-primary-container font-bold">
+            <span className="font-label-telemetry text-[11px] sm:text-xs uppercase tracking-widest text-primary-container font-bold">
               ESTÁNDAR DE OPERACIONES WHEELS ZONE
             </span>
-            <h2 className="font-display-hero text-3xl md:text-5xl uppercase tracking-tight text-on-surface">
+            <h2 className="font-display-hero text-2xl sm:text-3xl md:text-5xl uppercase tracking-tight text-on-surface">
               BLINDAJE Y <span className="text-secondary-container italic">GARANTÍA TOTAL</span>
             </h2>
-            <p className="font-body-md text-sm text-on-surface-variant max-w-xl">
+            <p className="font-body-md text-xs sm:text-sm text-on-surface-variant max-w-xl">
               Sabemos el valor intrínseco de cada tarjeta y burbuja. Por eso diseñamos un circuito de empaque sin margen de daño mecánico.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {/* Card 1 */}
-            <div className="bg-surface-container-low border border-surface-container p-6 flex flex-col gap-4 hover:border-secondary transition-colors">
-              <div className="w-12 h-12 bg-secondary-container text-on-secondary-container flex items-center justify-center">
-                <span className="material-symbols-outlined text-2xl">shield</span>
+            <div className="bg-surface-container-low border border-surface-container p-4 sm:p-6 flex flex-col gap-3.5 sm:gap-4 hover:border-secondary transition-colors">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-secondary-container text-on-secondary-container flex items-center justify-center">
+                <span className="material-symbols-outlined text-xl sm:text-2xl">shield</span>
               </div>
               <div className="flex flex-col gap-1">
-                <h3 className="font-headline-md text-xl uppercase text-on-surface">
+                <h3 className="font-headline-md text-lg sm:text-xl uppercase text-on-surface">
                   Embalaje de Grado Militar
                 </h3>
-                <span className="font-label-telemetry text-xs text-secondary uppercase">
+                <span className="font-label-telemetry text-[11px] sm:text-xs text-secondary uppercase">
                   BURBUJA ANTI-IMPACTO + CAJA TRICAPA
                 </span>
               </div>
@@ -912,15 +912,15 @@ export default function HomePage() {
             </div>
 
             {/* Card 2 */}
-            <div className="bg-surface-container-low border border-surface-container p-6 flex flex-col gap-4 hover:border-primary-container transition-colors">
-              <div className="w-12 h-12 bg-primary-container text-on-primary-container flex items-center justify-center">
-                <span className="material-symbols-outlined text-2xl">verified_user</span>
+            <div className="bg-surface-container-low border border-surface-container p-4 sm:p-6 flex flex-col gap-3.5 sm:gap-4 hover:border-primary-container transition-colors">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-container text-on-primary-container flex items-center justify-center">
+                <span className="material-symbols-outlined text-xl sm:text-2xl">verified_user</span>
               </div>
               <div className="flex flex-col gap-1">
-                <h3 className="font-headline-md text-xl uppercase text-on-surface">
+                <h3 className="font-headline-md text-lg sm:text-xl uppercase text-on-surface">
                   Autenticidad 100% Garantizada
                 </h3>
-                <span className="font-label-telemetry text-xs text-primary-container uppercase">
+                <span className="font-label-telemetry text-[11px] sm:text-xs text-primary-container uppercase">
                   VERIFICACIÓN OFICIAL DE REMACHES
                 </span>
               </div>
@@ -934,15 +934,15 @@ export default function HomePage() {
             </div>
 
             {/* Card 3 */}
-            <div className="bg-surface-container-low border border-surface-container p-6 flex flex-col gap-4 hover:border-surface-tint transition-colors">
-              <div className="w-12 h-12 bg-surface-container-highest text-on-surface flex items-center justify-center">
-                <span className="material-symbols-outlined text-2xl">savings</span>
+            <div className="bg-surface-container-low border border-surface-container p-4 sm:p-6 flex flex-col gap-3.5 sm:gap-4 hover:border-surface-tint transition-colors">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-surface-container-highest text-on-surface flex items-center justify-center">
+                <span className="material-symbols-outlined text-xl sm:text-2xl">savings</span>
               </div>
               <div className="flex flex-col gap-1">
-                <h3 className="font-headline-md text-xl uppercase text-on-surface">
+                <h3 className="font-headline-md text-lg sm:text-xl uppercase text-on-surface">
                   Transferencia con 10% OFF
                 </h3>
-                <span className="font-label-telemetry text-xs text-outline uppercase">
+                <span className="font-label-telemetry text-[11px] sm:text-xs text-outline uppercase">
                   DESCUENTO DIRECTO EN CHECKOUT
                 </span>
               </div>
@@ -961,20 +961,20 @@ export default function HomePage() {
       {/* ==============================================================================
           5. SECCIÓN PADDOCK PRESENCIAL & SHOWROOM JUNÍN (GOOGLE MAPS DARK MODE)
       ============================================================================== */}
-      <section className="w-full bg-carbon-pattern py-16 md:py-24 border-b border-surface-container relative" id="showroom">
-        <div className="absolute top-1/2 left-0 w-96 h-96 bg-primary-container/10 rounded-full blur-[140px] pointer-events-none"></div>
+      <section className="w-full bg-carbon-pattern py-10 sm:py-16 md:py-24 border-b border-surface-container relative overflow-hidden" id="showroom">
+        <div className="absolute top-1/2 left-0 w-80 sm:w-96 h-80 sm:h-96 bg-primary-container/10 rounded-full blur-[130px] pointer-events-none"></div>
 
-        <div className="w-full px-4 md:px-8 mx-auto max-w-7xl relative z-10 flex flex-col gap-10">
+        <div className="w-full px-3 sm:px-6 md:px-8 mx-auto max-w-7xl relative z-10 flex flex-col gap-6 sm:gap-10">
           {/* Section Header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-surface-container">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-4 pb-2 border-b border-surface-container">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 bg-primary-container rounded-full animate-ping"></span>
-                <span className="font-label-telemetry text-xs uppercase tracking-widest text-primary-container font-bold">
+                <span className="font-label-telemetry text-[11px] sm:text-xs uppercase tracking-widest text-primary-container font-bold">
                   PADDOCK PRESENCIAL & SHOWROOM OFICIAL
                 </span>
               </div>
-              <h2 className="font-display-hero text-3xl md:text-5xl uppercase tracking-tight text-on-surface">
+              <h2 className="font-display-hero text-2xl sm:text-3xl md:text-5xl uppercase tracking-tight text-on-surface">
                 VENÍ A CONOCER EL <span className="text-gradient-flame italic">GARAJE EN PERSONA</span>
               </h2>
             </div>
@@ -983,27 +983,27 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
             {/* Left Column: Headquarters Info & Action Buttons (5 Cols) */}
-            <div className="lg:col-span-5 bg-surface-container-low/95 border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col justify-between gap-6 shadow-2xl relative">
-              <div className="flex flex-col gap-5">
+            <div className="lg:col-span-5 bg-surface-container-low/95 border border-white/10 rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 flex flex-col justify-between gap-5 sm:gap-6 shadow-2xl relative">
+              <div className="flex flex-col gap-4 sm:gap-5">
                 {/* Header Badge */}
                 <div className="flex items-center justify-between pb-3 border-b border-white/10">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary-container text-xl">storefront</span>
-                    <span className="font-headline-sm uppercase text-sm text-white font-bold tracking-wider">
+                    <span className="material-symbols-outlined text-primary-container text-lg sm:text-xl">storefront</span>
+                    <span className="font-headline-sm uppercase text-xs sm:text-sm text-white font-bold tracking-wider">
                       WHEELS ZONE HEADQUARTERS
                     </span>
                   </div>
-                  <span className="font-label-telemetry text-[11px] px-2.5 py-1 rounded-md bg-secondary-container text-on-secondary-container uppercase font-extrabold shadow-sm">
+                  <span className="font-label-telemetry text-[10px] sm:text-[11px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-secondary-container text-on-secondary-container uppercase font-extrabold shadow-sm">
                     PUNTO DE RETIRO
                   </span>
                 </div>
 
-                {/* Address Box (Suavizada con esquinas redondeadas y acento sutil) */}
-                <div className="flex flex-col gap-2 p-4 sm:p-5 rounded-xl bg-gradient-to-br from-surface-container/90 to-surface-container-low border border-primary-container/20 border-l-4 border-l-primary-container shadow-md">
+                {/* Address Box */}
+                <div className="flex flex-col gap-2 p-3.5 sm:p-5 rounded-xl bg-gradient-to-br from-surface-container/90 to-surface-container-low border border-primary-container/20 border-l-4 border-l-primary-container shadow-md">
                   <div className="flex items-center justify-between flex-wrap gap-2 pb-1 border-b border-white/5">
-                    <span className="font-display-hero text-sm sm:text-[15px] uppercase text-primary-container font-extrabold tracking-wider flex items-center gap-1.5">
+                    <span className="font-display-hero text-xs sm:text-[15px] uppercase text-primary-container font-extrabold tracking-wider flex items-center gap-1.5">
                       <span className="material-symbols-outlined text-[15px] text-amber-400 shrink-0">location_on</span>
                       DIRECCIÓN DEL SHOWROOM
                     </span>
@@ -1019,7 +1019,7 @@ export default function HomePage() {
                   </div>
 
                   {/* Cuerpo de la Dirección con separación clara */}
-                  <p className="font-display-hero text-xl sm:text-2xl font-black uppercase text-white leading-tight mt-1 mb-1 tracking-wide">
+                  <p className="font-display-hero text-lg sm:text-xl md:text-2xl font-black uppercase text-white leading-tight mt-1 mb-1 tracking-wide">
                     Rioja 281, B6022 Junín, Argentina
                   </p>
                   
@@ -1035,65 +1035,63 @@ export default function HomePage() {
                     <span className="material-symbols-outlined text-sm text-primary-container">schedule</span>
                     HORARIOS DE ATENCIÓN EN PADDOCK
                   </span>
-                  <div className="grid grid-cols-2 gap-2 text-on-surface">
-                    <div className="p-3 rounded-lg bg-[#141416] border border-neutral-700/70 flex flex-col">
-                      <span className="text-primary-container font-extrabold">LUNES A VIERNES</span>
+                  <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 text-on-surface">
+                    <div className="p-2.5 sm:p-3 rounded-lg bg-[#141416] border border-neutral-700/70 flex flex-col">
+                      <span className="text-primary-container font-extrabold text-xs">LUNES A VIERNES</span>
                       <span className="text-[11px] text-neutral-300 mt-0.5">09:30 a 13:00 hs</span>
                       <span className="text-[11px] text-neutral-300">16:30 a 20:30 hs</span>
                     </div>
-                    <div className="p-3 rounded-lg bg-[#141416] border border-neutral-700/70 flex flex-col">
-                      <span className="text-primary-container font-extrabold">SÁBADOS</span>
+                    <div className="p-2.5 sm:p-3 rounded-lg bg-[#141416] border border-neutral-700/70 flex flex-col">
+                      <span className="text-primary-container font-extrabold text-xs">SÁBADOS</span>
                       <span className="text-[11px] text-neutral-300 mt-0.5">10:00 a 13:30 hs</span>
                       <span className="text-[11px] text-neutral-300">17:00 a 20:30 hs</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Showroom Perks (Viñetas de beneficios con iconos simples dorados y mayor interlineado) */}
-                <div className="flex flex-col gap-3 font-sans text-xs sm:text-[13px] text-neutral-200 pt-1">
-                  <div className="flex items-start gap-2.5 leading-snug">
-                    <span className="material-symbols-outlined text-amber-400 text-base font-bold shrink-0 mt-0.5">check</span>
+                {/* Showroom Perks */}
+                <div className="flex flex-col gap-2.5 sm:gap-3 font-sans text-xs sm:text-[13px] text-neutral-200 pt-1">
+                  <div className="flex items-start gap-2 sm:gap-2.5 leading-snug">
+                    <span className="material-symbols-outlined text-amber-400 text-sm sm:text-base font-bold shrink-0 mt-0.5">check</span>
                     <span>Más de 1.200 autitos coleccionables y STH en exhibición permanente</span>
                   </div>
-                  <div className="flex items-start gap-2.5 leading-snug">
-                    <span className="material-symbols-outlined text-amber-400 text-base font-bold shrink-0 mt-0.5">check</span>
+                  <div className="flex items-start gap-2 sm:gap-2.5 leading-snug">
+                    <span className="material-symbols-outlined text-amber-400 text-sm sm:text-base font-bold shrink-0 mt-0.5">check</span>
                     <span>10% OFF en efectivo o transferencia directa al retirar en showroom</span>
                   </div>
-                  <div className="flex items-start gap-2.5 leading-snug">
-                    <span className="material-symbols-outlined text-amber-400 text-base font-bold shrink-0 mt-0.5">check</span>
+                  <div className="flex items-start gap-2 sm:gap-2.5 leading-snug">
+                    <span className="material-symbols-outlined text-amber-400 text-sm sm:text-base font-bold shrink-0 mt-0.5">check</span>
                     <span>Inspección de remaches, tampografía y estado de blíster bajo lupa</span>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col gap-3 pt-3 border-t border-white/10">
-                {/* Botón Principal: Coordinar visita por WhatsApp con degradado ámbar/amarillo, brillo suave y logo WhatsApp */}
+              <div className="flex flex-col gap-2.5 sm:gap-3 pt-3 border-t border-white/10">
+                {/* Botón Principal: Coordinar visita por WhatsApp */}
                 <a
                   href={`https://wa.me/${phone}?text=${encodeURIComponent('¡Hola Willson! Quiero coordinar para pasar a visitar el showroom de Wheels Zone en Rioja 281, Junín para ver/retirar piezas.')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-3.5 sm:py-4 px-6 rounded-xl bg-gradient-to-r from-[#FFA000] via-[#FFB800] to-[#FFC200] hover:from-[#FFB300] hover:to-[#FFD54F] text-neutral-950 font-display-hero font-extrabold uppercase text-sm sm:text-base tracking-wider flex items-center justify-center gap-3 shadow-[0_4px_20px_rgba(255,160,0,0.35)] hover:shadow-[0_6px_28px_rgba(255,194,0,0.55)] hover:scale-[1.01] active:scale-95 transition-all duration-300 border border-amber-200/40 group cursor-pointer"
+                  className="w-full py-3 sm:py-3.5 md:py-4 px-4 sm:px-6 rounded-xl bg-gradient-to-r from-[#FFA000] via-[#FFB800] to-[#FFC200] hover:from-[#FFB300] hover:to-[#FFD54F] text-neutral-950 font-display-hero font-extrabold uppercase text-xs sm:text-sm md:text-base tracking-wider flex items-center justify-center gap-2.5 sm:gap-3 shadow-[0_4px_20px_rgba(255,160,0,0.35)] hover:shadow-[0_6px_28px_rgba(255,194,0,0.55)] hover:scale-[1.01] active:scale-95 transition-all duration-300 border border-amber-200/40 group cursor-pointer text-center"
                 >
-                  {/* Pequeño icono de WhatsApp blanco */}
-                  <div className="w-6.5 h-6.5 rounded-full bg-neutral-950/85 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
-                    <svg className="w-3.5 h-3.5 fill-current text-white shrink-0" viewBox="0 0 24 24">
+                  <div className="w-6 h-6 sm:w-6.5 sm:h-6.5 rounded-full bg-neutral-950/85 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
+                    <svg className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-current text-white shrink-0" viewBox="0 0 24 24">
                       <path d="M17.472 14.382c-.301-.15-1.767-.867-2.04-.966-.274-.101-.473-.15-.673.15-.197.295-.771.966-.944 1.162-.175.197-.349.222-.65.074-.301-.15-1.27-.467-2.42-1.485-.896-.795-1.501-1.777-1.677-2.077-.175-.3-.019-.461.13-.61.134-.133.301-.347.451-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.01-.371-.01-.571-.01-.2 0-.523.074-.797.372-.272.296-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                     </svg>
                   </div>
                   <span>COORDINAR VISITA POR WHATSAPP</span>
                 </a>
 
-                {/* Botones Secundarios: Tarjetas flotantes en gris oscuro */}
-                <div className="grid grid-cols-2 gap-2.5">
+                {/* Botones Secundarios: Tarjetas en columna en móviles, fila en sm+ */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
                   <a
                     href="https://www.google.com/maps/dir/?api=1&destination=Rioja+281,+B6022+Jun%C3%ADn,+Provincia+de+Buenos+Aires"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-3 px-3 rounded-xl bg-[#18181b] hover:bg-[#232328] border border-neutral-700/80 hover:border-neutral-500 text-white font-sans font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 group cursor-pointer"
+                    className="py-2.5 sm:py-3 px-3 rounded-xl bg-[#18181b] hover:bg-[#232328] border border-neutral-700/80 hover:border-neutral-500 text-white font-sans font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 group cursor-pointer text-center"
                   >
-                    {/* Icono oficial Google Maps */}
-                    <svg className="w-4.5 h-4.5 shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none">
+                    <svg className="w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none">
                       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335" />
                       <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 6.07L12 18l4-2.93c1.81-1.6 3-3.69 3-6.07 0-3.87-3.13-7-7-7z" fill="#4285F4" opacity="0.4" />
                       <circle cx="12" cy="9" r="2.5" fill="#FFFFFF" />
@@ -1105,10 +1103,9 @@ export default function HomePage() {
                     href="https://waze.com/ul?q=Rioja+281,+B6022+Jun%C3%ADn,+Argentina&navigate=yes"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-3 px-3 rounded-xl bg-[#18181b] hover:bg-[#232328] border border-neutral-700/80 hover:border-neutral-500 text-white font-sans font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 group cursor-pointer"
+                    className="py-2.5 sm:py-3 px-3 rounded-xl bg-[#18181b] hover:bg-[#232328] border border-neutral-700/80 hover:border-neutral-500 text-white font-sans font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 group cursor-pointer text-center"
                   >
-                    {/* Icono Waze */}
-                    <svg className="w-4.5 h-4.5 fill-[#33CCFF] shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 sm:w-4.5 sm:h-4.5 fill-[#33CCFF] shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
                       <path d="M20.54 13.13a7.48 7.48 0 0 0-1.46-4.63 7.84 7.84 0 0 0-6.19-3.23 8.35 8.35 0 0 0-3.79.88A7.8 7.8 0 0 0 5.4 9.17a7.6 7.6 0 0 0-.82 3.82c0 .63.07 1.25.21 1.86a4.2 4.2 0 0 0-1.74 3.44 4.29 4.29 0 0 0 4.29 4.28h9.85a4.84 4.84 0 0 0 4.84-4.84 4.67 4.67 0 0 0-1.49-3.4zm-11.4 3.43a1.43 1.43 0 1 1 0-2.86 1.43 1.43 0 0 1 0 2.86zm5.72 0a1.43 1.43 0 1 1 0-2.86 1.43 1.43 0 0 1 0 2.86z"/>
                     </svg>
                     <span>ABRIR EN WAZE</span>
@@ -1118,21 +1115,21 @@ export default function HomePage() {
             </div>
 
             {/* Right Column: Google Maps Interactive Dark Mode Embed (7 Cols) */}
-            <div className="lg:col-span-7 bg-surface-container-low border border-white/10 rounded-2xl p-2.5 shadow-2xl relative overflow-hidden flex flex-col group min-h-[440px]">
+            <div className="lg:col-span-7 bg-surface-container-low border border-white/10 rounded-xl sm:rounded-2xl p-2 sm:p-2.5 shadow-2xl relative overflow-hidden flex flex-col group min-h-[320px] sm:min-h-[400px] md:min-h-[440px]">
               {/* Floating Top Telemetry Bar */}
-              <div className="absolute top-5 left-5 z-20 flex items-center gap-2 bg-black/90 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-primary-container/80 shadow-xl">
-                <span className="w-2 h-2 rounded-full bg-secondary-container animate-ping"></span>
-                <span className="font-label-telemetry text-xs uppercase text-primary-container font-bold tracking-wider">
+              <div className="absolute top-3 left-3 sm:top-5 sm:left-5 z-20 flex items-center gap-1.5 sm:gap-2 bg-black/90 backdrop-blur-md px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg border border-primary-container/80 shadow-xl max-w-[90%] truncate">
+                <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-secondary-container animate-ping shrink-0"></span>
+                <span className="font-label-telemetry text-[10px] sm:text-xs uppercase text-primary-container font-bold tracking-wider truncate">
                   WHEELS ZONE // RIOJA 281, JUNÍN
                 </span>
               </div>
 
               {/* Google Maps Iframe with dark theme inversion filter */}
-              <div className="relative w-full h-full min-h-[420px] rounded-xl overflow-hidden bg-surface-container-lowest">
+              <div className="relative w-full h-full min-h-[300px] sm:min-h-[380px] md:min-h-[420px] rounded-xl overflow-hidden bg-surface-container-lowest">
                 <iframe
                   title="Ubicación Showroom Wheels Zone en Google Maps"
                   src="https://maps.google.com/maps?q=Rioja+281,+B6022+Jun%C3%ADn,+Provincia+de+Buenos+Aires&t=&z=16&ie=UTF8&iwloc=&output=embed"
-                  className="w-full h-full min-h-[420px] border-0"
+                  className="w-full h-full min-h-[300px] sm:min-h-[380px] md:min-h-[420px] border-0"
                   style={{
                     filter: 'invert(90%) hue-rotate(180deg) contrast(125%) grayscale(25%)',
                   }}
@@ -1140,15 +1137,15 @@ export default function HomePage() {
                   allowFullScreen
                 ></iframe>
 
-                {/* Floating GPS Action Card in Map (Gris oscuro consistente) */}
+                {/* Floating GPS Action Card in Map */}
                 <a
                   href="https://maps.google.com/?q=Rioja+281,+B6022+Jun%C3%ADn,+Provincia+de+Buenos+Aires"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="absolute bottom-4 right-4 z-20 px-4 py-2.5 bg-[#18181b]/95 hover:bg-[#232328] text-white hover:text-primary-container font-sans font-semibold text-xs uppercase tracking-wider flex items-center gap-2 border border-neutral-700/80 hover:border-primary-container/60 rounded-xl transition-all shadow-2xl backdrop-blur-md group"
+                  className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-20 px-3 sm:px-4 py-2 sm:py-2.5 bg-[#18181b]/95 hover:bg-[#232328] text-white hover:text-primary-container font-sans font-semibold text-[10px] sm:text-xs uppercase tracking-wider flex items-center gap-1.5 sm:gap-2 border border-neutral-700/80 hover:border-primary-container/60 rounded-xl transition-all shadow-2xl backdrop-blur-md group"
                 >
-                  <span className="material-symbols-outlined text-base text-primary-container group-hover:scale-110 transition-transform">open_in_new</span>
-                  <span>VER EN GOOGLE MAPS GRANDE</span>
+                  <span className="material-symbols-outlined text-sm sm:text-base text-primary-container group-hover:scale-110 transition-transform">open_in_new</span>
+                  <span>VER EN MAPS</span>
                 </a>
               </div>
             </div>
@@ -1159,16 +1156,16 @@ export default function HomePage() {
       {/* ==============================================================================
           6. BANNER FINAL VELOCIDAD CALL TO ACTION
       ============================================================================== */}
-      <section className="w-full bg-secondary-container text-on-secondary-container py-10 relative overflow-hidden">
-        <div className="w-full px-4 md:px-8 mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+      <section className="w-full bg-secondary-container text-on-secondary-container py-8 sm:py-10 relative overflow-hidden">
+        <div className="w-full px-3 sm:px-6 md:px-8 mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-5 sm:gap-6 relative z-10 text-center md:text-left">
           <div className="flex flex-col gap-1">
             <span className="font-label-telemetry text-xs uppercase tracking-widest text-primary-fixed font-bold">
               ¡NO DEJES ESCAPAR ESA PIEZA!
             </span>
-            <h2 className="font-headline-lg text-2xl md:text-3xl uppercase tracking-tight text-on-secondary-container">
+            <h2 className="font-headline-lg text-xl sm:text-2xl md:text-3xl uppercase tracking-tight text-on-secondary-container">
               ¿TENÉS DUDAS O QUERÉS VER FOTOS ADICIONALES DEL BLÍSTER?
             </h2>
-            <p className="font-body-md text-xs md:text-sm text-on-secondary-container/90">
+            <p className="font-body-md text-xs sm:text-sm text-on-secondary-container/90 max-w-2xl">
               Chateá directamente con nuestro equipo de coleccionistas por WhatsApp y te enviamos video en vivo 360° de la pieza.
             </p>
           </div>
@@ -1176,7 +1173,7 @@ export default function HomePage() {
             href={`https://wa.me/${phone}?text=${encodeURIComponent('¡Hola Wheels Zone! Quiero fotos y video 360° de las piezas disponibles.')}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="whitespace-nowrap px-6 py-3.5 bg-surface-container-lowest text-primary font-headline-md text-sm md:text-base uppercase tracking-wider flex items-center gap-2 hover:bg-surface-container transition-colors shadow-xl"
+            className="w-full sm:w-auto text-center justify-center whitespace-nowrap px-6 py-3.5 bg-surface-container-lowest text-primary font-headline-md text-sm md:text-base uppercase tracking-wider flex items-center gap-2 hover:bg-surface-container transition-colors shadow-xl shrink-0"
           >
             <span className="material-symbols-outlined text-primary-container">support_agent</span>
             <span>HABLAR CON UN ASESOR</span>

@@ -681,28 +681,28 @@ export default function AdminPage() {
   // VIEW: AUTHENTICATED ADMIN DASHBOARD
   // ==============================================================================
   return (
-    <div className="flex flex-col w-full px-4 md:px-8 mx-auto max-w-7xl pb-24 pt-4">
+    <div className="flex flex-col w-full px-3 sm:px-6 md:px-8 mx-auto max-w-7xl pb-24 pt-3 sm:pt-4 overflow-x-hidden">
       {/* Session Security Banner */}
-      <div className="bg-surface-container-low border border-surface-container p-3 mb-6 flex flex-wrap items-center justify-between gap-3 text-xs font-label-telemetry">
-        <div className="flex items-center gap-3">
+      <div className="bg-surface-container-low border border-surface-container p-2.5 sm:p-3 mb-6 flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 text-xs font-label-telemetry">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-primary-container animate-ping"></span>
-            <span className="text-on-surface font-bold">SESIÓN ACTIVA: admin@wheelszone.com</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-primary-container animate-ping shrink-0"></span>
+            <span className="text-on-surface font-bold text-[11px] sm:text-xs">SESIÓN ACTIVA: admin@wheelszone.com</span>
           </div>
-          <span className="text-outline">//</span>
-          <span className="px-2 py-0.5 bg-surface-container-highest text-primary-container uppercase">
-            {isSupabaseConfigured ? 'Supabase PostgreSQL Cloud Conectado' : 'Modo Almacén Local Autónomo'}
+          <span className="text-outline hidden sm:inline">//</span>
+          <span className="px-2 py-0.5 bg-surface-container-highest text-primary-container uppercase text-[10px] sm:text-xs truncate">
+            {isSupabaseConfigured ? 'Supabase PostgreSQL Cloud Conectado' : 'Modo Almacén Local'}
           </span>
         </div>
 
-        <div className="flex items-center gap-4">
-          <span className="text-secondary flex items-center gap-1">
+        <div className="flex items-center gap-3">
+          <span className="text-secondary hidden md:flex items-center gap-1 text-[11px]">
             <span className="material-symbols-outlined text-sm">lock</span>
-            RUTAS PRIVADAS HOMOLOGADAS
+            RUTAS PRIVADAS
           </span>
           <button
             onClick={handleLogout}
-            className="px-3 py-1 bg-surface-container hover:bg-surface-container-high text-race-red border border-surface-container-highest uppercase font-bold flex items-center gap-1"
+            className="px-2.5 sm:px-3 py-1 bg-surface-container hover:bg-surface-container-high text-race-red border border-surface-container-highest uppercase font-bold flex items-center gap-1 text-[11px] sm:text-xs"
           >
             <span className="material-symbols-outlined text-xs">logout</span>
             Cerrar Sesión
@@ -711,120 +711,120 @@ export default function AdminPage() {
       </div>
 
       {/* Telemetry KPI Strip */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="bg-surface-container-low border border-surface-container p-4 flex flex-col gap-1 relative overflow-hidden">
-          <div className="flex items-center justify-between text-outline text-xs font-label-telemetry uppercase">
-            <span>Catálogo Activo</span>
-            <span className="material-symbols-outlined text-primary-container text-lg">garage</span>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 mb-6 sm:mb-8">
+        <div className="bg-surface-container-low border border-surface-container p-3 sm:p-4 flex flex-col gap-1 relative overflow-hidden">
+          <div className="flex items-center justify-between text-outline text-[10px] sm:text-xs font-label-telemetry uppercase">
+            <span className="truncate">Catálogo Activo</span>
+            <span className="material-symbols-outlined text-primary-container text-base sm:text-lg shrink-0">garage</span>
           </div>
-          <div className="font-display-hero text-3xl text-primary leading-none">
+          <div className="font-display-hero text-2xl sm:text-3xl text-primary leading-none">
             {products.length}
           </div>
-          <span className="text-[11px] text-outline font-label-telemetry uppercase">
-            {totalStockCount} unidades en depósito
+          <span className="text-[10px] sm:text-[11px] text-outline font-label-telemetry uppercase truncate">
+            {totalStockCount} unid. en depósito
           </span>
         </div>
 
-        <div className="bg-surface-container-low border border-surface-container p-4 flex flex-col gap-1 relative overflow-hidden">
-          <div className="flex items-center justify-between text-outline text-xs font-label-telemetry uppercase">
-            <span>Despachos Pendientes</span>
-            <span className="material-symbols-outlined text-secondary-container text-lg">local_shipping</span>
+        <div className="bg-surface-container-low border border-surface-container p-3 sm:p-4 flex flex-col gap-1 relative overflow-hidden">
+          <div className="flex items-center justify-between text-outline text-[10px] sm:text-xs font-label-telemetry uppercase">
+            <span className="truncate">Despachos</span>
+            <span className="material-symbols-outlined text-secondary-container text-base sm:text-lg shrink-0">local_shipping</span>
           </div>
-          <div className="font-display-hero text-3xl text-secondary-fixed leading-none">
+          <div className="font-display-hero text-2xl sm:text-3xl text-secondary-fixed leading-none">
             08
           </div>
-          <span className="text-[11px] text-secondary-container font-label-telemetry uppercase font-bold">
-            Protección Blíster Activa
+          <span className="text-[10px] sm:text-[11px] text-secondary-container font-label-telemetry uppercase font-bold truncate">
+            Blíster C-10 Activo
           </span>
         </div>
 
-        <div className="bg-surface-container-low border border-surface-container p-4 flex flex-col gap-1 relative overflow-hidden">
-          <div className="flex items-center justify-between text-outline text-xs font-label-telemetry uppercase">
-            <span>Encargos Especiales</span>
-            <span className="material-symbols-outlined text-primary-container text-lg">radar</span>
+        <div className="bg-surface-container-low border border-surface-container p-3 sm:p-4 flex flex-col gap-1 relative overflow-hidden">
+          <div className="flex items-center justify-between text-outline text-[10px] sm:text-xs font-label-telemetry uppercase">
+            <span className="truncate">Encargos</span>
+            <span className="material-symbols-outlined text-primary-container text-base sm:text-lg shrink-0">radar</span>
           </div>
-          <div className="font-display-hero text-3xl text-primary leading-none">
+          <div className="font-display-hero text-2xl sm:text-3xl text-primary leading-none">
             {pendingLeads}
           </div>
-          <span className="text-[11px] text-on-surface-variant font-label-telemetry uppercase">
-            Leads pendientes en Supabase
+          <span className="text-[10px] sm:text-[11px] text-on-surface-variant font-label-telemetry uppercase truncate">
+            Leads pendientes
           </span>
         </div>
 
-        <div className="bg-surface-container-low border border-surface-container p-4 flex flex-col gap-1 relative overflow-hidden">
-          <div className="flex items-center justify-between text-outline text-xs font-label-telemetry uppercase">
-            <span>Valuación de Stock</span>
-            <span className="material-symbols-outlined text-tertiary text-lg">payments</span>
+        <div className="bg-surface-container-low border border-surface-container p-3 sm:p-4 flex flex-col gap-1 relative overflow-hidden">
+          <div className="flex items-center justify-between text-outline text-[10px] sm:text-xs font-label-telemetry uppercase">
+            <span className="truncate">Valuación Stock</span>
+            <span className="material-symbols-outlined text-tertiary text-base sm:text-lg shrink-0">payments</span>
           </div>
-          <div className="font-label-price text-2xl text-on-surface leading-none">
+          <div className="font-label-price text-lg sm:text-2xl text-on-surface leading-none truncate">
             ${totalValuation.toLocaleString('es-AR')}
           </div>
-          <span className="text-[11px] text-primary-container font-label-telemetry uppercase">
-            ARS // Total Inventario
+          <span className="text-[10px] sm:text-[11px] text-primary-container font-label-telemetry uppercase truncate">
+            ARS // Inventario
           </span>
         </div>
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex items-center gap-2 border-b border-surface-container mb-6 overflow-x-auto pb-1">
+      <div className="flex items-center gap-1.5 sm:gap-2 border-b border-surface-container mb-6 overflow-x-auto pb-2 no-scrollbar -mx-3 sm:mx-0 px-3 sm:px-0">
         <button
           onClick={() => setActiveTab('nuevo')}
-          className={`px-4 py-2 font-headline-sm uppercase text-sm tracking-wider flex items-center gap-2 transition-all whitespace-nowrap ${
+          className={`px-3 sm:px-4 py-2 font-headline-sm uppercase text-xs sm:text-sm tracking-wider flex items-center gap-1.5 sm:gap-2 transition-all whitespace-nowrap shrink-0 ${
             activeTab === 'nuevo'
               ? 'bg-primary-container text-on-primary-container font-bold border-b-2 border-primary-container'
               : 'text-on-surface-variant hover:text-on-surface bg-surface-container-low'
           }`}
         >
-          <span className="material-symbols-outlined text-base">add_box</span>
-          <span>Carga Rápida de Producto</span>
+          <span className="material-symbols-outlined text-sm sm:text-base">add_box</span>
+          <span>Carga Rápida</span>
         </button>
 
         <button
           onClick={() => setActiveTab('stock')}
-          className={`px-4 py-2 font-headline-sm uppercase text-sm tracking-wider flex items-center gap-2 transition-all whitespace-nowrap ${
+          className={`px-3 sm:px-4 py-2 font-headline-sm uppercase text-xs sm:text-sm tracking-wider flex items-center gap-1.5 sm:gap-2 transition-all whitespace-nowrap shrink-0 ${
             activeTab === 'stock'
               ? 'bg-primary-container text-on-primary-container font-bold border-b-2 border-primary-container'
               : 'text-on-surface-variant hover:text-on-surface bg-surface-container-low'
           }`}
         >
-          <span className="material-symbols-outlined text-base">inventory_2</span>
-          <span>Gestión de Inventario ({products.length})</span>
+          <span className="material-symbols-outlined text-sm sm:text-base">inventory_2</span>
+          <span>Inventario ({products.length})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('destacados')}
-          className={`px-4 py-2 font-headline-sm uppercase text-sm tracking-wider flex items-center gap-2 transition-all whitespace-nowrap ${
+          className={`px-3 sm:px-4 py-2 font-headline-sm uppercase text-xs sm:text-sm tracking-wider flex items-center gap-1.5 sm:gap-2 transition-all whitespace-nowrap shrink-0 ${
             activeTab === 'destacados'
               ? 'bg-primary-container text-on-primary-container font-bold border-b-2 border-primary-container'
               : 'text-on-surface-variant hover:text-on-surface bg-surface-container-low'
           }`}
         >
-          <span className="material-symbols-outlined text-base">stars</span>
-          <span>Gestor de Destacados & Hero ({products.filter((p) => p.destacado).length})</span>
+          <span className="material-symbols-outlined text-sm sm:text-base">stars</span>
+          <span>Destacados & Hero ({products.filter((p) => p.destacado).length})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('leads')}
-          className={`px-4 py-2 font-headline-sm uppercase text-sm tracking-wider flex items-center gap-2 transition-all whitespace-nowrap ${
+          className={`px-3 sm:px-4 py-2 font-headline-sm uppercase text-xs sm:text-sm tracking-wider flex items-center gap-1.5 sm:gap-2 transition-all whitespace-nowrap shrink-0 ${
             activeTab === 'leads'
               ? 'bg-primary-container text-on-primary-container font-bold border-b-2 border-primary-container'
               : 'text-on-surface-variant hover:text-on-surface bg-surface-container-low'
           }`}
         >
-          <span className="material-symbols-outlined text-base">assignment_ind</span>
-          <span>Encargos y Leads ({leads.length})</span>
+          <span className="material-symbols-outlined text-sm sm:text-base">assignment_ind</span>
+          <span>Encargos ({leads.length})</span>
         </button>
 
         <button
           onClick={() => setActiveTab('comunidad')}
-          className={`px-4 py-2 font-headline-sm uppercase text-sm tracking-wider flex items-center gap-2 transition-all whitespace-nowrap ${
+          className={`px-3 sm:px-4 py-2 font-headline-sm uppercase text-xs sm:text-sm tracking-wider flex items-center gap-1.5 sm:gap-2 transition-all whitespace-nowrap shrink-0 ${
             activeTab === 'comunidad'
               ? 'bg-primary-container text-on-primary-container font-bold border-b-2 border-primary-container'
               : 'text-on-surface-variant hover:text-on-surface bg-surface-container-low'
           }`}
         >
-          <span className="material-symbols-outlined text-base">forum</span>
-          <span>Moderación Comunidad ({community.length})</span>
+          <span className="material-symbols-outlined text-sm sm:text-base">forum</span>
+          <span>Comunidad ({community.length})</span>
         </button>
       </div>
 
@@ -832,21 +832,21 @@ export default function AdminPage() {
           TAB 1: CARGA RÁPIDA DE PRODUCTO (ANTI-COMPLICACIONES + DRAG & DROP)
       ============================================================================== */}
       {activeTab === 'nuevo' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-8 items-start">
           {/* Drag & Drop Photo Area (5 Cols) */}
-          <div className="lg:col-span-5 bg-surface-container-low border border-surface-container p-6 flex flex-col gap-4">
+          <div className="lg:col-span-5 bg-surface-container-low border border-surface-container p-4 sm:p-6 flex flex-col gap-4">
             <div className="flex items-center justify-between pb-2 border-b border-surface-container">
-              <span className="font-headline-sm uppercase text-sm text-primary-container flex items-center gap-1.5">
+              <span className="font-headline-sm uppercase text-xs sm:text-sm text-primary-container flex items-center gap-1.5">
                 <span className="material-symbols-outlined text-base">cloud_upload</span>
                 FOTOGRAFÍA DEL BLÍSTER
               </span>
-              <span className="font-label-telemetry text-[11px] text-outline uppercase">
+              <span className="font-label-telemetry text-[10px] sm:text-[11px] text-outline uppercase">
                 BUCKET: diecast-media
               </span>
             </div>
 
             {/* Dropzone container */}
-            <div className="relative border-2 border-dashed border-surface-container-highest bg-surface-container p-6 flex flex-col items-center justify-center text-center hover:border-primary-container transition-colors cursor-pointer group min-h-[220px]">
+            <div className="relative border-2 border-dashed border-surface-container-highest bg-surface-container p-4 sm:p-6 flex flex-col items-center justify-center text-center hover:border-primary-container transition-colors cursor-pointer group min-h-[200px] sm:min-h-[220px]">
               <input
                 type="file"
                 accept="image/*"
@@ -904,12 +904,12 @@ export default function AdminPage() {
           </div>
 
           {/* Form Fields (7 Cols) */}
-          <div className="lg:col-span-7 bg-surface-container-low border border-surface-container p-6 md:p-8 flex flex-col gap-5 shadow-2xl">
+          <div className="lg:col-span-7 bg-surface-container-low border border-surface-container p-4 sm:p-6 md:p-8 flex flex-col gap-5 shadow-2xl">
             <div className="flex items-center justify-between pb-2 border-b border-surface-container">
-              <h2 className="font-headline-lg text-xl uppercase tracking-wider text-on-surface">
+              <h2 className="font-headline-lg text-lg sm:text-xl uppercase tracking-wider text-on-surface">
                 Datos del Modelo para Catálogo
               </h2>
-              <span className="font-label-telemetry text-xs text-outline">TABLE: PRODUCTS</span>
+              <span className="font-label-telemetry text-[11px] sm:text-xs text-outline">TABLE: PRODUCTS</span>
             </div>
 
             <form onSubmit={handleCreateProduct} className="flex flex-col gap-4">
@@ -1118,7 +1118,7 @@ export default function AdminPage() {
           TAB 2: GESTIÓN DE INVENTARIO & STOCK CON FILTROS SINCRONIZADOS
       ============================================================================== */}
       {activeTab === 'stock' && (
-        <div className="bg-surface-container-low border border-surface-container p-6 flex flex-col gap-5 shadow-2xl">
+        <div className="bg-surface-container-low border border-surface-container p-4 sm:p-6 flex flex-col gap-4 sm:gap-5 shadow-2xl">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-surface-container">
             <div className="flex flex-col gap-0.5">
@@ -1253,8 +1253,8 @@ export default function AdminPage() {
           </div>
 
           {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs font-body-sm">
+          <div className="overflow-x-auto no-scrollbar -mx-4 sm:mx-0 px-4 sm:px-0">
+            <table className="w-full min-w-[680px] text-left text-xs font-body-sm">
               <thead className="bg-surface-container font-label-telemetry text-[11px] uppercase text-outline border-b border-surface-container-highest">
                 <tr>
                   <th className="p-3">Foto</th>
@@ -1386,21 +1386,21 @@ export default function AdminPage() {
           TAB EXTRA: GESTOR DE DESTACADOS & HERO SPOTLIGHT ("LO MÁS CALIENTE")
       ============================================================================== */}
       {activeTab === 'destacados' && (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-6 sm:gap-8">
           {/* Header & Overview */}
-          <div className="bg-surface-container-low border border-surface-container p-6 flex flex-col gap-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-surface-container">
+          <div className="bg-surface-container-low border border-surface-container p-4 sm:p-6 flex flex-col gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-3 border-b border-surface-container">
               <div>
-                <h2 className="font-headline-lg text-2xl uppercase tracking-wider text-on-surface flex items-center gap-2">
+                <h2 className="font-headline-lg text-lg sm:text-2xl uppercase tracking-wider text-on-surface flex items-center gap-2">
                   <span className="text-primary-container">⭐</span>
-                  <span>Gestor de Destacados & Hero Carousel ("Lo más caliente")</span>
+                  <span>Gestor de Destacados & Hero</span>
                 </h2>
                 <p className="text-xs text-on-surface-variant font-body-sm mt-1">
                   Controlá qué modelos aparecen en el gran Blíster 3D rotativo del Hero y organizá las piezas para el carrusel de la página de inicio.
                 </p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <span className="px-3 py-1.5 bg-primary-container/20 border border-primary-container text-primary-container font-label-telemetry text-xs uppercase font-bold">
+                <span className="px-2.5 sm:px-3 py-1 sm:py-1.5 bg-primary-container/20 border border-primary-container text-primary-container font-label-telemetry text-[11px] sm:text-xs uppercase font-bold">
                   {products.filter((p) => p.destacado).length} ACTIVOS EN DESTACADOS
                 </span>
               </div>
@@ -1605,8 +1605,8 @@ export default function AdminPage() {
             </div>
 
             {/* Table */}
-            <div className="overflow-x-auto border border-surface-container">
-              <table className="w-full text-left text-xs border-collapse">
+            <div className="overflow-x-auto border border-surface-container no-scrollbar -mx-4 sm:mx-0 px-4 sm:px-0">
+              <table className="w-full min-w-[680px] text-left text-xs border-collapse">
                 <thead>
                   <tr className="bg-surface-container border-b border-surface-container-highest font-label-telemetry text-outline uppercase tracking-wider">
                     <th className="p-3 w-16 text-center">Destacado</th>
@@ -1735,9 +1735,9 @@ export default function AdminPage() {
           TAB 3: ENCARGOS Y LEADS DE CLIENTES (leads_encargos)
       ============================================================================== */}
       {activeTab === 'leads' && (
-        <div className="bg-surface-container-low border border-surface-container p-6 flex flex-col gap-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-surface-container">
-            <h2 className="font-headline-lg text-xl uppercase tracking-wider text-on-surface">
+        <div className="bg-surface-container-low border border-surface-container p-4 sm:p-6 flex flex-col gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-2 border-b border-surface-container">
+            <h2 className="font-headline-lg text-lg sm:text-xl uppercase tracking-wider text-on-surface">
               Solicitudes de Encargo & Cacería de Piezas ({leads.length})
             </h2>
             <span className="font-label-telemetry text-xs text-outline">TABLE: LEADS_ENCARGOS</span>
@@ -1752,11 +1752,11 @@ export default function AdminPage() {
               leads.map((lead) => (
                 <div
                   key={lead.id}
-                  className="bg-surface-container border border-surface-container-high p-4 flex flex-col md:flex-row md:items-center justify-between gap-4"
+                  className="bg-surface-container border border-surface-container-high p-3 sm:p-4 flex flex-col md:flex-row md:items-center justify-between gap-4"
                 >
                   <div className="flex flex-col gap-1 max-w-xl">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-headline-sm uppercase text-base text-on-surface font-bold">
+                      <span className="font-headline-sm uppercase text-sm sm:text-base text-on-surface font-bold">
                         {lead.nombre}
                       </span>
                       <span
@@ -1799,18 +1799,18 @@ export default function AdminPage() {
 
                     {lead.notas_admin && (
                       <div className="mt-2 p-2 bg-surface-container-lowest border border-surface-container-highest text-xs font-label-telemetry text-amber-300 flex items-start gap-1.5">
-                        <span className="material-symbols-outlined text-sm">note</span>
+                        <span className="material-symbols-outlined text-sm shrink-0">note</span>
                         <span><strong>Nota interna:</strong> {lead.notas_admin}</span>
                       </div>
                     )}
                   </div>
 
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                  <div className="flex flex-wrap sm:flex-nowrap items-stretch sm:items-center gap-2">
                     {/* Status Changer */}
                     <select
                       value={lead.estado}
                       onChange={(e) => handleLeadStatusChange(lead.id, e.target.value as LeadStatus)}
-                      className="bg-surface-container-lowest border border-surface-container-highest text-on-surface text-xs font-label-telemetry px-2.5 py-1.5 focus:outline-none"
+                      className="bg-surface-container-lowest border border-surface-container-highest text-on-surface text-xs font-label-telemetry px-2.5 py-1.5 focus:outline-none flex-grow sm:flex-grow-0"
                     >
                       <option value="Pendiente">Pendiente</option>
                       <option value="En búsqueda">En búsqueda</option>
@@ -1825,7 +1825,7 @@ export default function AdminPage() {
                       href={getWhatsAppLeadUrl(lead)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3 py-1.5 bg-primary-container hover:bg-surface-tint text-on-primary-container font-headline-sm text-xs uppercase flex items-center justify-center gap-1 font-bold transition-colors whitespace-nowrap"
+                      className="px-3 py-1.5 bg-primary-container hover:bg-surface-tint text-on-primary-container font-headline-sm text-xs uppercase flex items-center justify-center gap-1 font-bold transition-colors whitespace-nowrap flex-grow sm:flex-grow-0"
                     >
                       <span className="material-symbols-outlined text-sm">chat</span>
                       <span>WhatsApp</span>
@@ -1861,9 +1861,9 @@ export default function AdminPage() {
           TAB 4: MODERACIÓN DE LA COMUNIDAD (EL GARAJE)
       ============================================================================== */}
       {activeTab === 'comunidad' && (
-        <div className="bg-surface-container-low border border-surface-container p-6 flex flex-col gap-4">
+        <div className="bg-surface-container-low border border-surface-container p-4 sm:p-6 flex flex-col gap-4">
           <div className="flex items-center justify-between pb-2 border-b border-surface-container">
-            <h2 className="font-headline-lg text-xl uppercase tracking-wider text-on-surface">
+            <h2 className="font-headline-lg text-lg sm:text-xl uppercase tracking-wider text-on-surface">
               Publicaciones Comunitarias ({community.length})
             </h2>
             <span className="font-label-telemetry text-xs text-outline">TABLE: COMMUNITY_POSTS</span>
@@ -1873,9 +1873,9 @@ export default function AdminPage() {
             {community.map((item) => (
               <div
                 key={item.id}
-                className="bg-surface-container border border-surface-container-high p-4 flex gap-4 relative"
+                className="bg-surface-container border border-surface-container-high p-3 sm:p-4 flex flex-col xs:flex-row gap-3 sm:gap-4 relative"
               >
-                <div className="relative w-24 h-24 bg-surface-container-lowest flex-shrink-0 overflow-hidden border border-surface-container">
+                <div className="relative w-full xs:w-24 h-40 xs:h-24 bg-surface-container-lowest flex-shrink-0 overflow-hidden border border-surface-container">
                   <Image src={item.image_url} alt={item.featured_piece} fill className="object-cover" />
                 </div>
                 <div className="flex flex-col justify-between flex-grow min-w-0">
@@ -1934,20 +1934,20 @@ export default function AdminPage() {
           MODAL: EDITAR PRODUCTO (GESTIÓN DE INVENTARIO COMPLETA)
       ============================================================================== */}
       {editingProduct && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="w-full max-w-3xl bg-surface-container-low border border-surface-container p-6 shadow-2xl relative my-8">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto overscroll-contain">
+          <div className="w-full max-w-3xl bg-surface-container-low border border-surface-container p-4 sm:p-6 shadow-2xl relative my-4 sm:my-8">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-container via-surface-tint to-secondary-container"></div>
 
-            <div className="flex items-center justify-between pb-3 border-b border-surface-container mb-4">
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary-container">edit_document</span>
-                <h3 className="font-headline-md uppercase text-lg text-on-surface tracking-wider">
-                  Modificar Artículo // {editingProduct.modelo}
+            <div className="flex items-center justify-between pb-3 border-b border-surface-container mb-4 gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="material-symbols-outlined text-primary-container shrink-0">edit_document</span>
+                <h3 className="font-headline-md uppercase text-base sm:text-lg text-on-surface tracking-wider truncate">
+                  Modificar // {editingProduct.modelo}
                 </h3>
               </div>
               <button
                 onClick={() => setEditingProduct(null)}
-                className="text-outline hover:text-on-surface transition-colors"
+                className="p-1 min-h-[40px] min-w-[40px] flex items-center justify-center text-outline hover:text-on-surface transition-colors shrink-0"
               >
                 <span className="material-symbols-outlined text-2xl">close</span>
               </button>
@@ -2216,20 +2216,20 @@ export default function AdminPage() {
           MODAL: EDITAR ENCARGO DE CLIENTE (LEAD)
       ============================================================================== */}
       {editingLead && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="w-full max-w-xl bg-surface-container-low border border-surface-container p-6 shadow-2xl relative my-8">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto overscroll-contain">
+          <div className="w-full max-w-xl bg-surface-container-low border border-surface-container p-4 sm:p-6 shadow-2xl relative my-4 sm:my-8">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary-container via-primary-container to-surface-tint"></div>
 
-            <div className="flex items-center justify-between pb-3 border-b border-surface-container mb-4">
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-secondary">assignment</span>
-                <h3 className="font-headline-md uppercase text-lg text-on-surface tracking-wider">
-                  Editar Encargo // {editingLead.nombre}
+            <div className="flex items-center justify-between pb-3 border-b border-surface-container mb-4 gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="material-symbols-outlined text-secondary shrink-0">assignment</span>
+                <h3 className="font-headline-md uppercase text-base sm:text-lg text-on-surface tracking-wider truncate">
+                  Editar // {editingLead.nombre}
                 </h3>
               </div>
               <button
                 onClick={() => setEditingLead(null)}
-                className="text-outline hover:text-on-surface transition-colors"
+                className="p-1 min-h-[40px] min-w-[40px] flex items-center justify-center text-outline hover:text-on-surface transition-colors shrink-0"
               >
                 <span className="material-symbols-outlined text-2xl">close</span>
               </button>

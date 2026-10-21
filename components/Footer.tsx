@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="w-full bg-surface-container-lowest text-on-surface-variant border-t border-surface-container mt-16">
       {/* 4 Columns Racing Grid */}
-      <div className="w-full max-w-7xl px-4 md:px-8 mx-auto py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="w-full max-w-7xl px-4 sm:px-6 md:px-8 mx-auto py-10 sm:py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* Brand & Manifesto */}
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
@@ -130,11 +130,11 @@ export default function Footer() {
 
       {/* Bottom Legal Strip */}
       <div className="w-full bg-surface-container-low border-t border-surface-container py-4">
-        <div className="w-full max-w-7xl px-4 md:px-8 mx-auto flex flex-col md:flex-row items-center justify-between gap-3 font-label-telemetry text-xs text-outline">
+        <div className="w-full max-w-7xl px-4 sm:px-6 md:px-8 mx-auto flex flex-col md:flex-row items-center justify-between gap-3 font-label-telemetry text-[11px] sm:text-xs text-outline text-center md:text-left">
           <div>
             <span>© {new Date().getFullYear()} WHEELS ZONE PLATFORM. TODOS LOS DERECHOS RESERVADOS.</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-3 gap-y-1">
             <span>TRACK-TESTED PACKAGING SYSTEM</span>
             <span className="text-primary-container">//</span>
             <span>PADDOCK ENLACE SEGURO</span>

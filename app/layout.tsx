@@ -25,11 +25,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className="dark">
-      <body className="bg-surface text-on-surface antialiased min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+      <body className="bg-surface text-on-surface antialiased min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden w-full max-w-full">
         <CartProvider>
           <Navbar />
           <CartDrawer />
-          <main className="flex-1 pt-28 md:pt-32 w-full">
+          <main className="flex-1 pt-24 sm:pt-28 md:pt-32 w-full max-w-full overflow-x-hidden">
             {children}
           </main>
           <Footer />

@@ -150,17 +150,17 @@ function TiendaContent() {
   return (
     <div className="flex flex-col w-full pb-20">
       {/* Top Telemetry Strip */}
-      <section className="w-full bg-surface-container-lowest px-4 md:px-8 py-3 border-b border-surface-container">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs font-label-telemetry">
-          <div className="flex items-center gap-3">
+      <section className="w-full bg-surface-container-lowest px-3 sm:px-6 md:px-8 py-2.5 sm:py-3 border-b border-surface-container">
+        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 text-[10px] sm:text-xs font-label-telemetry">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-primary-container animate-ping"></span>
               <span className="text-primary-container font-bold uppercase">LIVE INVENTORY PADDOCK</span>
             </div>
-            <span className="text-outline-variant">//</span>
-            <span className="text-on-surface-variant uppercase">SERIE 2024 - BATCH IMPORTADO</span>
+            <span className="text-outline-variant hidden xs:inline">//</span>
+            <span className="text-on-surface-variant uppercase hidden xs:inline">SERIE 2024 - BATCH IMPORTADO</span>
           </div>
-          <div className="flex items-center gap-4 text-outline">
+          <div className="flex items-center gap-3 text-outline">
             <span className="flex items-center gap-1 text-secondary">
               <span className="material-symbols-outlined text-sm">verified_user</span>
               CARD PROTECTOR CASE INCLUIDO
@@ -173,14 +173,14 @@ function TiendaContent() {
       </section>
 
       {/* Main Store Layout: 12-Column Grid */}
-      <div className="w-full max-w-7xl px-4 md:px-8 mx-auto py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="w-full max-w-7xl px-3 sm:px-6 md:px-8 mx-auto py-6 sm:py-8 grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
         {/* ==============================================================================
             SIDEBAR DE FILTROS EN TIEMPO REAL
         ============================================================================== */}
         <aside
           className={`lg:col-span-3 flex flex-col gap-4 ${
             mobileFilterOpen
-              ? 'fixed inset-0 z-50 bg-surface-container-lowest p-6 overflow-y-auto'
+              ? 'fixed inset-0 z-50 bg-surface-container-lowest p-4 sm:p-6 overflow-y-auto'
               : 'hidden lg:flex'
           }`}
         >
@@ -369,34 +369,34 @@ function TiendaContent() {
         {/* ==============================================================================
             ÁREA PRINCIPAL DE PRODUCTOS
         ============================================================================== */}
-        <main className="lg:col-span-9 flex flex-col gap-6">
+        <main className="lg:col-span-9 flex flex-col gap-4 sm:gap-6">
           {/* Top Bar */}
-          <div className="bg-surface-container-low border border-surface-container p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
+          <div className="bg-surface-container-low border border-surface-container p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+            <div className="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
               <button
                 onClick={() => setMobileFilterOpen(true)}
-                className="lg:hidden px-3 py-1.5 bg-surface-container-high text-on-surface font-label-telemetry text-xs uppercase flex items-center gap-1.5 border border-surface-container-highest"
+                className="lg:hidden px-3 py-1.5 bg-surface-container-high text-on-surface font-label-telemetry text-xs uppercase flex items-center gap-1.5 border border-surface-container-highest rounded-sm hover:border-primary-container transition-colors"
               >
                 <span className="material-symbols-outlined text-base text-primary-container">tune</span>
-                <span>Filtros</span>
+                <span>Filtros ({selectedBrands.length + selectedScales.length + (selectedCategory ? 1 : 0)})</span>
               </button>
 
-              <div className="flex items-center gap-2 font-label-telemetry text-xs">
-                <span className="text-on-surface font-bold">
-                  {filteredProducts.length} MODELOS DISPONIBLES
+              <div className="flex items-center gap-2 font-label-telemetry text-[11px] sm:text-xs">
+                <span className="text-on-surface font-bold whitespace-nowrap">
+                  {filteredProducts.length} MODELOS
                 </span>
-                <span className="text-outline">|</span>
-                <span className="text-outline">DESPACHO INMEDIATO</span>
+                <span className="text-outline hidden xs:inline">|</span>
+                <span className="text-outline hidden xs:inline">STOCK INMEDIATO</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-2 font-label-telemetry text-xs">
-              <label htmlFor="sort-select" className="text-outline uppercase">Ordenar:</label>
+            <div className="flex items-center justify-between sm:justify-end gap-2 font-label-telemetry text-xs w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-surface-container">
+              <label htmlFor="sort-select" className="text-outline uppercase text-[11px] sm:text-xs">Ordenar:</label>
               <select
                 id="sort-select"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="bg-surface-container border border-surface-container-highest text-on-surface px-2.5 py-1 text-xs focus:outline-none focus:border-primary-container"
+                className="bg-surface-container border border-surface-container-highest text-on-surface px-2.5 py-1 text-xs focus:outline-none focus:border-primary-container cursor-pointer"
               >
                 <option value="newest">Últimos Ingresos</option>
                 <option value="price-asc">Precio: Menor a Mayor</option>
@@ -408,16 +408,16 @@ function TiendaContent() {
 
           {/* Products Grid */}
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {[1, 2, 3, 4, 5, 6].map((n) => (
-                <div key={n} className="h-96 bg-surface-container-low animate-pulse border border-surface-container"></div>
+                <div key={n} className="h-80 sm:h-96 bg-surface-container-low animate-pulse border border-surface-container"></div>
               ))}
             </div>
           ) : filteredProducts.length === 0 ? (
-            <div className="bg-surface-container-low border border-surface-container p-12 text-center flex flex-col items-center gap-4">
-              <span className="material-symbols-outlined text-5xl text-outline">search_off</span>
+            <div className="bg-surface-container-low border border-surface-container p-8 sm:p-12 text-center flex flex-col items-center gap-4">
+              <span className="material-symbols-outlined text-4xl sm:text-5xl text-outline">search_off</span>
               <div className="flex flex-col gap-1">
-                <h3 className="font-headline-md text-xl uppercase text-on-surface">
+                <h3 className="font-headline-md text-lg sm:text-xl uppercase text-on-surface">
                   No encontramos modelos con estos filtros
                 </h3>
                 <p className="font-body-sm text-xs text-on-surface-variant max-w-md">
@@ -426,13 +426,13 @@ function TiendaContent() {
               </div>
               <button
                 onClick={resetFilters}
-                className="px-6 py-2.5 bg-primary-container text-on-primary-container font-headline-sm uppercase text-sm tracking-wider font-bold"
+                className="px-6 py-2.5 bg-primary-container text-on-primary-container font-headline-sm uppercase text-xs sm:text-sm tracking-wider font-bold"
               >
                 Limpiar Filtros
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {filteredProducts.map((product) => (
                 <div
                   key={product.id}
@@ -440,7 +440,7 @@ function TiendaContent() {
                 >
                   {/* Photo area */}
                   <div
-                    className="relative w-full h-64 bg-surface-container-lowest overflow-hidden cursor-pointer"
+                    className="relative w-full h-48 xs:h-44 sm:h-64 bg-surface-container-lowest overflow-hidden cursor-pointer"
                     onClick={() => setSelectedProductModal(product)}
                   >
                     <Image
@@ -448,28 +448,28 @@ function TiendaContent() {
                       alt={product.modelo}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
                     />
 
                     {/* Telemetry badges */}
-                    <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
-                      <span className="bg-surface-container-highest/90 text-on-surface font-label-telemetry text-[11px] px-2 py-0.5 uppercase tracking-wider">
+                    <div className="absolute top-2 left-2 flex flex-col gap-1 z-10 max-w-[85%]">
+                      <span className="bg-surface-container-highest/90 text-on-surface font-label-telemetry text-[10px] sm:text-[11px] px-2 py-0.5 uppercase tracking-wider w-fit">
                         {product.escala}
                       </span>
                       {product.categoria.includes('Super Treasure Hunt') ? (
-                        <span className="bg-secondary-container text-on-secondary-container font-label-telemetry text-[11px] px-2 py-0.5 uppercase font-bold tracking-wider flex items-center gap-1">
+                        <span className="bg-secondary-container text-on-secondary-container font-label-telemetry text-[10px] sm:text-[11px] px-2 py-0.5 uppercase font-bold tracking-wider flex items-center gap-1 w-fit">
                           <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: '"FILL" 1' }}>whatshot</span>
                           STH // RARO
                         </span>
                       ) : (
-                        <span className="bg-primary-container text-on-primary-container font-label-telemetry text-[11px] px-2 py-0.5 uppercase font-bold tracking-wider">
+                        <span className="bg-primary-container text-on-primary-container font-label-telemetry text-[10px] sm:text-[11px] px-2 py-0.5 uppercase font-bold tracking-wider truncate w-fit max-w-full">
                           {product.categoria}
                         </span>
                       )}
                     </div>
 
                     <div className="absolute top-2 right-2 z-10">
-                      <span className="font-label-telemetry text-[11px] px-2 py-0.5 uppercase border bg-surface-container-lowest/90 text-primary-container border-primary-container/40">
+                      <span className="font-label-telemetry text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.5 uppercase border bg-surface-container-lowest/90 text-primary-container border-primary-container/40">
                         NUEVO
                       </span>
                     </div>
@@ -484,14 +484,14 @@ function TiendaContent() {
                   </div>
 
                   {/* Body details */}
-                  <div className="p-4 flex flex-col flex-grow justify-between gap-3">
-                    <div className="flex flex-col gap-1">
-                      <span className="font-label-telemetry text-[11px] uppercase text-outline truncate">
+                  <div className="p-3 sm:p-4 flex flex-col flex-grow justify-between gap-2.5 sm:gap-3">
+                    <div className="flex flex-col gap-1 min-w-0">
+                      <span className="font-label-telemetry text-[10px] sm:text-[11px] uppercase text-outline truncate">
                         {product.serie || product.marca}
                       </span>
                       <h3
                         onClick={() => setSelectedProductModal(product)}
-                        className="font-headline-md text-base uppercase text-on-surface group-hover:text-primary transition-colors cursor-pointer leading-snug line-clamp-1"
+                        className="font-headline-md text-sm sm:text-base uppercase text-on-surface group-hover:text-primary transition-colors cursor-pointer leading-snug line-clamp-1"
                       >
                         {product.modelo}
                       </h3>
@@ -502,19 +502,19 @@ function TiendaContent() {
 
                     <div className="flex flex-col gap-2 pt-2 border-t border-surface-container">
                       <div className="flex items-baseline justify-between">
-                        <span className="font-label-price text-2xl text-primary-container">
+                        <span className="font-label-price text-lg sm:text-2xl text-primary-container">
                           ${product.precio.toLocaleString('es-AR')}
                         </span>
-                        <span className="font-label-telemetry text-xs text-outline">
-                          {product.stock > 0 ? `STOCK: ${product.stock} UNID.` : 'AGOTADO'}
+                        <span className="font-label-telemetry text-[10px] sm:text-xs text-outline">
+                          {product.stock > 0 ? `STOCK: ${product.stock}` : 'AGOTADO'}
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
                         <button
                           onClick={() => addItem(product)}
                           disabled={product.stock <= 0}
-                          className="py-2.5 px-2 bg-surface-container-high hover:bg-surface-container-highest disabled:opacity-50 text-on-surface font-headline-sm text-xs uppercase flex items-center justify-center gap-1 transition-colors border border-surface-container-highest"
+                          className="py-2 px-1 sm:py-2.5 sm:px-2 bg-surface-container-high hover:bg-surface-container-highest disabled:opacity-50 text-on-surface font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-colors border border-surface-container-highest"
                         >
                           <span className="material-symbols-outlined text-sm">add_shopping_cart</span>
                           <span>CARRITO</span>
@@ -523,7 +523,7 @@ function TiendaContent() {
                           href={getWhatsAppProductUrl(product)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="py-2.5 px-2 bg-primary-container hover:bg-surface-tint text-on-primary-container font-headline-sm text-xs uppercase flex items-center justify-center gap-1 transition-colors font-bold"
+                          className="py-2 px-1 sm:py-2.5 sm:px-2 bg-primary-container hover:bg-surface-tint text-on-primary-container font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-colors font-bold"
                         >
                           <span className="material-symbols-outlined text-sm">chat</span>
                           <span>COMPRAR</span>
@@ -542,52 +542,53 @@ function TiendaContent() {
           MODAL DE INSPECCIÓN DETALLADA DEL PRODUCTO
       ============================================================================== */}
       {selectedProductModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-3xl bg-surface-container-low border border-surface-container-highest max-h-[90vh] overflow-y-auto flex flex-col shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-sm overscroll-contain">
+          <div className="relative w-full max-w-3xl bg-surface-container-low border border-surface-container-highest max-h-[92vh] overflow-y-auto flex flex-col shadow-2xl rounded-sm">
             {/* Modal Header */}
-            <div className="p-4 bg-surface-container border-b border-surface-container-highest flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary-container text-xl">speed</span>
-                <span className="font-headline-md uppercase text-on-surface tracking-wider text-base">
-                  Ficha Técnica Coleccionista // {selectedProductModal.marca}
+            <div className="p-3.5 sm:p-4 bg-surface-container border-b border-surface-container-highest flex items-center justify-between">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="material-symbols-outlined text-primary-container text-lg sm:text-xl shrink-0">speed</span>
+                <span className="font-headline-md uppercase text-on-surface tracking-wider text-xs sm:text-base truncate">
+                  Ficha Técnica // {selectedProductModal.marca}
                 </span>
               </div>
               <button
                 onClick={() => setSelectedProductModal(null)}
-                className="p-1 text-on-surface-variant hover:text-on-surface"
+                className="w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-md transition-colors shrink-0"
+                aria-label="Cerrar modal"
               >
                 <span className="material-symbols-outlined text-2xl">close</span>
               </button>
             </div>
 
             {/* Modal Body */}
-            <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            <div className="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-start">
               {/* Left: High-res Photo */}
-              <div className="relative w-full h-80 bg-surface-container-lowest border border-surface-container overflow-hidden">
+              <div className="relative w-full h-60 sm:h-80 bg-surface-container-lowest border border-surface-container overflow-hidden rounded-sm">
                 <Image
                   src={selectedProductModal.imagen_url}
                   alt={selectedProductModal.modelo}
                   fill
                   className="object-contain"
-                  sizes="400px"
+                  sizes="(max-width: 768px) 100vw, 400px"
                 />
                 <div className="absolute top-2 left-2">
-                  <span className="bg-secondary-container text-on-secondary-container font-label-telemetry text-xs px-2 py-0.5 uppercase font-bold">
+                  <span className="bg-secondary-container text-on-secondary-container font-label-telemetry text-[11px] sm:text-xs px-2 py-0.5 uppercase font-bold">
                     ESCALA {selectedProductModal.escala}
                   </span>
                 </div>
               </div>
 
               {/* Right: Technical Specs & Purchase */}
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-3.5 sm:gap-4">
                 <div className="flex flex-col gap-1">
                   <span className="font-label-telemetry text-xs text-primary-container uppercase tracking-wider">
                     {selectedProductModal.serie || selectedProductModal.categoria}
                   </span>
-                  <h2 className="font-headline-md text-2xl uppercase text-on-surface leading-tight">
+                  <h2 className="font-headline-md text-xl sm:text-2xl uppercase text-on-surface leading-tight">
                     {selectedProductModal.modelo}
                   </h2>
-                  <span className="font-label-price text-3xl text-primary-container mt-1">
+                  <span className="font-label-price text-2xl sm:text-3xl text-primary-container mt-1">
                     ${selectedProductModal.precio.toLocaleString('es-AR')}
                   </span>
                 </div>
@@ -621,7 +622,7 @@ function TiendaContent() {
                     href={getWhatsAppProductUrl(selectedProductModal)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full py-3 bg-primary-container hover:bg-surface-tint text-on-primary-container font-headline-md uppercase text-sm tracking-wider flex items-center justify-center gap-2 font-bold shadow-md transition-all"
+                    className="w-full py-3 bg-primary-container hover:bg-surface-tint text-on-primary-container font-headline-md uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 font-bold shadow-md transition-all text-center"
                   >
                     <span className="material-symbols-outlined text-lg">chat</span>
                     <span>COMPRAR VÍA WHATSAPP</span>
@@ -632,7 +633,7 @@ function TiendaContent() {
                       addItem(selectedProductModal);
                       setSelectedProductModal(null);
                     }}
-                    className="w-full py-3 bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-on-surface font-headline-md uppercase text-sm tracking-wider flex items-center justify-center gap-2 transition-colors"
+                    className="w-full py-3 bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-on-surface font-headline-md uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 transition-colors text-center"
                   >
                     <span className="material-symbols-outlined text-lg text-primary-container">add_shopping_cart</span>
                     <span>AGREGAR AL CARRITO</span>

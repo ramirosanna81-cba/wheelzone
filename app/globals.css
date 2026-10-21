@@ -20,12 +20,36 @@
   --color-surface-dark: #131313;
 }
 
-/* Base Body Styles */
+/* Base HTML & Body Styles with strict mobile horizontal overflow prevention */
+html {
+  background-color: #0B0B0B;
+  color: #E5E2E1;
+  overflow-x: hidden;
+  max-width: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   background-color: #0B0B0B;
   color: #E5E2E1;
   font-family: 'DM Sans', sans-serif;
   overflow-x: hidden;
+  max-width: 100%;
+  width: 100%;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utility to hide scrollbars on swipeable carousels while keeping smooth touch scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Carbon Fiber Texture Pattern */

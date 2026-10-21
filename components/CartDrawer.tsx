@@ -39,23 +39,24 @@ export default function CartDrawer() {
       />
 
       {/* Drawer */}
-      <div className="relative w-full max-w-md bg-surface-container-lowest border-l border-surface-container-high h-full flex flex-col z-10 shadow-2xl">
+      <div className="relative w-full max-w-md bg-surface-container-lowest border-l border-surface-container-high h-full flex flex-col z-10 shadow-2xl overscroll-contain">
         {/* Header */}
-        <div className="p-4 bg-surface-container-low border-b border-surface-container flex items-center justify-between">
+        <div className="p-3.5 sm:p-4 bg-surface-container-low border-b border-surface-container flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-primary-container text-xl">shopping_cart</span>
             <div>
-              <h2 className="font-headline-md uppercase text-on-surface tracking-wider text-lg">
+              <h2 className="font-headline-md uppercase text-on-surface tracking-wider text-base sm:text-lg">
                 Paddock Carrito ({totalItems})
               </h2>
-              <span className="text-xs font-label-telemetry text-primary-container uppercase">
+              <span className="text-[11px] sm:text-xs font-label-telemetry text-primary-container uppercase">
                 Embalaje Blindado C-10 Incluido
               </span>
             </div>
           </div>
           <button
             onClick={closeCart}
-            className="p-1 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"
+            className="w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors rounded-lg"
+            aria-label="Cerrar Carrito"
           >
             <span className="material-symbols-outlined text-2xl">close</span>
           </button>
@@ -189,13 +190,13 @@ export default function CartDrawer() {
             ) : null}
 
             {/* Quick customer data for order */}
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <input
                 type="text"
                 placeholder="Tu nombre..."
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
-                className="bg-surface-container-lowest px-3 py-1.5 text-xs text-on-surface placeholder:text-outline border border-surface-container-highest focus:outline-none focus:border-primary-container"
+                className="bg-surface-container-lowest px-3 py-2 text-xs text-on-surface placeholder:text-outline border border-surface-container-highest focus:outline-none focus:border-primary-container"
               />
               <input
                 type="text"
@@ -203,7 +204,7 @@ export default function CartDrawer() {
                 value={deliveryMethod === 'retiro' ? "Rioja 281, Junín" : shippingCity}
                 disabled={deliveryMethod === 'retiro'}
                 onChange={(e) => setShippingCity(e.target.value)}
-                className="bg-surface-container-lowest px-3 py-1.5 text-xs text-on-surface placeholder:text-outline border border-surface-container-highest focus:outline-none focus:border-primary-container disabled:opacity-60"
+                className="bg-surface-container-lowest px-3 py-2 text-xs text-on-surface placeholder:text-outline border border-surface-container-highest focus:outline-none focus:border-primary-container disabled:opacity-60"
               />
             </div>
 
