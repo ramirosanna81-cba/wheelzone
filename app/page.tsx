@@ -358,10 +358,10 @@ export default function HomePage() {
               <div
                 onMouseEnter={() => setIsHeroPaused(true)}
                 onMouseLeave={() => setIsHeroPaused(false)}
-                className="relative z-10 w-full max-w-sm sm:max-w-md group select-none"
+                className="relative z-10 w-full max-w-sm sm:max-w-[420px] flex flex-col items-center gap-3 group select-none"
               >
-                {/* Blister Image Frame */}
-                <div className="relative w-full h-[400px] sm:h-[460px] rounded-2xl overflow-hidden border border-neutral-700/80 bg-neutral-950/80 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-sm transition-transform duration-500 group-hover:scale-[1.01]">
+                {/* Blister Image Frame (100% Clean, Unobstructed Art & Bubble) */}
+                <div className="relative w-full h-[400px] sm:h-[450px] md:h-[470px] rounded-2xl overflow-hidden border border-neutral-700/80 bg-neutral-950/90 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-sm transition-transform duration-500 group-hover:scale-[1.01]">
                   
                   {/* Telemetry RPM Progress Bar at Top */}
                   <div className="absolute top-0 left-0 right-0 h-1 bg-neutral-800/80 z-30 overflow-hidden">
@@ -380,18 +380,18 @@ export default function HomePage() {
                     priority
                     sizes="(max-width: 768px) 100vw, 500px"
                   />
-                  {/* Subtle lighting sheen */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-white/10 pointer-events-none"></div>
+                  {/* Subtle lighting sheen without blocking the bottom card or vehicle */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10 pointer-events-none"></div>
 
                   {/* Quality / Rarity Badge Top Left */}
-                  <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-md border border-neutral-700 text-[11px] font-label-telemetry text-primary-container uppercase font-bold tracking-wider shadow-lg">
+                  <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-md border border-neutral-700 text-[11px] font-label-telemetry text-primary-container uppercase font-bold tracking-wider shadow-lg">
                     <span className="w-2 h-2 rounded-full bg-secondary-container animate-ping"></span>
                     <span>{badgeText}</span>
                   </div>
 
                   {/* Auto-play pause indicator */}
                   {isHeroPaused && (
-                    <div className="absolute top-3 right-3 z-20 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-label-telemetry text-neutral-300 uppercase tracking-widest border border-neutral-700/60">
+                    <div className="absolute top-3 right-3 z-20 bg-black/80 backdrop-blur-md px-2.5 py-0.5 rounded text-[10px] font-label-telemetry text-neutral-300 uppercase tracking-widest border border-neutral-700/60 shadow">
                       PAUSADO
                     </div>
                   )}
@@ -403,7 +403,7 @@ export default function HomePage() {
                       e.stopPropagation();
                       handlePrevHero();
                     }}
-                    className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 text-white/80 hover:text-white border border-neutral-700/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg"
+                    className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/70 hover:bg-black text-white/80 hover:text-white border border-neutral-700/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg cursor-pointer"
                     aria-label="Anterior modelo"
                   >
                     <span className="material-symbols-outlined text-base">chevron_left</span>
@@ -414,38 +414,53 @@ export default function HomePage() {
                       e.stopPropagation();
                       handleNextHero();
                     }}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 text-white/80 hover:text-white border border-neutral-700/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/70 hover:bg-black text-white/80 hover:text-white border border-neutral-700/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg cursor-pointer"
                     aria-label="Siguiente modelo"
                   >
                     <span className="material-symbols-outlined text-base">chevron_right</span>
                   </button>
                 </div>
 
-                {/* Floating Glassmorphism Product Card in Corner */}
-                <div className="absolute -bottom-4 right-2 sm:-right-4 z-20 bg-neutral-900/95 backdrop-blur-md border border-neutral-700/90 rounded-2xl p-3.5 sm:p-4 shadow-2xl flex items-center justify-between gap-4 max-w-xs sm:max-w-sm transition-all duration-300">
+                {/* Dedicated Lower Information Bar (Anchored and perfectly centered under the blister image) */}
+                <div className="w-full bg-[#121214]/90 backdrop-blur-md border border-neutral-800/90 hover:border-neutral-700 rounded-xl sm:rounded-2xl px-4 py-2.5 sm:py-3 shadow-xl flex items-center justify-between gap-3 transition-all duration-300">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded-lg bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-500 font-extrabold text-xs tracking-tighter shrink-0">
+                    {/* Model Acronym Chip */}
+                    <div className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-lg bg-red-600/15 border border-red-500/30 flex items-center justify-center text-red-500 font-extrabold text-[11px] sm:text-xs tracking-tighter shrink-0 font-sans">
                       {modelAcronym}
                     </div>
+                    {/* Model Name & Serie/Category */}
                     <div className="flex flex-col min-w-0">
-                      <span className="text-sm font-bold text-white leading-tight truncate">
+                      <span className="font-sans font-bold text-sm sm:text-[15px] text-white leading-tight truncate">
                         {activeSpotlight.modelo}
                       </span>
-                      <span className="text-[11px] text-neutral-400 truncate">
+                      <span className="font-sans text-[11px] text-neutral-400 truncate mt-0.5">
                         {activeSpotlight.serie || `${activeSpotlight.marca} // ${activeSpotlight.categoria}`}
-                      </span>
-                      <span className="text-base font-extrabold text-[#FFC200] mt-0.5">
-                        ${activeSpotlight.precio.toLocaleString('es-AR')}
                       </span>
                     </div>
                   </div>
-                  <button
-                    onClick={handleAddSpotlight}
-                    title="Agregar al carrito"
-                    className="w-10 h-10 rounded-full bg-primary-container hover:bg-amber-400 text-black flex items-center justify-center font-bold text-lg shadow-lg hover:scale-105 active:scale-95 transition-all shrink-0"
-                  >
-                    {spotlightAdded ? '✓' : '>'}
-                  </button>
+
+                  {/* Price & Compact Harmonious CTA Button */}
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span className="font-sans font-extrabold text-[#FFC200] text-base sm:text-lg whitespace-nowrap">
+                      ${activeSpotlight.precio.toLocaleString('es-AR')}
+                    </span>
+                    <button
+                      onClick={handleAddSpotlight}
+                      title={spotlightAdded ? '¡Agregado al carrito!' : 'Agregar al carrito'}
+                      className={`w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold transition-all shrink-0 shadow-md ${
+                        spotlightAdded
+                          ? 'bg-emerald-500 text-white scale-105'
+                          : 'bg-primary-container hover:bg-amber-400 text-black hover:scale-105 active:scale-95'
+                      }`}
+                      aria-label="Agregar al carrito"
+                    >
+                      {spotlightAdded ? (
+                        <span className="material-symbols-outlined text-base">check</span>
+                      ) : (
+                        <span className="material-symbols-outlined text-base">shopping_cart</span>
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
