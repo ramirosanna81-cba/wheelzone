@@ -73,11 +73,6 @@ export default function HomePage() {
     return () => clearInterval(scrollTimer);
   }, [featuredProducts.length, destacadosHovered]);
 
-  const handleSelectHero = (idx: number) => {
-    setHeroIndex(idx);
-    setHeroProgress(0);
-  };
-
   const handlePrevHero = () => {
     setHeroIndex((idx) => (idx - 1 + heroProducts.length) % heroProducts.length);
     setHeroProgress(0);
@@ -453,32 +448,6 @@ export default function HomePage() {
                   </button>
                 </div>
               </div>
-
-              {/* Clickable Racing Pills / Model Switcher below Blister */}
-              {heroProducts.length > 1 && (
-                <div className="flex items-center gap-1.5 mt-7 z-20 flex-wrap justify-center max-w-md px-2">
-                  {heroProducts.map((p, idx) => {
-                    const isSelected = idx === heroIndex;
-                    return (
-                      <button
-                        key={p.id}
-                        type="button"
-                        onClick={() => handleSelectHero(idx)}
-                        className={`px-2.5 py-1 rounded-full text-[11px] font-label-telemetry uppercase tracking-wider transition-all duration-200 border flex items-center gap-1 ${
-                          isSelected
-                            ? 'bg-primary-container text-black font-extrabold border-primary-container shadow-[0_0_12px_rgba(255,194,0,0.5)] scale-105'
-                            : 'bg-neutral-900/80 text-neutral-400 hover:text-white border-neutral-800 hover:border-neutral-600'
-                        }`}
-                      >
-                        <span>{idx === 0 ? '🔥' : idx === 1 ? '💎' : '🏎️'}</span>
-                        <span className="truncate max-w-[90px] sm:max-w-[120px]">
-                          {p.modelo.split(' ')[0]} {p.modelo.split(' ')[1] || ''}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
             </div>
           </div>
         </div>
