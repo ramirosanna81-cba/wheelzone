@@ -59,17 +59,17 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-3 xl:gap-6 shrink-0">
+        <nav className="hidden lg:flex items-center gap-3.5 xl:gap-6 shrink-0">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`font-label-telemetry text-xs uppercase tracking-wider py-1 whitespace-nowrap transition-all ${
+                className={`font-display-hero text-[15px] xl:text-base font-bold uppercase tracking-wider py-1 px-1 whitespace-nowrap transition-all duration-150 ${
                   isActive
-                    ? 'text-primary-container font-bold border-b-2 border-primary-container'
-                    : 'text-neutral-300 hover:text-white'
+                    ? 'text-primary-container border-b-2 border-primary-container font-extrabold drop-shadow-[0_2px_8px_rgba(255,194,0,0.3)]'
+                    : 'text-neutral-200 hover:text-white hover:border-b-2 hover:border-neutral-500/50'
                 }`}
               >
                 {link.name}
@@ -154,10 +154,10 @@ export default function Navbar() {
               key={link.href}
               href={link.href}
               onClick={() => setMobileMenuOpen(false)}
-              className={`px-3 py-2 text-sm font-headline-sm uppercase tracking-wider ${
+              className={`px-3 py-2.5 text-base font-display-hero uppercase tracking-wider rounded-md transition-colors ${
                 pathname === link.href
-                  ? 'text-primary-container bg-surface-container-high font-bold'
-                  : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+                  ? 'text-primary-container bg-surface-container-high font-bold border-l-4 border-primary-container'
+                  : 'text-neutral-200 hover:text-white hover:bg-surface-container-low font-semibold'
               }`}
             >
               {link.name}
