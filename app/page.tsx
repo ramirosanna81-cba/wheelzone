@@ -538,8 +538,9 @@ export default function HomePage() {
                     FORMULARIO DE CACERÍA TELEMÉTRICA
                   </span>
                 </div>
-                <span className="font-label-telemetry text-xs text-outline hidden sm:inline">
-                  TABLE: LEADS_ENCARGOS
+                <span className="font-label-telemetry text-xs text-primary-container hidden sm:inline-flex items-center gap-1 font-bold">
+                  <span className="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+                  RADAR DE BÚSQUEDA ACTIVO
                 </span>
               </div>
 
