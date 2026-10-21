@@ -1,5 +1,7 @@
 export type BlisterCondition = 'Impecable' | 'Muy Bueno' | 'Desgaste / Abrir' | 'Loose';
 
+export type DestacadoTipo = 'semanal' | 'mensual' | 'spotlight' | 'general';
+
 export interface Product {
   id: string;
   marca: string;
@@ -13,6 +15,9 @@ export interface Product {
   imagen_url: string;
   estado_blister: BlisterCondition;
   destacado: boolean;
+  destacado_tipo?: DestacadoTipo;
+  destacado_tag?: string;
+  hero_order?: number;
   descripcion?: string;
   activo: boolean;
   created_at?: string;

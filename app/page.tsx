@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import confetti from 'canvas-confetti';
 import FireParticles from '@/components/FireParticles';
 import { Product } from '@/lib/types';
 import { fetchProducts, createLead } from '@/lib/supabase';
+import { INITIAL_PRODUCTS } from '@/lib/mock-data';
 import { useCart } from '@/lib/cart-context';
 import { CATALOG_BRANDS, CATALOG_SCALES } from '@/lib/catalog-constants';
 
@@ -16,30 +17,120 @@ export default function HomePage() {
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [spotlightAdded, setSpotlightAdded] = useState(false);
 
-  const spotlightProduct: Product = {
-    id: 'spotlight-nissan-gtr-r34',
-    modelo: 'Nissan Skyline GT-R (R34)',
-    marca: 'Hot Wheels',
-    escala: '1:64',
-    anio: 2024,
-    precio: 14990,
-    stock: 3,
-    estado_blister: 'Impecable',
-    descripcion: 'Hot Wheels Premium // Car Culture con carrocería de metal fundido y ruedas Real Riders.',
-    imagen_url:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDQvZS12mbKb8nmB3EtCJiJFGVrC8KgusEcf8NfnxbrNmoTRwX7Yxzw1u9EtVLnYTfrsjRSYO3ATU-owjBX_Jt-uaSJrJMDKvyVvxlg5A3eajb3_AtPwcMS-WHlSCQyfOwAIaBHtg8tJK2GwCJbgRn6J6gsq45t2aqHvbzhLNwe0kceg2QHxRLFGhfuqRi1TaD3VU6AChARkeYG4ke0XBy1ICk9BO-igcP8TW9y3X_nOG6RIB_mXQbXcA',
-    categoria: 'Premium',
-    destacado: true,
-    activo: true,
-    created_at: new Date().toISOString(),
+  // Hero Spotlight Carousel State
+  const [heroIndex, setHeroIndex] = useState(0);
+  const [isHeroPaused, setIsHeroPaused] = useState(false);
+  const [heroProgress, setHeroProgress] = useState(0);
+  const [destacadosHovered, setDestacadosHovered] = useState(false);
+
+  // Filter hero products
+  const heroProducts = useMemo(() => {
+    const featured = featuredProducts.filter((p) => p.destacado);
+    const list = featured.length > 0 ? featured : INITIAL_PRODUCTS.filter((p) => p.destacado);
+    // Sort by hero_order if available
+    return [...list].sort((a, b) => (a.hero_order || 99) - (b.hero_order || 99)).slice(0, 5);
+  }, [featuredProducts]);
+
+  const activeSpotlight = heroProducts[heroIndex] || heroProducts[0] || INITIAL_PRODUCTS[0];
+
+  // Auto-play timer for Hero Spotlight (5s per car with telemetry progress bar)
+  useEffect(() => {
+    if (heroProducts.length <= 1) return;
+    const interval = 5000;
+    const step = 50;
+    const increment = (step / interval) * 100;
+
+    const timer = setInterval(() => {
+      if (!isHeroPaused) {
+        setHeroProgress((prev) => {
+          if (prev >= 100) {
+            setHeroIndex((idx) => (idx + 1) % heroProducts.length);
+            return 0;
+          }
+          return prev + increment;
+        });
+      }
+    }, step);
+
+    return () => clearInterval(timer);
+  }, [isHeroPaused, heroProducts.length]);
+
+  // Auto-scroll timer for Destacados section
+  useEffect(() => {
+    if (featuredProducts.length <= 4 || destacadosHovered) return;
+    const scrollTimer = setInterval(() => {
+      const el = document.getElementById('destacados-grid');
+      if (el) {
+        const maxScroll = el.scrollWidth - el.clientWidth;
+        if (el.scrollLeft >= maxScroll - 20) {
+          el.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          el.scrollBy({ left: 320, behavior: 'smooth' });
+        }
+      }
+    }, 4500);
+
+    return () => clearInterval(scrollTimer);
+  }, [featuredProducts.length, destacadosHovered]);
+
+  const handleSelectHero = (idx: number) => {
+    setHeroIndex(idx);
+    setHeroProgress(0);
   };
 
+  const handlePrevHero = () => {
+    setHeroIndex((idx) => (idx - 1 + heroProducts.length) % heroProducts.length);
+    setHeroProgress(0);
+  };
+
+  const handleNextHero = () => {
+    setHeroIndex((idx) => (idx + 1) % heroProducts.length);
+    setHeroProgress(0);
+  };
+
+  // Dynamic halo gradient depending on active car
+  const haloClass = useMemo(() => {
+    if (!activeSpotlight) return 'from-secondary-container/40 via-secondary-container/15';
+    if (activeSpotlight.categoria?.includes('Super Treasure Hunt') || activeSpotlight.destacado_tipo === 'mensual') {
+      return 'from-amber-500/40 via-yellow-500/15';
+    }
+    if (activeSpotlight.modelo?.toLowerCase().includes('porsche') || activeSpotlight.categoria?.includes('Speed')) {
+      return 'from-sky-500/40 via-blue-600/15';
+    }
+    return 'from-secondary-container/40 via-secondary-container/15';
+  }, [activeSpotlight]);
+
+  // Model acronym for floating pill
+  const modelAcronym = useMemo(() => {
+    if (!activeSpotlight) return 'CAR';
+    const m = activeSpotlight.modelo.toUpperCase();
+    if (m.includes('SKYLINE') || m.includes('R34') || m.includes('GT-R')) return 'GT-R';
+    if (m.includes('DATSUN')) return '$TH';
+    if (m.includes('PORSCHE')) return 'GT3';
+    if (m.includes('LAMBORGHINI') || m.includes('COUNTACH')) return 'LP500';
+    if (m.includes('RX-7')) return 'FD3S';
+    return activeSpotlight.marca.substring(0, 3).toUpperCase();
+  }, [activeSpotlight]);
+
+  // Dynamic badge tag for blister
+  const badgeText = useMemo(() => {
+    if (activeSpotlight?.destacado_tag) return activeSpotlight.destacado_tag;
+    if (activeSpotlight?.destacado_tipo === 'mensual' || activeSpotlight?.categoria?.includes('Super Treasure Hunt')) {
+      return '💎 JOYA DEL MES // $TH RAREZA';
+    }
+    if (activeSpotlight?.destacado_tipo === 'semanal') {
+      return '🔥 HOT DROP DE LA SEMANA';
+    }
+    return '🔥 SPOTLIGHT DESTACADO';
+  }, [activeSpotlight]);
+
   const handleAddSpotlight = () => {
-    addItem(spotlightProduct);
+    if (!activeSpotlight) return;
+    addItem(activeSpotlight);
     setSpotlightAdded(true);
     confetti({
-      particleCount: 40,
-      spread: 50,
+      particleCount: 45,
+      spread: 55,
       origin: { y: 0.6 },
       colors: ['#FFC200', '#FF9900', '#E51937'],
     });
@@ -65,8 +156,8 @@ export default function HomePage() {
     async function loadData() {
       try {
         const products = await fetchProducts();
-        const featured = products.filter((p) => p.destacado).slice(0, 4);
-        setFeaturedProducts(featured.length > 0 ? featured : products.slice(0, 4));
+        const featured = products.filter((p) => p.destacado);
+        setFeaturedProducts(featured.length > 0 ? featured : products.slice(0, 8));
       } catch (err) {
         console.error('Error loading featured products:', err);
       } finally {
@@ -261,48 +352,95 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Hero Right Deck: Spotlight Blister Pack Mockup with Floating Glass Card */}
-            <div className="lg:col-span-5 relative flex justify-center items-center py-4">
-              {/* Radial red spotlight halo */}
-              <div className="absolute w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] bg-gradient-to-br from-secondary-container/40 via-secondary-container/15 to-transparent rounded-full blur-[80px] pointer-events-none"></div>
+            {/* Hero Right Deck: Spotlight Blister Pack Mockup with Dynamic Interactive Carousel */}
+            <div className="lg:col-span-5 relative flex flex-col justify-center items-center py-4">
+              {/* Radial dynamic reactive spotlight halo */}
+              <div
+                className={`absolute w-[300px] h-[300px] sm:w-[420px] sm:h-[420px] bg-gradient-to-br ${haloClass} to-transparent rounded-full blur-[80px] pointer-events-none transition-all duration-700`}
+              ></div>
 
-              {/* Blister Card Container */}
-              <div className="relative z-10 w-full max-w-sm sm:max-w-md group">
+              {/* Blister Card Container with Pause on Hover */}
+              <div
+                onMouseEnter={() => setIsHeroPaused(true)}
+                onMouseLeave={() => setIsHeroPaused(false)}
+                className="relative z-10 w-full max-w-sm sm:max-w-md group select-none"
+              >
                 {/* Blister Image Frame */}
-                <div className="relative w-full h-[400px] sm:h-[460px] rounded-2xl overflow-hidden border border-neutral-700/80 bg-neutral-950/80 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-sm transition-transform duration-500 group-hover:scale-[1.02]">
+                <div className="relative w-full h-[400px] sm:h-[460px] rounded-2xl overflow-hidden border border-neutral-700/80 bg-neutral-950/80 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-sm transition-transform duration-500 group-hover:scale-[1.01]">
+                  
+                  {/* Telemetry RPM Progress Bar at Top */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-neutral-800/80 z-30 overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-primary-container via-amber-400 to-race-red transition-all duration-75 ease-linear"
+                      style={{ width: `${heroProgress}%` }}
+                    ></div>
+                  </div>
+
                   <Image
-                    src={spotlightProduct.imagen_url}
-                    alt={spotlightProduct.modelo}
+                    key={activeSpotlight.id}
+                    src={activeSpotlight.imagen_url}
+                    alt={activeSpotlight.modelo}
                     fill
-                    className="object-cover object-center"
+                    className="object-cover object-center transition-all duration-500"
                     priority
                     sizes="(max-width: 768px) 100vw, 500px"
                   />
                   {/* Subtle lighting sheen */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-white/10 pointer-events-none"></div>
 
-                  {/* Quality Badge */}
-                  <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-md border border-neutral-700 text-[11px] font-label-telemetry text-primary-container uppercase font-bold tracking-wider">
+                  {/* Quality / Rarity Badge Top Left */}
+                  <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 bg-black/75 backdrop-blur-md px-2.5 py-1 rounded-md border border-neutral-700 text-[11px] font-label-telemetry text-primary-container uppercase font-bold tracking-wider shadow-lg">
                     <span className="w-2 h-2 rounded-full bg-secondary-container animate-ping"></span>
-                    <span>SPOTLIGHT DESTACADO</span>
+                    <span>{badgeText}</span>
                   </div>
+
+                  {/* Auto-play pause indicator */}
+                  {isHeroPaused && (
+                    <div className="absolute top-3 right-3 z-20 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded text-[10px] font-label-telemetry text-neutral-300 uppercase tracking-widest border border-neutral-700/60">
+                      PAUSADO
+                    </div>
+                  )}
+
+                  {/* Manual Arrow Controls (< and >) on hover */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePrevHero();
+                    }}
+                    className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 text-white/80 hover:text-white border border-neutral-700/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg"
+                    aria-label="Anterior modelo"
+                  >
+                    <span className="material-symbols-outlined text-base">chevron_left</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleNextHero();
+                    }}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 text-white/80 hover:text-white border border-neutral-700/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg"
+                    aria-label="Siguiente modelo"
+                  >
+                    <span className="material-symbols-outlined text-base">chevron_right</span>
+                  </button>
                 </div>
 
                 {/* Floating Glassmorphism Product Card in Corner */}
-                <div className="absolute -bottom-4 right-2 sm:-right-4 z-20 bg-neutral-900/90 backdrop-blur-md border border-neutral-700/80 rounded-2xl p-3.5 sm:p-4 shadow-2xl flex items-center justify-between gap-4 max-w-xs sm:max-w-sm">
-                  <div className="flex items-center gap-3">
+                <div className="absolute -bottom-4 right-2 sm:-right-4 z-20 bg-neutral-900/95 backdrop-blur-md border border-neutral-700/90 rounded-2xl p-3.5 sm:p-4 shadow-2xl flex items-center justify-between gap-4 max-w-xs sm:max-w-sm transition-all duration-300">
+                  <div className="flex items-center gap-3 min-w-0">
                     <div className="w-10 h-10 rounded-lg bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-500 font-extrabold text-xs tracking-tighter shrink-0">
-                      GT-R
+                      {modelAcronym}
                     </div>
-                    <div className="flex flex-col">
-                      <span className="text-sm font-bold text-white leading-tight">
-                        {spotlightProduct.modelo}
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-sm font-bold text-white leading-tight truncate">
+                        {activeSpotlight.modelo}
                       </span>
-                      <span className="text-[11px] text-neutral-400">
-                        Hot Wheels Premium // Car Culture
+                      <span className="text-[11px] text-neutral-400 truncate">
+                        {activeSpotlight.serie || `${activeSpotlight.marca} // ${activeSpotlight.categoria}`}
                       </span>
                       <span className="text-base font-extrabold text-[#FFC200] mt-0.5">
-                        ${spotlightProduct.precio.toLocaleString('es-AR')}
+                        ${activeSpotlight.precio.toLocaleString('es-AR')}
                       </span>
                     </div>
                   </div>
@@ -315,6 +453,32 @@ export default function HomePage() {
                   </button>
                 </div>
               </div>
+
+              {/* Clickable Racing Pills / Model Switcher below Blister */}
+              {heroProducts.length > 1 && (
+                <div className="flex items-center gap-1.5 mt-7 z-20 flex-wrap justify-center max-w-md px-2">
+                  {heroProducts.map((p, idx) => {
+                    const isSelected = idx === heroIndex;
+                    return (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() => handleSelectHero(idx)}
+                        className={`px-2.5 py-1 rounded-full text-[11px] font-label-telemetry uppercase tracking-wider transition-all duration-200 border flex items-center gap-1 ${
+                          isSelected
+                            ? 'bg-primary-container text-black font-extrabold border-primary-container shadow-[0_0_12px_rgba(255,194,0,0.5)] scale-105'
+                            : 'bg-neutral-900/80 text-neutral-400 hover:text-white border-neutral-800 hover:border-neutral-600'
+                        }`}
+                      >
+                        <span>{idx === 0 ? '🔥' : idx === 1 ? '💎' : '🏎️'}</span>
+                        <span className="truncate max-w-[90px] sm:max-w-[120px]">
+                          {p.modelo.split(' ')[0]} {p.modelo.split(' ')[1] || ''}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -375,7 +539,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Cards Grid */}
+          {/* Cards Carousel */}
           {loadingProducts ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((n) => (
@@ -383,11 +547,16 @@ export default function HomePage() {
               ))}
             </div>
           ) : (
-            <div id="destacados-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 overflow-x-auto pb-2 scroll-smooth">
+            <div
+              id="destacados-grid"
+              onMouseEnter={() => setDestacadosHovered(true)}
+              onMouseLeave={() => setDestacadosHovered(false)}
+              className="flex items-stretch gap-4 overflow-x-auto pb-4 scroll-smooth no-scrollbar"
+            >
               {featuredProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="group bg-surface-container-low hover:bg-surface-container transition-all duration-300 flex flex-col border border-surface-container hover:border-primary-container relative overflow-hidden"
+                  className="w-[280px] sm:w-[300px] lg:w-[285px] xl:w-[298px] shrink-0 group bg-surface-container-low hover:bg-surface-container transition-all duration-300 flex flex-col border border-surface-container hover:border-primary-container relative overflow-hidden"
                 >
                   {/* Photo area */}
                   <div className="relative w-full h-64 bg-surface-container-lowest overflow-hidden">
@@ -401,6 +570,16 @@ export default function HomePage() {
 
                     {/* Scale and series badges */}
                     <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
+                      {product.destacado_tipo === 'mensual' ? (
+                        <span className="bg-amber-400 text-black font-label-telemetry text-[11px] px-2 py-0.5 uppercase font-black tracking-wider flex items-center gap-1 shadow-md">
+                          <span>💎 JOYA DEL MES</span>
+                        </span>
+                      ) : product.destacado_tipo === 'semanal' ? (
+                        <span className="bg-secondary-container text-white font-label-telemetry text-[11px] px-2 py-0.5 uppercase font-black tracking-wider flex items-center gap-1 shadow-md">
+                          <span>🔥 DESTACADO DE LA SEMANA</span>
+                        </span>
+                      ) : null}
+
                       <span className="bg-surface-container-highest/90 text-on-surface font-label-telemetry text-[11px] px-2 py-0.5 uppercase tracking-wider">
                         ESCALA {product.escala}
                       </span>

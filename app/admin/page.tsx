@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import confetti from 'canvas-confetti';
-import { Product, LeadEncargo, CommunityPost, BlisterCondition, LeadStatus } from '@/lib/types';
+import { Product, LeadEncargo, CommunityPost, BlisterCondition, LeadStatus, DestacadoTipo } from '@/lib/types';
 import {
   isSupabaseConfigured,
   supabase,
@@ -36,8 +36,8 @@ export default function AdminPage() {
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState('');
 
-  // Active Tab: 'nuevo' | 'stock' | 'leads' | 'comunidad'
-  const [activeTab, setActiveTab] = useState<'nuevo' | 'stock' | 'leads' | 'comunidad'>('nuevo');
+  // Active Tab: 'nuevo' | 'stock' | 'destacados' | 'leads' | 'comunidad'
+  const [activeTab, setActiveTab] = useState<'nuevo' | 'stock' | 'destacados' | 'leads' | 'comunidad'>('nuevo');
 
   // Data states
   const [products, setProducts] = useState<Product[]>([]);
@@ -92,6 +92,34 @@ export default function AdminPage() {
     setStockBlister('');
     setStockStatus('all');
   };
+
+  // Destacados Filter & Management States
+  const [destacadosSearch, setDestacadosSearch] = useState('');
+  const [destacadosFilter, setDestacadosFilter] = useState<'all' | 'destacados' | 'semanal' | 'mensual' | 'spotlight'>('destacados');
+
+  const filteredDestacadosProducts = useMemo(() => {
+    return products.filter((p) => {
+      if (destacadosSearch.trim()) {
+        const q = destacadosSearch.toLowerCase();
+        const match =
+          p.modelo.toLowerCase().includes(q) ||
+          p.marca.toLowerCase().includes(q) ||
+          p.categoria.toLowerCase().includes(q) ||
+          (p.serie && p.serie.toLowerCase().includes(q));
+        if (!match) return false;
+      }
+      if (destacadosFilter === 'destacados') return p.destacado;
+      if (destacadosFilter === 'semanal') return p.destacado && p.destacado_tipo === 'semanal';
+      if (destacadosFilter === 'mensual') return p.destacado && p.destacado_tipo === 'mensual';
+      if (destacadosFilter === 'spotlight') return p.destacado && (p.destacado_tipo === 'spotlight' || (p.hero_order !== undefined && p.hero_order > 0));
+      return true; // 'all'
+    });
+  }, [products, destacadosSearch, destacadosFilter]);
+
+  const heroSpotlightProducts = useMemo(() => {
+    const list = products.filter((p) => p.destacado);
+    return [...list].sort((a, b) => (a.hero_order || 99) - (b.hero_order || 99)).slice(0, 5);
+  }, [products]);
 
   // Toast notification state
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
@@ -408,6 +436,58 @@ export default function AdminPage() {
     }
   };
 
+  // Handler to toggle product 'destacado' status directly with 1 click
+  const handleToggleDestacado = async (product: Product) => {
+    const newStatus = !product.destacado;
+    const newTipo: DestacadoTipo | undefined = newStatus ? (product.destacado_tipo || 'general') : undefined;
+    const newTag = newStatus ? (product.destacado_tag || '🔥 SPOTLIGHT DESTACADO') : undefined;
+
+    try {
+      const res = await updateProduct(product.id, {
+        destacado: newStatus,
+        destacado_tipo: newTipo,
+        destacado_tag: newTag,
+      });
+
+      if (res.success && res.product) {
+        setProducts((prev) => prev.map((p) => (p.id === product.id ? res.product! : p)));
+        showToast(
+          newStatus
+            ? `"${product.modelo}" agregado a Destacados.`
+            : `"${product.modelo}" removido de Destacados.`
+        );
+      } else {
+        showToast(res.error || 'Error al actualizar destacado.', 'error');
+      }
+    } catch (err: any) {
+      showToast(err?.message || 'Error inesperado.', 'error');
+    }
+  };
+
+  const handleUpdateDestacadoMeta = async (
+    productId: string,
+    tipo: DestacadoTipo,
+    tag?: string,
+    heroOrder?: number
+  ) => {
+    try {
+      const updates: Partial<Product> = {
+        destacado: true,
+        destacado_tipo: tipo,
+      };
+      if (tag !== undefined) updates.destacado_tag = tag;
+      if (heroOrder !== undefined) updates.hero_order = heroOrder;
+
+      const res = await updateProduct(productId, updates);
+      if (res.success && res.product) {
+        setProducts((prev) => prev.map((p) => (p.id === productId ? res.product! : p)));
+        showToast('Configuración de Destacado guardada.');
+      }
+    } catch (err: any) {
+      showToast(err?.message || 'Error al guardar configuración.', 'error');
+    }
+  };
+
   // Lead Handlers (Update & Delete)
   const handleLeadStatusChange = async (leadId: string, newStatus: LeadStatus) => {
     const res = await updateLead(leadId, { estado: newStatus });
@@ -709,6 +789,18 @@ export default function AdminPage() {
         >
           <span className="material-symbols-outlined text-base">inventory_2</span>
           <span>Gestión de Inventario ({products.length})</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('destacados')}
+          className={`px-4 py-2 font-headline-sm uppercase text-sm tracking-wider flex items-center gap-2 transition-all whitespace-nowrap ${
+            activeTab === 'destacados'
+              ? 'bg-primary-container text-on-primary-container font-bold border-b-2 border-primary-container'
+              : 'text-on-surface-variant hover:text-on-surface bg-surface-container-low'
+          }`}
+        >
+          <span className="material-symbols-outlined text-base">stars</span>
+          <span>Gestor de Destacados & Hero ({products.filter((p) => p.destacado).length})</span>
         </button>
 
         <button
@@ -1286,6 +1378,355 @@ export default function AdminPage() {
                 )))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* ==============================================================================
+          TAB EXTRA: GESTOR DE DESTACADOS & HERO SPOTLIGHT ("LO MÁS CALIENTE")
+      ============================================================================== */}
+      {activeTab === 'destacados' && (
+        <div className="flex flex-col gap-8">
+          {/* Header & Overview */}
+          <div className="bg-surface-container-low border border-surface-container p-6 flex flex-col gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-surface-container">
+              <div>
+                <h2 className="font-headline-lg text-2xl uppercase tracking-wider text-on-surface flex items-center gap-2">
+                  <span className="text-primary-container">⭐</span>
+                  <span>Gestor de Destacados & Hero Carousel ("Lo más caliente")</span>
+                </h2>
+                <p className="text-xs text-on-surface-variant font-body-sm mt-1">
+                  Controlá qué modelos aparecen en el gran Blíster 3D rotativo del Hero y organizá las piezas para el carrusel de la página de inicio.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="px-3 py-1.5 bg-primary-container/20 border border-primary-container text-primary-container font-label-telemetry text-xs uppercase font-bold">
+                  {products.filter((p) => p.destacado).length} ACTIVOS EN DESTACADOS
+                </span>
+              </div>
+            </div>
+
+            {/* Quick Metrics */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+              <div className="p-3 bg-surface-container border border-surface-container-highest flex flex-col">
+                <span className="text-xs text-outline font-label-telemetry uppercase">Hero Spotlight</span>
+                <span className="text-2xl font-display-hero text-primary-container">
+                  {heroSpotlightProducts.length} / 5
+                </span>
+                <span className="text-[10px] text-on-surface-variant">Rotan en el blíster 3D</span>
+              </div>
+              <div className="p-3 bg-surface-container border border-surface-container-highest flex flex-col">
+                <span className="text-xs text-outline font-label-telemetry uppercase">Drops Semanales</span>
+                <span className="text-2xl font-display-hero text-secondary">
+                  {products.filter((p) => p.destacado && p.destacado_tipo === 'semanal').length}
+                </span>
+                <span className="text-[10px] text-on-surface-variant">Badge 🔥 Semanal</span>
+              </div>
+              <div className="p-3 bg-surface-container border border-surface-container-highest flex flex-col">
+                <span className="text-xs text-outline font-label-telemetry uppercase">Joyas del Mes</span>
+                <span className="text-2xl font-display-hero text-amber-400">
+                  {products.filter((p) => p.destacado && p.destacado_tipo === 'mensual').length}
+                </span>
+                <span className="text-[10px] text-on-surface-variant">Badge 💎 Mensual / STH</span>
+              </div>
+              <div className="p-3 bg-surface-container border border-surface-container-highest flex flex-col">
+                <span className="text-xs text-outline font-label-telemetry uppercase">Carrusel General</span>
+                <span className="text-2xl font-display-hero text-on-surface">
+                  {products.filter((p) => p.destacado).length}
+                </span>
+                <span className="text-[10px] text-on-surface-variant">En sección Destacados</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Section 1: Hero 3D Blister Spotlight Order & Badges */}
+          <div className="bg-surface-container-low border border-surface-container p-6 flex flex-col gap-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-surface-container">
+              <div>
+                <h3 className="font-headline-lg text-lg uppercase tracking-wider text-primary-container flex items-center gap-2">
+                  <span className="material-symbols-outlined text-base">local_fire_department</span>
+                  <span>Slots del Blíster Hero ("Lo más caliente" - Máx 5 autos)</span>
+                </h3>
+                <p className="text-xs text-on-surface-variant font-body-sm">
+                  Estos autos van pasando automáticamente en el blíster con barra de telemetría y resplandor reactivo.
+                </p>
+              </div>
+            </div>
+
+            {heroSpotlightProducts.length === 0 ? (
+              <div className="p-8 border border-dashed border-surface-container-highest text-center flex flex-col items-center gap-2">
+                <span className="material-symbols-outlined text-3xl text-outline">auto_awesome</span>
+                <p className="text-sm text-on-surface-variant font-label-telemetry">
+                  No tenés ningún auto asignado al Hero Spotlight. Marcá autos abajo como "Destacado" para que aparezcan acá.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                {heroSpotlightProducts.map((p, idx) => (
+                  <div
+                    key={p.id}
+                    className="bg-surface-container border border-surface-container-highest p-3 flex flex-col justify-between gap-3 relative group"
+                  >
+                    {/* Slot badge */}
+                    <div className="flex items-center justify-between">
+                      <span className="px-2 py-0.5 bg-primary-container text-black font-label-telemetry text-xs font-black uppercase tracking-wider rounded">
+                        SLOT #{idx + 1} {idx === 0 ? '★ PRINCIPAL' : ''}
+                      </span>
+                      <button
+                        onClick={() => handleUpdateDestacadoMeta(p.id, p.destacado_tipo || 'general', p.destacado_tag, 99)}
+                        className="text-outline hover:text-race-red transition-colors text-xs"
+                        title="Quitar este auto del Hero"
+                      >
+                        <span className="material-symbols-outlined text-base">close</span>
+                      </button>
+                    </div>
+
+                    {/* Thumbnail */}
+                    <div className="relative w-full h-32 bg-surface-container-lowest border border-surface-container overflow-hidden">
+                      <Image
+                        src={p.imagen_url}
+                        alt={p.modelo}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+
+                    {/* Info */}
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-xs font-bold text-white truncate" title={p.modelo}>
+                        {p.modelo}
+                      </span>
+                      <span className="text-[11px] text-outline truncate">{p.marca} // {p.categoria}</span>
+                      <span className="text-sm font-extrabold text-[#FFC200] mt-1">
+                        ${p.precio.toLocaleString('es-AR')}
+                      </span>
+                    </div>
+
+                    {/* Tag Selector */}
+                    <div className="flex flex-col gap-1 pt-2 border-t border-surface-container-highest">
+                      <label className="text-[10px] uppercase font-label-telemetry text-outline">
+                        Etiqueta del Blíster:
+                      </label>
+                      <select
+                        value={p.destacado_tag || '🔥 HOT DROP DE LA SEMANA'}
+                        onChange={(e) => handleUpdateDestacadoMeta(p.id, p.destacado_tipo || 'semanal', e.target.value, p.hero_order || (idx + 1))}
+                        className="bg-surface-container-low border border-surface-container-highest text-white text-[11px] px-2 py-1.5 focus:outline-none focus:border-primary-container"
+                      >
+                        <option value="🔥 HOT DROP DE LA SEMANA">🔥 HOT DROP DE LA SEMANA</option>
+                        <option value="💎 JOYA DEL MES // $TH RAREZA">💎 JOYA DEL MES // $TH</option>
+                        <option value="⚡ RECIÉN LLEGADO // ÚLTIMA UNIDAD">⚡ RECIÉN LLEGADO // ÚLTIMA UNIDAD</option>
+                        <option value="🏎️ ICONO BOULEVARD // PREMIUM">🏎️ ICONO BOULEVARD</option>
+                        <option value="🏁 EDICIÓN ESPECIAL // COLECCIONISTA">🏁 EDICIÓN ESPECIAL</option>
+                      </select>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Section 2: Catalog Quick Toggle Table */}
+          <div className="bg-surface-container-low border border-surface-container p-6 flex flex-col gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-surface-container">
+              <div>
+                <h3 className="font-headline-lg text-lg uppercase tracking-wider text-on-surface">
+                  Catálogo Rápido: Activar / Configurar Destacados
+                </h3>
+                <p className="text-xs text-on-surface-variant font-body-sm">
+                  Hacé 1 clic en la estrella para incluir cualquier auto en el carrusel y elegí su tipo de vigencia.
+                </p>
+              </div>
+
+              {/* Search */}
+              <div className="relative w-full sm:w-64">
+                <span className="material-symbols-outlined absolute left-3 top-2.5 text-outline text-base">search</span>
+                <input
+                  type="text"
+                  placeholder="Buscar modelo o marca..."
+                  value={destacadosSearch}
+                  onChange={(e) => setDestacadosSearch(e.target.value)}
+                  className="w-full bg-surface-container border border-surface-container-highest pl-9 pr-3 py-1.5 text-xs text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container"
+                />
+              </div>
+            </div>
+
+            {/* Filter pills */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={() => setDestacadosFilter('destacados')}
+                className={`px-3 py-1 text-xs font-label-telemetry uppercase tracking-wider border transition-all ${
+                  destacadosFilter === 'destacados'
+                    ? 'bg-primary-container text-black font-bold border-primary-container'
+                    : 'bg-surface-container text-outline border-surface-container-highest hover:text-white'
+                }`}
+              >
+                ⭐ Solo Destacados ({products.filter((p) => p.destacado).length})
+              </button>
+              <button
+                onClick={() => setDestacadosFilter('semanal')}
+                className={`px-3 py-1 text-xs font-label-telemetry uppercase tracking-wider border transition-all ${
+                  destacadosFilter === 'semanal'
+                    ? 'bg-secondary-container text-white font-bold border-secondary-container'
+                    : 'bg-surface-container text-outline border-surface-container-highest hover:text-white'
+                }`}
+              >
+                🔥 Semanal ({products.filter((p) => p.destacado && p.destacado_tipo === 'semanal').length})
+              </button>
+              <button
+                onClick={() => setDestacadosFilter('mensual')}
+                className={`px-3 py-1 text-xs font-label-telemetry uppercase tracking-wider border transition-all ${
+                  destacadosFilter === 'mensual'
+                    ? 'bg-amber-400 text-black font-bold border-amber-400'
+                    : 'bg-surface-container text-outline border-surface-container-highest hover:text-white'
+                }`}
+              >
+                💎 Mensual ({products.filter((p) => p.destacado && p.destacado_tipo === 'mensual').length})
+              </button>
+              <button
+                onClick={() => setDestacadosFilter('spotlight')}
+                className={`px-3 py-1 text-xs font-label-telemetry uppercase tracking-wider border transition-all ${
+                  destacadosFilter === 'spotlight'
+                    ? 'bg-sky-500 text-white font-bold border-sky-500'
+                    : 'bg-surface-container text-outline border-surface-container-highest hover:text-white'
+                }`}
+              >
+                ⚡ Hero Spotlight ({heroSpotlightProducts.length})
+              </button>
+              <button
+                onClick={() => setDestacadosFilter('all')}
+                className={`px-3 py-1 text-xs font-label-telemetry uppercase tracking-wider border transition-all ${
+                  destacadosFilter === 'all'
+                    ? 'bg-surface-bright text-white font-bold border-white/50'
+                    : 'bg-surface-container text-outline border-surface-container-highest hover:text-white'
+                }`}
+              >
+                Mostrar Todos ({products.length})
+              </button>
+            </div>
+
+            {/* Table */}
+            <div className="overflow-x-auto border border-surface-container">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-surface-container border-b border-surface-container-highest font-label-telemetry text-outline uppercase tracking-wider">
+                    <th className="p-3 w-16 text-center">Destacado</th>
+                    <th className="p-3 w-16">Foto</th>
+                    <th className="p-3">Modelo & Categoría</th>
+                    <th className="p-3">Precio</th>
+                    <th className="p-3">Tipo de Destacado</th>
+                    <th className="p-3">Slot Hero</th>
+                    <th className="p-3">Etiqueta de Insignia</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-surface-container">
+                  {filteredDestacadosProducts.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="p-8 text-center text-outline font-label-telemetry">
+                        No se encontraron productos con el filtro aplicado.
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredDestacadosProducts.map((p) => (
+                      <tr
+                        key={p.id}
+                        className={`hover:bg-surface-container transition-colors ${
+                          p.destacado ? 'bg-primary-container/[0.04]' : ''
+                        }`}
+                      >
+                        {/* 1-Click Toggle Star */}
+                        <td className="p-3 text-center">
+                          <button
+                            onClick={() => handleToggleDestacado(p)}
+                            title={p.destacado ? 'Quitar de Destacados' : 'Marcar como Destacado'}
+                            className={`p-1.5 rounded transition-transform active:scale-90 ${
+                              p.destacado
+                                ? 'text-primary-container hover:text-amber-300'
+                                : 'text-neutral-600 hover:text-neutral-400'
+                            }`}
+                          >
+                            <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: p.destacado ? '"FILL" 1' : '"FILL" 0' }}>
+                              star
+                            </span>
+                          </button>
+                        </td>
+
+                        {/* Thumbnail */}
+                        <td className="p-3">
+                          <div className="relative w-12 h-12 bg-surface-container-lowest border border-surface-container overflow-hidden">
+                            <Image
+                              src={p.imagen_url}
+                              alt={p.modelo}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        </td>
+
+                        {/* Model */}
+                        <td className="p-3">
+                          <div className="flex flex-col">
+                            <span className="font-bold text-white text-sm">{p.modelo}</span>
+                            <span className="text-outline text-[11px]">{p.marca} // {p.categoria} ({p.escala})</span>
+                          </div>
+                        </td>
+
+                        {/* Price */}
+                        <td className="p-3 font-label-price text-sm font-bold text-primary-container">
+                          ${p.precio.toLocaleString('es-AR')}
+                        </td>
+
+                        {/* Tipo Selector */}
+                        <td className="p-3">
+                          <select
+                            disabled={!p.destacado}
+                            value={p.destacado_tipo || 'general'}
+                            onChange={(e) => handleUpdateDestacadoMeta(p.id, e.target.value as DestacadoTipo, p.destacado_tag, p.hero_order)}
+                            className="bg-surface-container border border-surface-container-highest text-on-surface text-xs px-2 py-1 focus:outline-none focus:border-primary-container disabled:opacity-40"
+                          >
+                            <option value="general">⭐ General (Carrusel)</option>
+                            <option value="semanal">🔥 Semanal (Drop de la Semana)</option>
+                            <option value="mensual">💎 Mensual (Joya del Mes)</option>
+                            <option value="spotlight">⚡ Spotlight Hero</option>
+                          </select>
+                        </td>
+
+                        {/* Hero Slot Selector */}
+                        <td className="p-3">
+                          <select
+                            disabled={!p.destacado}
+                            value={p.hero_order ? String(p.hero_order) : '0'}
+                            onChange={(e) => {
+                              const val = parseInt(e.target.value, 10);
+                              handleUpdateDestacadoMeta(p.id, p.destacado_tipo || 'spotlight', p.destacado_tag, val > 0 ? val : undefined);
+                            }}
+                            className="bg-surface-container border border-surface-container-highest text-on-surface text-xs px-2 py-1 focus:outline-none focus:border-primary-container disabled:opacity-40"
+                          >
+                            <option value="0">Fuera del Hero</option>
+                            <option value="1">Slot #1 (Principal)</option>
+                            <option value="2">Slot #2</option>
+                            <option value="3">Slot #3</option>
+                            <option value="4">Slot #4</option>
+                            <option value="5">Slot #5</option>
+                          </select>
+                        </td>
+
+                        {/* Tag */}
+                        <td className="p-3">
+                          <input
+                            type="text"
+                            disabled={!p.destacado}
+                            placeholder="Ej: 🔥 HOT DROP DE LA SEMANA"
+                            value={p.destacado_tag || ''}
+                            onChange={(e) => handleUpdateDestacadoMeta(p.id, p.destacado_tipo || 'general', e.target.value, p.hero_order)}
+                            className="bg-surface-container border border-surface-container-highest text-on-surface text-xs px-2 py-1 w-full max-w-[220px] focus:outline-none focus:border-primary-container disabled:opacity-40"
+                          />
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
