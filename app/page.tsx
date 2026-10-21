@@ -632,72 +632,90 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Information Column */}
             <div className="lg:col-span-5 flex flex-col gap-6">
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-3 h-3 bg-primary-container"></span>
+                  <span className="w-2.5 h-2.5 bg-primary-container rounded-sm shadow-[0_0_8px_rgba(255,194,0,0.6)]"></span>
                   <span className="font-label-telemetry text-xs uppercase tracking-widest text-primary-container font-bold">
                     GARAJE DE BÚSQUEDA & IMPORTACIÓN
                   </span>
                 </div>
-                <h2 className="font-display-hero text-3xl md:text-5xl uppercase tracking-tight text-on-surface leading-none">
-                  ¿BUSCÁS UNA PIEZA <span className="text-secondary italic">INCONSEGUIBLE</span>?
+                <h2 className="font-display-hero text-3xl md:text-5xl uppercase tracking-tight text-white leading-none">
+                  ¿BUSCÁS UNA PIEZA <span className="text-primary-container italic font-black drop-shadow-[0_2px_12px_rgba(255,194,0,0.35)]">INCONSEGUIBLE</span>?
                 </h2>
-                <p className="font-body-md text-sm text-on-surface-variant leading-relaxed">
+                <p className="font-body-md text-sm md:text-base text-neutral-300 leading-relaxed">
                   Nosotros la rastreamos, verificamos su autenticidad y estado de blíster bajo lupa, y la traemos directo a tus manos a través de nuestra red de coleccionistas internacionales en Japón, Estados Unidos y Europa.
                 </p>
               </div>
 
-              {/* Protocol steps */}
-              <div className="flex flex-col gap-3 bg-surface-container-low p-4 border border-surface-container">
-                <span className="font-headline-sm text-base uppercase text-primary">
-                  Protocolo de Cacería Wheels Zone
-                </span>
-                <div className="flex flex-col gap-2 font-body-sm text-xs text-on-surface-variant">
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary-container text-base">radar</span>
-                    <span>Escaneo en subastas RLC y clubes cerrados de coleccionistas</span>
+              {/* Protocol steps - High-end modern card */}
+              <div className="flex flex-col gap-4 bg-gradient-to-b from-surface-container/90 to-surface-container-low/95 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/10 border-l-4 border-l-primary-container shadow-xl">
+                <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
+                  <span className="material-symbols-outlined text-primary-container text-xl">verified</span>
+                  <span className="font-headline-sm text-base uppercase text-white font-bold tracking-wide">
+                    Protocolo de Cacería Wheels Zone
+                  </span>
+                </div>
+                <div className="flex flex-col gap-3.5 font-body-sm text-xs sm:text-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0">
+                      <span className="material-symbols-outlined text-primary-container text-base">radar</span>
+                    </div>
+                    <span className="text-neutral-200 leading-snug">Escaneo en subastas RLC y clubes cerrados de coleccionistas</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary-container text-base">verified</span>
-                    <span>Verificación fotográfica de esquinas, tampografía y burbuja</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0">
+                      <span className="material-symbols-outlined text-primary-container text-base">saved_search</span>
+                    </div>
+                    <span className="text-neutral-200 leading-snug">Verificación fotográfica de esquinas, tampografía y burbuja</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary-container text-base">lock</span>
-                    <span>Seña congelada hasta aprobación de fotos reales en mano</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0">
+                      <span className="material-symbols-outlined text-primary-container text-base">lock</span>
+                    </div>
+                    <span className="text-neutral-200 leading-snug">Seña congelada hasta aprobación de fotos reales en mano</span>
                   </div>
                 </div>
               </div>
 
-              {/* Guarantee alert box */}
-              <div className="p-4 bg-secondary-container/15 border-l-4 border-secondary-container flex items-center gap-3">
-                <span className="material-symbols-outlined text-secondary-container text-2xl">priority_high</span>
-                <p className="font-label-telemetry text-xs text-on-surface uppercase leading-snug">
-                  SIN COMPROMISO DE COMPRA SI EL ESTADO DEL BLÍSTER NO COINCIDE EXACTAMENTE CON EL ACORDADO PREVIAMENTE.
-                </p>
+              {/* Guarantee alert box - Reassuring sober dark gray with amber/gold shield */}
+              <div className="p-4 sm:p-4.5 bg-[#18181b]/95 backdrop-blur-md rounded-xl border border-primary-container/25 border-l-4 border-l-primary-container flex items-center gap-3.5 shadow-md">
+                <div className="w-9 h-9 rounded-full bg-primary-container/15 flex items-center justify-center shrink-0 text-primary-container">
+                  <span className="material-symbols-outlined text-xl">shield</span>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <span className="font-label-telemetry text-[11px] uppercase tracking-wider text-primary-container font-extrabold">
+                    Garantía y Tranquilidad Total
+                  </span>
+                  <p className="font-label-telemetry text-xs text-neutral-300 uppercase leading-snug">
+                    Sin compromiso de compra si el estado del blíster no coincide exactamente con el acordado previamente.
+                  </p>
+                </div>
               </div>
             </div>
 
             {/* Custom Request Form connected to Supabase */}
-            <div className="lg:col-span-7 bg-surface-container-low border border-surface-container p-6 md:p-8 flex flex-col gap-4 shadow-2xl relative">
-              <div className="flex items-center justify-between pb-3 border-b border-surface-container">
-                <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary-container">assignment</span>
-                  <span className="font-headline-sm text-lg uppercase text-on-surface">
+            <div className="lg:col-span-7 bg-surface-container-low/95 backdrop-blur-md border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col gap-5 shadow-2xl relative">
+              <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-primary-container/15 border border-primary-container/30 flex items-center justify-center">
+                    <span className="material-symbols-outlined text-primary-container text-lg">assignment</span>
+                  </div>
+                  <span className="font-headline-sm text-lg md:text-xl uppercase text-white font-bold tracking-wide">
                     FORMULARIO DE CACERÍA TELEMÉTRICA
                   </span>
                 </div>
-                <span className="font-label-telemetry text-xs text-primary-container hidden sm:inline-flex items-center gap-1 font-bold">
+                <span className="font-label-telemetry text-xs text-primary-container hidden sm:inline-flex items-center gap-1.5 font-bold px-2.5 py-1 rounded-full bg-primary-container/10 border border-primary-container/20">
                   <span className="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
-                  RADAR DE BÚSQUEDA ACTIVO
+                  RADAR ACTIVO
                 </span>
               </div>
 
-              <form onSubmit={handleEncargoSubmit} className="flex flex-col gap-4">
+              <form onSubmit={handleEncargoSubmit} className="flex flex-col gap-4.5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Nombre */}
-                  <div className="flex flex-col gap-1">
-                    <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                      Nombre Completo del Coleccionista *
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
+                      Nombre Completo del Coleccionista <span className="text-primary-container">*</span>
                     </label>
                     <input
                       type="text"
@@ -705,14 +723,14 @@ export default function HomePage() {
                       placeholder="Ej: Martín Rodríguez"
                       value={formData.nombre}
                       onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-                      className="w-full px-3 py-2 bg-surface-container border border-surface-container-high text-on-surface font-body-sm text-sm placeholder:text-outline focus:outline-none focus:border-primary-container transition-colors"
+                      className="w-full px-4 py-3 sm:py-3.5 rounded-lg bg-[#141416] border border-neutral-700/80 hover:border-neutral-500 text-white font-body-sm text-sm placeholder:text-neutral-500 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all"
                     />
                   </div>
 
                   {/* Teléfono */}
-                  <div className="flex flex-col gap-1">
-                    <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                      WhatsApp / Teléfono Móvil *
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
+                      WhatsApp / Teléfono Móvil <span className="text-primary-container">*</span>
                     </label>
                     <input
                       type="tel"
@@ -720,26 +738,26 @@ export default function HomePage() {
                       placeholder="+54 9 11 5555-0123"
                       value={formData.telefono}
                       onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
-                      className="w-full px-3 py-2 bg-surface-container border border-surface-container-high text-on-surface font-body-sm text-sm placeholder:text-outline focus:outline-none focus:border-primary-container transition-colors"
+                      className="w-full px-4 py-3 sm:py-3.5 rounded-lg bg-[#141416] border border-neutral-700/80 hover:border-neutral-500 text-white font-body-sm text-sm placeholder:text-neutral-500 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Marca y Categoría */}
-                  <div className="flex flex-col gap-1">
-                    <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                      Marca y Categoría Deseada *
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
+                      Marca y Categoría Deseada <span className="text-primary-container">*</span>
                     </label>
                     <select
                       required
                       value={formData.serie}
                       onChange={(e) => setFormData({ ...formData, serie: e.target.value })}
-                      className="w-full px-3 py-2 bg-surface-container border border-surface-container-high text-on-surface font-body-sm text-sm focus:outline-none focus:border-primary-container transition-colors"
+                      className="w-full px-4 py-3 sm:py-3.5 rounded-lg bg-[#141416] border border-neutral-700/80 hover:border-neutral-500 text-white font-body-sm text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all cursor-pointer"
                     >
                       <option value="">Seleccioná una línea...</option>
                       {CATALOG_BRANDS.map((brand) => (
-                        <option key={brand.value} value={brand.value}>
+                        <option key={brand.value} value={brand.value} className="bg-[#18181b] text-white">
                           {brand.label}
                         </option>
                       ))}
@@ -747,29 +765,29 @@ export default function HomePage() {
                   </div>
 
                   {/* Escala Automotor */}
-                  <div className="flex flex-col gap-1">
-                    <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
                       Escala Requerida
                     </label>
                     <select
                       value={formData.estado_empaque}
                       onChange={(e) => setFormData({ ...formData, estado_empaque: e.target.value })}
-                      className="w-full px-3 py-2 bg-surface-container border border-surface-container-high text-on-surface font-body-sm text-sm focus:outline-none focus:border-primary-container transition-colors"
+                      className="w-full px-4 py-3 sm:py-3.5 rounded-lg bg-[#141416] border border-neutral-700/80 hover:border-neutral-500 text-white font-body-sm text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all cursor-pointer"
                     >
                       {CATALOG_SCALES.map((scale) => (
-                        <option key={scale} value={scale}>
+                        <option key={scale} value={scale} className="bg-[#18181b] text-white">
                           {scale}
                         </option>
                       ))}
-                      <option value="Indiferente">Indiferente / Cualquier escala</option>
+                      <option value="Indiferente" className="bg-[#18181b] text-white">Indiferente / Cualquier escala</option>
                     </select>
                   </div>
                 </div>
 
                 {/* Modelo exacto */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                    Modelo exacto, año o variante de color *
+                <div className="flex flex-col gap-1.5">
+                  <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
+                    Modelo exacto, año o variante de color <span className="text-primary-container">*</span>
                   </label>
                   <input
                     type="text"
@@ -777,13 +795,13 @@ export default function HomePage() {
                     placeholder="Ej: Toyota Supra MK4 1994 Amarillo Fast & Furious o Porsche 930 RLC Spectraflame Pink"
                     value={formData.modelo_buscado}
                     onChange={(e) => setFormData({ ...formData, modelo_buscado: e.target.value })}
-                    className="w-full px-3 py-2 bg-surface-container border border-surface-container-high text-on-surface font-body-sm text-sm placeholder:text-outline focus:outline-none focus:border-primary-container transition-colors"
+                    className="w-full px-4 py-3 sm:py-3.5 rounded-lg bg-[#141416] border border-neutral-700/80 hover:border-neutral-500 text-white font-body-sm text-sm placeholder:text-neutral-500 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all"
                   />
                 </div>
 
                 {/* Presupuesto */}
-                <div className="flex flex-col gap-1">
-                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                <div className="flex flex-col gap-1.5">
+                  <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
                     Presupuesto Estimado / Rango Dispuesto (ARS o USD)
                   </label>
                   <input
@@ -791,7 +809,7 @@ export default function HomePage() {
                     placeholder="Ej: Hasta $40.000 ARS o aprox. 45 USD"
                     value={formData.presupuesto}
                     onChange={(e) => setFormData({ ...formData, presupuesto: e.target.value })}
-                    className="w-full px-3 py-2 bg-surface-container border border-surface-container-high text-on-surface font-body-sm text-sm placeholder:text-outline focus:outline-none focus:border-primary-container transition-colors"
+                    className="w-full px-4 py-3 sm:py-3.5 rounded-lg bg-[#141416] border border-neutral-700/80 hover:border-neutral-500 text-white font-body-sm text-sm placeholder:text-neutral-500 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all"
                   />
                 </div>
 
@@ -800,7 +818,7 @@ export default function HomePage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full py-4 bg-primary-container hover:bg-surface-tint active:scale-[0.99] text-on-primary-container font-headline-md text-base uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md font-bold disabled:opacity-60"
+                    className="w-full h-13 sm:h-14 py-3.5 px-6 rounded-xl bg-primary-container hover:bg-[#ffd033] active:scale-[0.98] text-neutral-950 font-display-hero font-extrabold text-base uppercase tracking-wider flex items-center justify-center gap-3 transition-all duration-200 shadow-[0_4px_18px_rgba(255,194,0,0.35)] hover:shadow-[0_6px_24px_rgba(255,194,0,0.5)] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed group"
                   >
                     {submitting ? (
                       <>
@@ -809,7 +827,7 @@ export default function HomePage() {
                       </>
                     ) : (
                       <>
-                        <span className="material-symbols-outlined text-xl">send</span>
+                        <span className="material-symbols-outlined text-[22px] transition-transform duration-200 group-hover:translate-x-1 shrink-0">send</span>
                         <span>ENVIAR ENCARGO A CACERÍA</span>
                       </>
                     )}
@@ -817,7 +835,7 @@ export default function HomePage() {
 
                   {/* Feedback Message */}
                   {submitSuccess && (
-                    <div className="p-3 bg-secondary-container/20 border border-secondary-container text-on-surface font-label-telemetry text-xs flex items-center gap-2">
+                    <div className="p-3.5 rounded-lg bg-primary-container/15 border border-primary-container/30 text-on-surface font-label-telemetry text-xs flex items-center gap-2.5">
                       <span className="material-symbols-outlined text-primary-container text-lg">check_circle</span>
                       <span className="text-primary-container font-bold uppercase tracking-wider">
                         ¡ENCARGO RECIBIDO! NOS CONTACTAREMOS VÍA WHATSAPP EN BREVE CON LAS PRIMERAS OPCIONES DE PISTA.
@@ -826,7 +844,7 @@ export default function HomePage() {
                   )}
 
                   {submitError && (
-                    <div className="p-3 bg-error-container/30 border border-error-container text-error font-label-telemetry text-xs flex items-center gap-2">
+                    <div className="p-3.5 rounded-lg bg-error-container/30 border border-error-container text-error font-label-telemetry text-xs flex items-center gap-2.5">
                       <span className="material-symbols-outlined text-base">error</span>
                       <span>{submitError}</span>
                     </div>
