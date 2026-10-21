@@ -985,26 +985,26 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
             {/* Left Column: Headquarters Info & Action Buttons (5 Cols) */}
-            <div className="lg:col-span-5 bg-surface-container-low border border-surface-container p-6 md:p-8 flex flex-col justify-between gap-6 shadow-2xl relative">
+            <div className="lg:col-span-5 bg-surface-container-low/95 border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col justify-between gap-6 shadow-2xl relative">
               <div className="flex flex-col gap-5">
                 {/* Header Badge */}
-                <div className="flex items-center justify-between pb-2 border-b border-surface-container">
+                <div className="flex items-center justify-between pb-3 border-b border-white/10">
                   <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-primary-container text-xl">storefront</span>
-                    <span className="font-headline-sm uppercase text-sm text-on-surface tracking-wider">
+                    <span className="font-headline-sm uppercase text-sm text-white font-bold tracking-wider">
                       WHEELS ZONE HEADQUARTERS
                     </span>
                   </div>
-                  <span className="font-label-telemetry text-[11px] px-2 py-0.5 bg-secondary-container text-on-secondary-container uppercase font-bold">
+                  <span className="font-label-telemetry text-[11px] px-2.5 py-1 rounded-md bg-secondary-container text-on-secondary-container uppercase font-extrabold shadow-sm">
                     PUNTO DE RETIRO
                   </span>
                 </div>
 
-                {/* Address Box */}
-                <div className="flex flex-col gap-1.5 p-3.5 bg-surface-container border border-surface-container-high">
-                  <div className="flex items-center justify-between flex-wrap gap-1">
-                    <span className="font-label-telemetry text-xs uppercase text-primary-container font-bold flex items-center gap-1">
-                      <span className="material-symbols-outlined text-sm text-secondary">location_on</span>
+                {/* Address Box (Suavizada con esquinas redondeadas y acento sutil) */}
+                <div className="flex flex-col gap-2 p-4 sm:p-5 rounded-xl bg-gradient-to-br from-surface-container/90 to-surface-container-low border border-primary-container/20 border-l-4 border-l-primary-container shadow-md">
+                  <div className="flex items-center justify-between flex-wrap gap-2 pb-1 border-b border-white/5">
+                    <span className="font-display-hero text-sm sm:text-[15px] uppercase text-primary-container font-extrabold tracking-wider flex items-center gap-1.5">
+                      <span className="material-symbols-outlined text-[15px] text-amber-400 shrink-0">location_on</span>
                       DIRECCIÓN DEL SHOWROOM
                     </span>
                     <a
@@ -1017,71 +1017,87 @@ export default function HomePage() {
                       +54 9 2364 27-5322
                     </a>
                   </div>
-                  <p className="font-headline-sm text-lg uppercase text-on-surface leading-snug">
+
+                  {/* Cuerpo de la Dirección con separación clara */}
+                  <p className="font-display-hero text-xl sm:text-2xl font-black uppercase text-white leading-tight mt-1 mb-1 tracking-wide">
                     Rioja 281, B6022 Junín, Argentina
                   </p>
-                  <span className="text-xs font-body-sm text-on-surface-variant">
+                  
+                  {/* Detalle de Zona en gris claro de alto contraste */}
+                  <span className="text-xs sm:text-[13px] font-sans font-medium text-neutral-200 leading-relaxed">
                     Provincia de Buenos Aires // Zona Centro de fácil acceso
                   </span>
                 </div>
 
                 {/* Horarios */}
                 <div className="flex flex-col gap-2 font-label-telemetry text-xs">
-                  <span className="uppercase text-outline font-bold flex items-center gap-1.5">
+                  <span className="uppercase text-neutral-300 font-bold flex items-center gap-1.5 tracking-wider">
                     <span className="material-symbols-outlined text-sm text-primary-container">schedule</span>
                     HORARIOS DE ATENCIÓN EN PADDOCK
                   </span>
                   <div className="grid grid-cols-2 gap-2 text-on-surface">
-                    <div className="p-2 bg-surface-container border border-surface-container-high flex flex-col">
-                      <span className="text-primary-container font-bold">LUNES A VIERNES</span>
-                      <span className="text-[11px] text-on-surface-variant">09:30 a 13:00 hs</span>
-                      <span className="text-[11px] text-on-surface-variant">16:30 a 20:30 hs</span>
+                    <div className="p-3 rounded-lg bg-[#141416] border border-neutral-700/70 flex flex-col">
+                      <span className="text-primary-container font-extrabold">LUNES A VIERNES</span>
+                      <span className="text-[11px] text-neutral-300 mt-0.5">09:30 a 13:00 hs</span>
+                      <span className="text-[11px] text-neutral-300">16:30 a 20:30 hs</span>
                     </div>
-                    <div className="p-2 bg-surface-container border border-surface-container-high flex flex-col">
-                      <span className="text-primary-container font-bold">SÁBADOS</span>
-                      <span className="text-[11px] text-on-surface-variant">10:00 a 13:30 hs</span>
-                      <span className="text-[11px] text-on-surface-variant">17:00 a 20:30 hs</span>
+                    <div className="p-3 rounded-lg bg-[#141416] border border-neutral-700/70 flex flex-col">
+                      <span className="text-primary-container font-extrabold">SÁBADOS</span>
+                      <span className="text-[11px] text-neutral-300 mt-0.5">10:00 a 13:30 hs</span>
+                      <span className="text-[11px] text-neutral-300">17:00 a 20:30 hs</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Showroom Perks */}
-                <div className="flex flex-col gap-1.5 font-body-sm text-xs text-on-surface-variant pt-1">
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary-container text-sm">check_circle</span>
-                    <span>Más de 1.200 autitos coleccionables y STH en exhibición</span>
+                {/* Showroom Perks (Viñetas de beneficios con iconos simples dorados y mayor interlineado) */}
+                <div className="flex flex-col gap-3 font-sans text-xs sm:text-[13px] text-neutral-200 pt-1">
+                  <div className="flex items-start gap-2.5 leading-snug">
+                    <span className="material-symbols-outlined text-amber-400 text-base font-bold shrink-0 mt-0.5">check</span>
+                    <span>Más de 1.200 autitos coleccionables y STH en exhibición permanente</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary-container text-sm">check_circle</span>
-                    <span>10% OFF en efectivo o transferencia directa al retirar</span>
+                  <div className="flex items-start gap-2.5 leading-snug">
+                    <span className="material-symbols-outlined text-amber-400 text-base font-bold shrink-0 mt-0.5">check</span>
+                    <span>10% OFF en efectivo o transferencia directa al retirar en showroom</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary-container text-sm">check_circle</span>
-                    <span>Inspección de remaches y estado de blíster bajo lupa</span>
+                  <div className="flex items-start gap-2.5 leading-snug">
+                    <span className="material-symbols-outlined text-amber-400 text-base font-bold shrink-0 mt-0.5">check</span>
+                    <span>Inspección de remaches, tampografía y estado de blíster bajo lupa</span>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col gap-2.5 pt-3 border-t border-surface-container">
+              <div className="flex flex-col gap-3 pt-3 border-t border-white/10">
+                {/* Botón Principal: Coordinar visita por WhatsApp con degradado ámbar/amarillo, brillo suave y logo WhatsApp */}
                 <a
                   href={`https://wa.me/${phone}?text=${encodeURIComponent('¡Hola Willson! Quiero coordinar para pasar a visitar el showroom de Wheels Zone en Rioja 281, Junín para ver/retirar piezas.')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-3.5 bg-gradient-to-r from-primary-container via-surface-tint to-secondary-container text-surface-container-lowest font-headline-md uppercase text-sm tracking-wider flex items-center justify-center gap-2 font-bold shadow-lg hover:scale-[1.01] active:scale-95 transition-all"
+                  className="w-full py-3.5 sm:py-4 px-6 rounded-xl bg-gradient-to-r from-[#FFA000] via-[#FFB800] to-[#FFC200] hover:from-[#FFB300] hover:to-[#FFD54F] text-neutral-950 font-display-hero font-extrabold uppercase text-sm sm:text-base tracking-wider flex items-center justify-center gap-3 shadow-[0_4px_20px_rgba(255,160,0,0.35)] hover:shadow-[0_6px_28px_rgba(255,194,0,0.55)] hover:scale-[1.01] active:scale-95 transition-all duration-300 border border-amber-200/40 group cursor-pointer"
                 >
-                  <span className="material-symbols-outlined text-lg">calendar_month</span>
+                  {/* Pequeño icono de WhatsApp blanco */}
+                  <div className="w-6.5 h-6.5 rounded-full bg-neutral-950/85 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
+                    <svg className="w-3.5 h-3.5 fill-current text-white shrink-0" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.301-.15-1.767-.867-2.04-.966-.274-.101-.473-.15-.673.15-.197.295-.771.966-.944 1.162-.175.197-.349.222-.65.074-.301-.15-1.27-.467-2.42-1.485-.896-.795-1.501-1.777-1.677-2.077-.175-.3-.019-.461.13-.61.134-.133.301-.347.451-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.01-.371-.01-.571-.01-.2 0-.523.074-.797.372-.272.296-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                  </div>
                   <span>COORDINAR VISITA POR WHATSAPP</span>
                 </a>
 
-                <div className="grid grid-cols-2 gap-2">
+                {/* Botones Secundarios: Tarjetas flotantes en gris oscuro */}
+                <div className="grid grid-cols-2 gap-2.5">
                   <a
                     href="https://www.google.com/maps/dir/?api=1&destination=Rioja+281,+B6022+Jun%C3%ADn,+Provincia+de+Buenos+Aires"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-2.5 px-2 bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-on-surface font-headline-sm uppercase text-xs flex items-center justify-center gap-1.5 transition-colors"
+                    className="py-3 px-3 rounded-xl bg-[#18181b] hover:bg-[#232328] border border-neutral-700/80 hover:border-neutral-500 text-white font-sans font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 group cursor-pointer"
                   >
-                    <span className="material-symbols-outlined text-sm text-primary-container">directions</span>
+                    {/* Icono oficial Google Maps */}
+                    <svg className="w-4.5 h-4.5 shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#EA4335" />
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 6.07L12 18l4-2.93c1.81-1.6 3-3.69 3-6.07 0-3.87-3.13-7-7-7z" fill="#4285F4" opacity="0.4" />
+                      <circle cx="12" cy="9" r="2.5" fill="#FFFFFF" />
+                    </svg>
                     <span>CÓMO LLEGAR (MAPS)</span>
                   </a>
 
@@ -1089,9 +1105,12 @@ export default function HomePage() {
                     href="https://waze.com/ul?q=Rioja+281,+B6022+Jun%C3%ADn,+Argentina&navigate=yes"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="py-2.5 px-2 bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-on-surface font-headline-sm uppercase text-xs flex items-center justify-center gap-1.5 transition-colors"
+                    className="py-3 px-3 rounded-xl bg-[#18181b] hover:bg-[#232328] border border-neutral-700/80 hover:border-neutral-500 text-white font-sans font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 group cursor-pointer"
                   >
-                    <span className="material-symbols-outlined text-sm text-secondary">navigation</span>
+                    {/* Icono Waze */}
+                    <svg className="w-4.5 h-4.5 fill-[#33CCFF] shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+                      <path d="M20.54 13.13a7.48 7.48 0 0 0-1.46-4.63 7.84 7.84 0 0 0-6.19-3.23 8.35 8.35 0 0 0-3.79.88A7.8 7.8 0 0 0 5.4 9.17a7.6 7.6 0 0 0-.82 3.82c0 .63.07 1.25.21 1.86a4.2 4.2 0 0 0-1.74 3.44 4.29 4.29 0 0 0 4.29 4.28h9.85a4.84 4.84 0 0 0 4.84-4.84 4.67 4.67 0 0 0-1.49-3.4zm-11.4 3.43a1.43 1.43 0 1 1 0-2.86 1.43 1.43 0 0 1 0 2.86zm5.72 0a1.43 1.43 0 1 1 0-2.86 1.43 1.43 0 0 1 0 2.86z"/>
+                    </svg>
                     <span>ABRIR EN WAZE</span>
                   </a>
                 </div>
@@ -1099,21 +1118,21 @@ export default function HomePage() {
             </div>
 
             {/* Right Column: Google Maps Interactive Dark Mode Embed (7 Cols) */}
-            <div className="lg:col-span-7 bg-surface-container-low border-2 border-primary-container/40 p-2 shadow-2xl relative overflow-hidden flex flex-col group min-h-[420px]">
+            <div className="lg:col-span-7 bg-surface-container-low border border-white/10 rounded-2xl p-2.5 shadow-2xl relative overflow-hidden flex flex-col group min-h-[440px]">
               {/* Floating Top Telemetry Bar */}
-              <div className="absolute top-4 left-4 z-20 flex items-center gap-2 bg-black/90 backdrop-blur-md px-3 py-1.5 border border-primary-container shadow-xl">
+              <div className="absolute top-5 left-5 z-20 flex items-center gap-2 bg-black/90 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-primary-container/80 shadow-xl">
                 <span className="w-2 h-2 rounded-full bg-secondary-container animate-ping"></span>
-                <span className="font-label-telemetry text-xs uppercase text-primary-container font-bold">
+                <span className="font-label-telemetry text-xs uppercase text-primary-container font-bold tracking-wider">
                   WHEELS ZONE // RIOJA 281, JUNÍN
                 </span>
               </div>
 
               {/* Google Maps Iframe with dark theme inversion filter */}
-              <div className="relative w-full h-full min-h-[400px] bg-surface-container-lowest overflow-hidden">
+              <div className="relative w-full h-full min-h-[420px] rounded-xl overflow-hidden bg-surface-container-lowest">
                 <iframe
                   title="Ubicación Showroom Wheels Zone en Google Maps"
                   src="https://maps.google.com/maps?q=Rioja+281,+B6022+Jun%C3%ADn,+Provincia+de+Buenos+Aires&t=&z=16&ie=UTF8&iwloc=&output=embed"
-                  className="w-full h-full min-h-[400px] border-0"
+                  className="w-full h-full min-h-[420px] border-0"
                   style={{
                     filter: 'invert(90%) hue-rotate(180deg) contrast(125%) grayscale(25%)',
                   }}
@@ -1121,14 +1140,14 @@ export default function HomePage() {
                   allowFullScreen
                 ></iframe>
 
-                {/* Floating GPS Action Pill in Map */}
+                {/* Floating GPS Action Card in Map (Gris oscuro consistente) */}
                 <a
                   href="https://maps.google.com/?q=Rioja+281,+B6022+Jun%C3%ADn,+Provincia+de+Buenos+Aires"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="absolute bottom-4 right-4 z-20 px-3 py-1.5 bg-black/90 hover:bg-primary-container text-white hover:text-black font-label-telemetry text-xs uppercase flex items-center gap-1.5 border border-primary-container transition-colors shadow-xl"
+                  className="absolute bottom-4 right-4 z-20 px-4 py-2.5 bg-[#18181b]/95 hover:bg-[#232328] text-white hover:text-primary-container font-sans font-semibold text-xs uppercase tracking-wider flex items-center gap-2 border border-neutral-700/80 hover:border-primary-container/60 rounded-xl transition-all shadow-2xl backdrop-blur-md group"
                 >
-                  <span className="material-symbols-outlined text-sm">open_in_new</span>
+                  <span className="material-symbols-outlined text-base text-primary-container group-hover:scale-110 transition-transform">open_in_new</span>
                   <span>VER EN GOOGLE MAPS GRANDE</span>
                 </a>
               </div>
