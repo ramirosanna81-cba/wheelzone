@@ -20,7 +20,6 @@ export default function Navbar() {
     { name: 'Showroom', href: '/#showroom' },
     { name: 'El Garaje', href: '/comunidad' },
     { name: 'Encargos', href: '/#encargos' },
-    { name: 'Admin', href: '/admin' },
   ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -66,10 +65,10 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`font-display-hero text-base xl:text-[18px] font-extrabold uppercase tracking-wider px-3 py-2 xl:px-4 xl:py-2.5 whitespace-nowrap transition-all duration-150 rounded-lg ${
+                className={`relative font-display-hero text-base xl:text-[17px] font-extrabold uppercase tracking-wider px-3.5 py-2 xl:px-4 xl:py-2.5 whitespace-nowrap transition-all duration-150 rounded-lg ${
                   isActive
-                    ? 'text-primary-container border-b-[3px] border-primary-container bg-primary-container/[0.08] shadow-[0_2px_12px_rgba(255,194,0,0.3)]'
-                    : 'text-neutral-200 hover:text-white hover:bg-white/[0.06] hover:border-b-[3px] hover:border-white/30 border-b-[3px] border-transparent'
+                    ? 'text-primary-container bg-primary-container/[0.08] after:absolute after:bottom-0.5 after:left-3 after:right-3 after:h-[2.5px] after:bg-primary-container after:rounded-full after:shadow-[0_0_8px_rgba(255,194,0,0.6)]'
+                    : 'text-neutral-300 hover:text-white hover:bg-white/[0.06]'
                 }`}
               >
                 {link.name}
@@ -99,13 +98,13 @@ export default function Navbar() {
             href={`https://wa.me/${phone}?text=${encodeURIComponent('¡Hola Wheels Zone! Quiero consultar por disponibilidad de modelos.')}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="h-11 xl:h-12 px-4 xl:px-5 bg-gradient-to-r from-[#25D366] to-[#1EBE5D] hover:from-[#20ba5a] hover:to-[#18a34f] text-white font-display-hero font-black text-sm xl:text-base uppercase tracking-wider rounded-xl border border-[#2ce672]/30 flex items-center gap-2 transition-all shadow-[0_4px_16px_rgba(37,211,102,0.35)] hover:shadow-[0_6px_22px_rgba(37,211,102,0.55)] hover:scale-[1.02] active:scale-95 select-none whitespace-nowrap shrink-0"
-            title="Contactanos por WhatsApp"
+            className="h-10.5 xl:h-11 px-4 xl:px-4.5 bg-[#25D366] hover:bg-[#20ba5a] active:bg-[#1da851] text-white font-sans font-semibold text-sm xl:text-[15px] rounded-full border border-white/15 flex items-center gap-2.5 transition-all shadow-[0_2px_10px_rgba(37,211,102,0.25)] hover:shadow-[0_4px_16px_rgba(37,211,102,0.4)] hover:scale-[1.02] active:scale-95 select-none whitespace-nowrap shrink-0"
+            title="Enviar mensaje por WhatsApp"
           >
-            <svg className="w-5 h-5 fill-current shrink-0" viewBox="0 0 24 24">
-              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.585 1.961.933 2.796.933 3.183 0 5.768-2.587 5.769-5.766.001-3.182-2.585-5.77-5.769-5.77zm0 10.377c-.779 0-1.637-.282-2.428-.751l-.174-.103-1.579.414.421-1.54-.113-.18c-.523-.834-.844-1.673-.843-2.6 0-2.508 2.041-4.549 4.55-4.549 2.509 0 4.55 2.041 4.55 4.549 0 2.51-2.041 4.55-4.55 4.55zm-1.89-6.38c-.105-.233-.217-.238-.318-.242-.083-.004-.177-.004-.271-.004s-.248.035-.378.177c-.13.141-.497.485-.497 1.183 0 .698.509 1.372.579 1.466.071.094 1.002 1.53 2.427 2.146.339.146.604.234.811.3.342.108.653.093.899.056.275-.041.846-.346.965-.68.119-.335.119-.622.084-.68-.035-.059-.13-.094-.271-.165s-.846-.418-.977-.465c-.13-.047-.225-.07-.32.071-.095.141-.367.465-.45.559-.083.094-.166.106-.307.035-.141-.07-.597-.22-.1.137-.39-.99-.885-.14-.24-.015-.369.056-.479.071-.11.141-.188.212-.283.07-.094.094-.165.141-.271.047-.106.024-.199-.012-.271-.035-.071-.318-.765-.436-1.048z" />
+            <svg className="w-[21px] h-[21px] fill-current text-white shrink-0" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.301-.15-1.767-.867-2.04-.966-.274-.101-.473-.15-.673.15-.197.295-.771.966-.944 1.162-.175.197-.349.222-.65.074-.301-.15-1.27-.467-2.42-1.485-.896-.795-1.501-1.777-1.677-2.077-.175-.3-.019-.461.13-.61.134-.133.301-.347.451-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.01-.371-.01-.571-.01-.2 0-.523.074-.797.372-.272.296-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
             </svg>
-            <span>WhatsApp</span>
+            <span>Enviar WhatsApp</span>
           </a>
 
           {/* Cart Button with Red Circular Counter */}
@@ -169,12 +168,12 @@ export default function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMobileMenuOpen(false)}
-            className="mt-2 px-3.5 py-2.5 bg-[#25D366] hover:bg-[#20ba5a] text-white rounded-lg flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-wider transition-colors"
+            className="mt-2 px-4 py-2.5 bg-[#25D366] hover:bg-[#20ba5a] active:bg-[#1da851] text-white rounded-xl flex items-center justify-center gap-2.5 font-sans font-semibold text-sm shadow-sm transition-colors"
           >
-            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.585 1.961.933 2.796.933 3.183 0 5.768-2.587 5.769-5.766.001-3.182-2.585-5.77-5.769-5.77zm0 10.377c-.779 0-1.637-.282-2.428-.751l-.174-.103-1.579.414.421-1.54-.113-.18c-.523-.834-.844-1.673-.843-2.6 0-2.508 2.041-4.549 4.55-4.549 2.509 0 4.55 2.041 4.55 4.549 0 2.51-2.041 4.55-4.55 4.55zm-1.89-6.38c-.105-.233-.217-.238-.318-.242-.083-.004-.177-.004-.271-.004s-.248.035-.378.177c-.13.141-.497.485-.497 1.183 0 .698.509 1.372.579 1.466.071.094 1.002 1.53 2.427 2.146.339.146.604.234.811.3.342.108.653.093.899.056.275-.041.846-.346.965-.68.119-.335.119-.622.084-.68-.035-.059-.13-.094-.271-.165s-.846-.418-.977-.465c-.13-.047-.225-.07-.32.071-.095.141-.367.465-.45.559-.083.094-.166.106-.307.035-.141-.07-.597-.22-.1.137-.39-.99-.885-.14-.24-.015-.369.056-.479.071-.11.141-.188.212-.283.07-.094.094-.165.141-.271.047-.106.024-.199-.012-.271-.035-.071-.318-.765-.436-1.048z" />
+            <svg className="w-5 h-5 fill-current shrink-0" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.301-.15-1.767-.867-2.04-.966-.274-.101-.473-.15-.673.15-.197.295-.771.966-.944 1.162-.175.197-.349.222-.65.074-.301-.15-1.27-.467-2.42-1.485-.896-.795-1.501-1.777-1.677-2.077-.175-.3-.019-.461.13-.61.134-.133.301-.347.451-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.01-.371-.01-.571-.01-.2 0-.523.074-.797.372-.272.296-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
             </svg>
-            <span>WhatsApp</span>
+            <span>Enviar WhatsApp</span>
           </a>
         </div>
       )}
