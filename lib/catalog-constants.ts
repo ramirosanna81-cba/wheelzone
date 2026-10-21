@@ -40,7 +40,7 @@ export const CATALOG_THEMES = [
   'Camionetas Off-Road',
   'Super Treasure Hunt ($TH)',
   'Treasure Hunt (TH)',
-  'Mainline / Básico',
+  'Básicos',
   'Fast & Furious Premium',
   'Red Line Club (RLC)',
   'Exóticos / Hiperautos',

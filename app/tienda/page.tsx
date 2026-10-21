@@ -117,8 +117,15 @@ function TiendaContent() {
         }
 
         // Category / Motorsport Theme
-        if (selectedCategory && !p.categoria.toLowerCase().includes(selectedCategory.toLowerCase())) {
-          return false;
+        if (selectedCategory) {
+          const catLower = (p.categoria || '').toLowerCase();
+          const selLower = selectedCategory.toLowerCase();
+          const matchesCategory =
+            catLower.includes(selLower) ||
+            (selLower === 'básicos' && (catLower.includes('básico') || catLower.includes('mainline')));
+          if (!matchesCategory) {
+            return false;
+          }
         }
 
         return true;
