@@ -140,17 +140,20 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
             {/* Hero Left Deck */}
             <div className="lg:col-span-7 flex flex-col gap-5">
-              {/* Eyebrow */}
-              <div className="flex items-center gap-2">
-                <span className="font-label-telemetry text-xs md:text-sm tracking-[0.2em] text-neutral-400 uppercase font-semibold">
+              {/* Eyebrow with gradient accent line */}
+              <div className="flex items-center gap-2.5">
+                <span className="font-label-telemetry text-xs md:text-sm tracking-[0.25em] text-neutral-300 uppercase font-semibold">
                   COLECCIONABLES A ESCALA
                 </span>
+                <div className="w-14 sm:w-16 h-[2.5px] bg-gradient-to-r from-[#FFC200] via-[#FF6A00] to-transparent rounded-full"></div>
               </div>
 
-              {/* Main Impact Title */}
+              {/* Main Impact Title - Slanted/Italic Display with Vertical Flame Gradient */}
               <div className="flex flex-col">
-                <h1 className="font-display-hero text-5xl sm:text-6xl md:text-7xl uppercase text-white tracking-tight leading-[0.95] drop-shadow-md">
-                  TU PRÓXIMA{' '}
+                <h1 className="font-display-hero italic font-black text-5xl sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tighter leading-[0.92]">
+                  <span className="text-hero-white block">
+                    TU PRÓXIMA
+                  </span>
                   <span className="text-gradient-flame block">
                     JOYA ESTÁ ACÁ
                   </span>
@@ -158,35 +161,75 @@ export default function HomePage() {
               </div>
 
               {/* Subtitle */}
-              <p className="font-body-md text-base sm:text-lg text-neutral-300 max-w-xl leading-relaxed">
+              <p className="font-body-md text-base sm:text-lg text-neutral-200 max-w-xl leading-relaxed">
                 Hot Wheels, premium y piezas especiales para tu colección.
               </p>
 
-              {/* Action Buttons */}
+              {/* Action Buttons with identical rounded-xl corners & crisp SVGs */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 pt-1">
                 <Link
                   href="/tienda"
-                  className="px-6 py-3.5 bg-gradient-to-r from-[#FFC200] via-[#FF9900] to-[#E51937] text-black font-extrabold text-sm md:text-base uppercase tracking-wider rounded-lg flex items-center justify-center gap-2.5 hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-orange-500/20"
+                  className="px-6 sm:px-7 py-3.5 bg-gradient-to-r from-[#FFC200] via-[#FF6000] to-[#FF1E27] text-black font-extrabold text-sm sm:text-base uppercase tracking-wider rounded-xl flex items-center justify-center gap-3 hover:brightness-110 active:scale-95 transition-all shadow-[0_8px_20px_rgba(255,96,0,0.35)]"
                 >
-                  <span className="text-lg">🛒</span>
+                  <svg
+                    className="w-5 h-5 text-black shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="9" cy="21" r="1.5" fill="currentColor" />
+                    <circle cx="19" cy="21" r="1.5" fill="currentColor" />
+                    <path d="M2.5 3h3.2l2.4 11.2a1.8 1.8 0 0 0 1.8 1.4h9.8a1.8 1.8 0 0 0 1.8-1.4l1.6-8.2H6.5" />
+                  </svg>
                   <span>EXPLORAR CATÁLOGO &gt;</span>
                 </Link>
 
                 <a
                   href="#encargos"
-                  className="px-6 py-3.5 bg-neutral-900/90 hover:bg-neutral-800 border border-neutral-700 text-white font-extrabold text-sm md:text-base uppercase tracking-wider rounded-lg flex items-center justify-center gap-2.5 transition-colors"
+                  className="px-6 sm:px-7 py-3.5 bg-[#151518]/90 hover:bg-[#202025] border border-neutral-600/90 text-white font-extrabold text-sm sm:text-base uppercase tracking-wider rounded-xl flex items-center justify-center gap-3 transition-colors"
                 >
-                  <span className="text-lg">🚗</span>
+                  <svg
+                    className="w-5 h-5 text-white shrink-0"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5.5 10.5L7.5 5.5C7.8 4.6 8.7 4 9.6 4h4.8c.9 0 1.8.6 2.1 1.5l2 5" />
+                    <rect x="2.5" y="10.5" width="19" height="7" rx="2" />
+                    <ellipse cx="6" cy="14" rx="1.5" ry="1" fill="currentColor" />
+                    <ellipse cx="18" cy="14" rx="1.5" ry="1" fill="currentColor" />
+                    <line x1="9.5" y1="14.5" x2="14.5" y2="14.5" />
+                    <path d="M4.5 17.5v2M19.5 17.5v2" strokeWidth="2.5" />
+                  </svg>
                   <span>PEDIR UN AUTO &gt;</span>
                 </a>
               </div>
 
-              {/* Handwritten Cursive Slogan */}
+              {/* Crisp White Handwritten Cursive Slogan with Curved Yellow Underline */}
               <div className="flex flex-col items-start pt-2">
-                <span className="font-script text-2xl sm:text-3xl text-neutral-200 italic tracking-wide">
+                <span className="font-script text-white text-3xl sm:text-4xl italic tracking-wide select-none drop-shadow-md">
                   La felicidad en diferentes escalas
                 </span>
-                <div className="w-44 h-1 bg-gradient-to-r from-primary-container via-amber-400 to-transparent rounded-full mt-1"></div>
+                {/* Hand-drawn curved yellow swoosh under 'La felicidad' */}
+                <svg
+                  className="w-36 sm:w-44 h-3.5 text-[#FFC200] -mt-1 sm:-mt-1.5 ml-1"
+                  viewBox="0 0 160 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M 4 9 C 40 16, 95 16, 156 4"
+                    stroke="currentColor"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
               </div>
 
               {/* Live Race Counters */}

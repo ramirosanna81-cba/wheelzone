@@ -1,9 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
 /* Slogan caligráfico manuscrito */
 .font-script {
   font-family: 'Caveat', cursive;
+  letter-spacing: 0.01em;
 }
 
 
@@ -66,10 +67,18 @@ body {
   box-shadow: 0 0 25px rgba(229, 25, 55, 0.3);
 }
 
-.text-gradient-flame {
-  background: linear-gradient(135deg, #FFC200 0%, #FF8C00 50%, #E51937 100%);
+.text-hero-white {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 65%, #CBD5E1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.9));
+}
+
+.text-gradient-flame {
+  background: linear-gradient(180deg, #FFDD00 0%, #FF6500 48%, #E51937 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.9));
 }
 
 .text-gradient-gold {
