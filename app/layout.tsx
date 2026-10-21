@@ -29,7 +29,7 @@ export default function RootLayout({
         <CartProvider>
           <Navbar />
           <CartDrawer />
-          <main className="flex-1 pt-24 w-full">
+          <main className="flex-1 pt-28 md:pt-32 w-full">
             {children}
           </main>
           <Footer />
