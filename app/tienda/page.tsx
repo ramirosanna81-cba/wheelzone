@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { Product, BlisterCondition } from '@/lib/types';
 import { fetchProducts } from '@/lib/supabase';
 import { useCart } from '@/lib/cart-context';
+import ProductModal from '@/components/ProductModal';
 import {
   CATALOG_BRANDS,
   CATALOG_SCALES,
@@ -555,111 +556,12 @@ function TiendaContent() {
       </div>
 
       {/* ==============================================================================
-          MODAL DE INSPECCIÓN DETALLADA DEL PRODUCTO
+          MODAL DE INSPECCIÓN DETALLADA DEL PRODUCTO (AMPLIADO & ZOOM)
       ============================================================================== */}
-      {selectedProductModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-sm overscroll-contain">
-          <div className="relative w-full max-w-3xl bg-surface-container-low border border-surface-container-highest max-h-[92vh] overflow-y-auto flex flex-col shadow-2xl rounded-sm">
-            {/* Modal Header */}
-            <div className="p-3.5 sm:p-4 bg-surface-container border-b border-surface-container-highest flex items-center justify-between">
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="material-symbols-outlined text-primary-container text-lg sm:text-xl shrink-0">speed</span>
-                <span className="font-headline-md uppercase text-on-surface tracking-wider text-xs sm:text-base truncate">
-                  Ficha Técnica // {selectedProductModal.marca}
-                </span>
-              </div>
-              <button
-                onClick={() => setSelectedProductModal(null)}
-                className="w-9 h-9 flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high rounded-md transition-colors shrink-0"
-                aria-label="Cerrar modal"
-              >
-                <span className="material-symbols-outlined text-2xl">close</span>
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-start">
-              {/* Left: High-res Photo */}
-              <div className="relative w-full h-60 sm:h-80 bg-surface-container-lowest border border-surface-container overflow-hidden rounded-sm">
-                <Image
-                  src={selectedProductModal.imagen_url}
-                  alt={selectedProductModal.modelo}
-                  fill
-                  className="object-contain"
-                  sizes="(max-width: 768px) 100vw, 400px"
-                />
-                <div className="absolute top-2 left-2">
-                  <span className="bg-secondary-container text-on-secondary-container font-label-telemetry text-[11px] sm:text-xs px-2 py-0.5 uppercase font-bold">
-                    ESCALA {selectedProductModal.escala}
-                  </span>
-                </div>
-              </div>
-
-              {/* Right: Technical Specs & Purchase */}
-              <div className="flex flex-col gap-3.5 sm:gap-4">
-                <div className="flex flex-col gap-1">
-                  <span className="font-label-telemetry text-xs text-primary-container uppercase tracking-wider">
-                    {selectedProductModal.serie || selectedProductModal.categoria}
-                  </span>
-                  <h2 className="font-headline-md text-xl sm:text-2xl uppercase text-on-surface leading-tight">
-                    {selectedProductModal.modelo}
-                  </h2>
-                  <span className="font-label-price text-2xl sm:text-3xl text-primary-container mt-1">
-                    ${selectedProductModal.precio.toLocaleString('es-AR')}
-                  </span>
-                </div>
-
-                <div className="p-3 bg-surface-container border border-surface-container-highest flex flex-col gap-1.5 font-label-telemetry text-xs">
-                  <div className="flex justify-between border-b border-surface-container-low pb-1">
-                    <span className="text-outline uppercase">Condición:</span>
-                    <span className="text-primary font-bold uppercase">NUEVO (EMPAQUE ORIGINAL)</span>
-                  </div>
-                  <div className="flex justify-between border-b border-surface-container-low pb-1">
-                    <span className="text-outline uppercase">Año de Lanzamiento:</span>
-                    <span className="text-on-surface">{selectedProductModal.anio}</span>
-                  </div>
-                  <div className="flex justify-between border-b border-surface-container-low pb-1">
-                    <span className="text-outline uppercase">Disponibilidad:</span>
-                    <span className="text-primary-container font-bold">{selectedProductModal.stock} unidades</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-outline uppercase">Embalaje Blindado:</span>
-                    <span className="text-secondary font-bold">INCLUIDO SIN CARGO</span>
-                  </div>
-                </div>
-
-                <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
-                  {selectedProductModal.descripcion || 'Pieza original verificada en telemetría de stock. Se despacha con protector rígido anti-impacto para garantizar la llegada intacta de esquinas y burbuja.'}
-                </p>
-
-                {/* Direct Action Buttons */}
-                <div className="flex flex-col gap-2 pt-2">
-                  <a
-                    href={getWhatsAppProductUrl(selectedProductModal)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full py-2.5 sm:py-3 rounded-xl bg-primary-container hover:bg-surface-tint active:scale-95 text-on-primary-container font-headline-md uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 font-bold shadow-md transition-all text-center"
-                  >
-                    <span className="material-symbols-outlined text-base sm:text-lg">chat</span>
-                    <span>COMPRAR VÍA WHATSAPP</span>
-                  </a>
-
-                  <button
-                    onClick={() => {
-                      addItem(selectedProductModal);
-                      setSelectedProductModal(null);
-                    }}
-                    className="w-full py-2.5 sm:py-3 rounded-xl bg-surface-container hover:bg-surface-container-high active:scale-95 border border-surface-container-highest text-on-surface font-headline-md uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 transition-all text-center"
-                  >
-                    <span className="material-symbols-outlined text-base sm:text-lg text-primary-container">add_shopping_cart</span>
-                    <span>AGREGAR AL CARRITO</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ProductModal
+        product={selectedProductModal}
+        onClose={() => setSelectedProductModal(null)}
+      />
     </div>
   );
 }

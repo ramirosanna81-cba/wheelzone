@@ -10,12 +10,14 @@ import { fetchProducts, createLead } from '@/lib/supabase';
 import { INITIAL_PRODUCTS } from '@/lib/mock-data';
 import { useCart } from '@/lib/cart-context';
 import { CATALOG_BRANDS, CATALOG_SCALES } from '@/lib/catalog-constants';
+import ProductModal from '@/components/ProductModal';
 
 export default function HomePage() {
   const { addItem } = useCart();
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
   const [spotlightAdded, setSpotlightAdded] = useState(false);
+  const [selectedProductModal, setSelectedProductModal] = useState<Product | null>(null);
 
   // Hero Spotlight Carousel State
   const [heroIndex, setHeroIndex] = useState(0);
@@ -362,7 +364,11 @@ export default function HomePage() {
                 className="relative z-10 w-full max-w-[320px] xs:max-w-sm sm:max-w-[420px] flex flex-col items-center gap-2.5 sm:gap-3 group select-none"
               >
                 {/* Blister Image Frame (100% Clean, Unobstructed Art & Bubble) */}
-                <div className="relative w-full h-[320px] xs:h-[370px] sm:h-[440px] md:h-[470px] rounded-2xl overflow-hidden border border-neutral-700/80 bg-neutral-950/90 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-sm transition-transform duration-500 group-hover:scale-[1.01]">
+                <div
+                  onClick={() => setSelectedProductModal(activeSpotlight)}
+                  className="relative w-full h-[320px] xs:h-[370px] sm:h-[440px] md:h-[470px] rounded-2xl overflow-hidden border border-neutral-700/80 bg-neutral-950/90 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-sm transition-transform duration-500 group-hover:scale-[1.01] cursor-pointer"
+                  title="Hacé clic para ver la foto en alta resolución y ficha técnica con lupa"
+                >
                   
                   {/* Telemetry RPM Progress Bar at Top */}
                   <div className="absolute top-0 left-0 right-0 h-1 bg-neutral-800/80 z-30 overflow-hidden">
@@ -397,6 +403,12 @@ export default function HomePage() {
                     </div>
                   )}
 
+                  {/* Hover Floating Hint for Zoom / Technical Sheet */}
+                  <div className="absolute bottom-3 left-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/80 text-white font-label-telemetry text-[11px] uppercase tracking-wider backdrop-blur-md border border-neutral-700 shadow-xl pointer-events-none">
+                    <span className="material-symbols-outlined text-sm text-primary-container">zoom_in</span>
+                    <span>Ver Ficha & Zoom</span>
+                  </div>
+
                   {/* Manual Arrow Controls (< and >) - Visible on touch/mobile, hover on desktop */}
                   <button
                     type="button"
@@ -423,7 +435,11 @@ export default function HomePage() {
                 </div>
 
                 {/* Dedicated Lower Information Bar (Anchored and perfectly centered under the blister image) */}
-                <div className="w-full bg-[#121214]/90 backdrop-blur-md border border-neutral-800/90 hover:border-neutral-700 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2 sm:py-3 shadow-xl flex items-center justify-between gap-2.5 sm:gap-3 transition-all duration-300">
+                <div
+                  onClick={() => setSelectedProductModal(activeSpotlight)}
+                  className="w-full bg-[#121214]/90 backdrop-blur-md border border-neutral-800/90 hover:border-neutral-700 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2 sm:py-3 shadow-xl flex items-center justify-between gap-2.5 sm:gap-3 transition-all duration-300 cursor-pointer"
+                  title="Hacé clic para ver la ficha técnica completa"
+                >
                   <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                     {/* Model Acronym Chip */}
                     <div className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-lg bg-red-600/15 border border-red-500/30 flex items-center justify-center text-red-500 font-extrabold text-[10px] sm:text-xs tracking-tighter shrink-0 font-sans">
@@ -446,7 +462,10 @@ export default function HomePage() {
                       ${activeSpotlight.precio.toLocaleString('es-AR')}
                     </span>
                     <button
-                      onClick={handleAddSpotlight}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAddSpotlight();
+                      }}
                       title={spotlightAdded ? '¡Agregado al carrito!' : 'Agregar al carrito'}
                       className={`w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold transition-all shrink-0 shadow-md ${
                         spotlightAdded
@@ -544,7 +563,11 @@ export default function HomePage() {
                   className="w-[240px] xs:w-[260px] sm:w-[280px] lg:w-[285px] xl:w-[298px] shrink-0 group bg-surface-container-low hover:bg-surface-container transition-all duration-300 flex flex-col border border-surface-container hover:border-primary-container relative overflow-hidden"
                 >
                   {/* Photo area */}
-                  <div className="relative w-full h-56 sm:h-64 bg-surface-container-lowest overflow-hidden">
+                  <div
+                    onClick={() => setSelectedProductModal(product)}
+                    className="relative w-full h-56 sm:h-64 bg-surface-container-lowest overflow-hidden cursor-pointer"
+                    title="Hacé clic para ver fotos en alta resolución, lupa y ficha técnica"
+                  >
                     <Image
                       src={product.imagen_url}
                       alt={product.modelo}
@@ -585,6 +608,14 @@ export default function HomePage() {
                         BLÍSTER {product.estado_blister === 'Impecable' ? '10/10' : product.estado_blister}
                       </span>
                     </div>
+
+                    {/* Hover Hint Overlay */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none z-20">
+                      <span className="px-3 py-1.5 rounded-full bg-black/85 backdrop-blur-md border border-neutral-600 text-white font-label-telemetry text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-xl">
+                        <span className="material-symbols-outlined text-sm text-primary-container">zoom_in</span>
+                        <span>Ver Ficha & Zoom</span>
+                      </span>
+                    </div>
                   </div>
 
                   {/* Body area */}
@@ -593,7 +624,11 @@ export default function HomePage() {
                       <span className="font-label-telemetry text-[11px] uppercase text-outline truncate">
                         {product.serie || product.marca}
                       </span>
-                      <h3 className="font-headline-md text-lg uppercase text-on-surface group-hover:text-primary transition-colors leading-snug line-clamp-1">
+                      <h3
+                        onClick={() => setSelectedProductModal(product)}
+                        className="font-headline-md text-lg uppercase text-on-surface group-hover:text-primary transition-colors leading-snug line-clamp-1 cursor-pointer"
+                        title="Ver ficha técnica"
+                      >
                         {product.modelo}
                       </h3>
                       <p className="font-body-sm text-xs text-on-surface-variant line-clamp-2">
@@ -1181,6 +1216,14 @@ export default function HomePage() {
           </a>
         </div>
       </section>
+
+      {/* ==============================================================================
+          MODAL DE FICHA TÉCNICA CON FOTOGRAFÍA AMPLIADA, ZOOM INTERACTIVO Y LIGHTBOX
+      ============================================================================== */}
+      <ProductModal
+        product={selectedProductModal}
+        onClose={() => setSelectedProductModal(null)}
+      />
     </div>
   );
 }
