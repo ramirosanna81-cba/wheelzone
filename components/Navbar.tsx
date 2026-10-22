@@ -60,12 +60,20 @@ export default function Navbar() {
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-surface/95 backdrop-blur-md border-b border-surface-container">
         {/* Top Banner (Racing Telemetry Strip) */}
-        <div className="bg-secondary-container text-on-secondary-container px-3 sm:px-4 py-1 sm:py-1.5 overflow-hidden select-none">
-          <div className="w-full flex items-center justify-center font-label-telemetry text-[10px] sm:text-xs uppercase tracking-wider text-center">
-            <div className="flex items-center gap-1.5 sm:gap-2 font-bold whitespace-nowrap">
-              <span>🏁 ENVÍOS A TODO EL PAÍS</span>
-              <span className="text-primary-container font-normal hidden sm:inline">|</span>
-              <span className="hidden sm:inline">TU PASIÓN POR EL COLECCIONISMO, SIEMPRE MÁS CERCA</span>
+        <div className="bg-secondary-container text-on-secondary-container px-2 sm:px-4 py-1.5 sm:py-2 overflow-hidden select-none border-b border-red-700/50 shadow-sm">
+          <div className="w-full flex items-center justify-center font-label-telemetry text-xs sm:text-[13px] md:text-sm uppercase tracking-wider text-center">
+            <div className="flex flex-wrap items-center justify-center gap-x-2.5 sm:gap-x-3 gap-y-1 font-bold">
+              <span className="flex items-center gap-1.5 text-white shrink-0">
+                <span>🏁</span>
+                <span>ENVÍOS A TODO EL PAÍS</span>
+              </span>
+              <span className="text-primary-container font-black hidden xs:inline shrink-0">|</span>
+              <span className="flex items-center gap-1.5 text-white shrink-0">
+                <span className="animate-heartbeat bg-primary-container text-black px-2.5 py-0.5 rounded-full font-black text-[11px] sm:text-xs tracking-wide shadow-[0_0_12px_rgba(255,194,0,0.65)] shrink-0">
+                  20% OFF
+                </span>
+                <span className="text-white font-extrabold tracking-wide">CON TRANSFERENCIA BANCARIA</span>
+              </span>
             </div>
           </div>
         </div>
