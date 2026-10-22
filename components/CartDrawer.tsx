@@ -232,9 +232,9 @@ export default function CartDrawer() {
             {/* Direct WhatsApp Action Button */}
             <button
               onClick={handleCheckout}
-              className="w-full py-3 bg-gradient-to-r from-primary-container via-surface-tint to-secondary-container text-surface-container-lowest font-headline-md uppercase tracking-wider text-sm flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-95 transition-all shadow-lg"
+              className="w-full py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-primary-container via-surface-tint to-secondary-container text-surface-container-lowest font-headline-md uppercase tracking-wider text-xs sm:text-sm flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-95 transition-all shadow-lg font-bold"
             >
-              <span className="material-symbols-outlined text-lg">chat</span>
+              <span className="material-symbols-outlined text-base sm:text-lg">chat</span>
               <span>COMPRAR VÍA WHATSAPP</span>
             </button>
 

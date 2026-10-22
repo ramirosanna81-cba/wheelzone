@@ -611,10 +611,10 @@ export default function HomePage() {
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
                         <button
                           onClick={() => addItem(product)}
-                          className="py-2.5 px-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-headline-sm text-xs uppercase flex items-center justify-center gap-1 transition-colors border border-surface-container-highest"
+                          className="py-2 sm:py-2.5 px-1 sm:px-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest active:scale-95 text-on-surface font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-all border border-surface-container-highest shadow-sm"
                         >
                           <span className="material-symbols-outlined text-sm">add_shopping_cart</span>
                           <span>CARRITO</span>
@@ -623,10 +623,10 @@ export default function HomePage() {
                           href={getWhatsAppProductUrl(product)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="py-2.5 px-2 bg-primary-container hover:bg-surface-tint text-on-primary-container font-headline-sm text-xs uppercase flex items-center justify-center gap-1 transition-colors font-bold"
+                          className="py-2 sm:py-2.5 px-1 sm:px-2 rounded-lg bg-primary-container hover:bg-surface-tint active:scale-95 text-on-primary-container font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-all font-bold shadow-sm"
                         >
                           <span className="material-symbols-outlined text-sm">chat</span>
-                          <span>COMPRAR</span>
+                          <span>WHATSAPP</span>
                         </a>
                       </div>
                     </div>
@@ -834,7 +834,7 @@ export default function HomePage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-full h-13 sm:h-14 py-3.5 px-6 rounded-xl bg-primary-container hover:bg-[#ffd033] active:scale-[0.98] text-neutral-950 font-display-hero font-extrabold text-base uppercase tracking-wider flex items-center justify-center gap-3 transition-all duration-200 shadow-[0_4px_18px_rgba(255,194,0,0.35)] hover:shadow-[0_6px_24px_rgba(255,194,0,0.5)] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed group"
+                    className="w-full h-11 sm:h-14 py-2.5 sm:py-3.5 px-4 sm:px-6 rounded-xl bg-primary-container hover:bg-[#ffd033] active:scale-[0.98] text-neutral-950 font-display-hero font-extrabold text-sm sm:text-base uppercase tracking-wider flex items-center justify-center gap-2 sm:gap-3 transition-all duration-200 shadow-[0_4px_18px_rgba(255,194,0,0.35)] hover:shadow-[0_6px_24px_rgba(255,194,0,0.5)] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed group"
                   >
                     {submitting ? (
                       <>
@@ -1074,9 +1074,9 @@ export default function HomePage() {
                   href={`https://wa.me/${phone}?text=${encodeURIComponent('¡Hola Willson! Quiero coordinar para pasar a visitar el showroom de Wheels Zone en Rioja 281, Junín para ver/retirar piezas.')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-3 sm:py-3.5 md:py-4 px-4 sm:px-6 rounded-xl bg-gradient-to-r from-[#FFA000] via-[#FFB800] to-[#FFC200] hover:from-[#FFB300] hover:to-[#FFD54F] text-neutral-950 font-display-hero font-extrabold uppercase text-xs sm:text-sm md:text-base tracking-wider flex items-center justify-center gap-2.5 sm:gap-3 shadow-[0_4px_20px_rgba(255,160,0,0.35)] hover:shadow-[0_6px_28px_rgba(255,194,0,0.55)] hover:scale-[1.01] active:scale-95 transition-all duration-300 border border-amber-200/40 group cursor-pointer text-center"
+                  className="w-full py-2.5 sm:py-3.5 md:py-4 px-3 sm:px-6 rounded-xl bg-gradient-to-r from-[#FFA000] via-[#FFB800] to-[#FFC200] hover:from-[#FFB300] hover:to-[#FFD54F] text-neutral-950 font-display-hero font-extrabold uppercase text-xs sm:text-sm md:text-base tracking-wider flex items-center justify-center gap-2 sm:gap-3 shadow-[0_4px_20px_rgba(255,160,0,0.35)] hover:shadow-[0_6px_28px_rgba(255,194,0,0.55)] hover:scale-[1.01] active:scale-95 transition-all duration-300 border border-amber-200/40 group cursor-pointer text-center"
                 >
-                  <div className="w-6 h-6 sm:w-6.5 sm:h-6.5 rounded-full bg-neutral-950/85 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
+                  <div className="w-5.5 h-5.5 sm:w-6.5 sm:h-6.5 rounded-full bg-neutral-950/85 flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 transition-transform">
                     <svg className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-current text-white shrink-0" viewBox="0 0 24 24">
                       <path d="M17.472 14.382c-.301-.15-1.767-.867-2.04-.966-.274-.101-.473-.15-.673.15-.197.295-.771.966-.944 1.162-.175.197-.349.222-.65.074-.301-.15-1.27-.467-2.42-1.485-.896-.795-1.501-1.777-1.677-2.077-.175-.3-.019-.461.13-.61.134-.133.301-.347.451-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.01-.371-.01-.571-.01-.2 0-.523.074-.797.372-.272.296-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                     </svg>
@@ -1174,9 +1174,9 @@ export default function HomePage() {
             href={`https://wa.me/${phone}?text=${encodeURIComponent('¡Hola Wheels Zone! Quiero fotos y video 360° de las piezas disponibles.')}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto text-center justify-center whitespace-nowrap px-6 py-3.5 bg-surface-container-lowest text-primary font-headline-md text-sm md:text-base uppercase tracking-wider flex items-center gap-2 hover:bg-surface-container transition-colors shadow-xl shrink-0"
+            className="w-full sm:w-auto text-center justify-center whitespace-nowrap px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-xl bg-surface-container-lowest text-primary font-headline-md text-xs sm:text-sm md:text-base uppercase tracking-wider flex items-center gap-2 hover:bg-surface-container transition-colors shadow-xl shrink-0"
           >
-            <span className="material-symbols-outlined text-primary-container">support_agent</span>
+            <span className="material-symbols-outlined text-primary-container text-base sm:text-xl">support_agent</span>
             <span>HABLAR CON UN ASESOR</span>
           </a>
         </div>

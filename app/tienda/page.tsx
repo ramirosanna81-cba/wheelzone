@@ -530,7 +530,7 @@ function TiendaContent() {
                         <button
                           onClick={() => addItem(product)}
                           disabled={product.stock <= 0}
-                          className="py-2 px-1 sm:py-2.5 sm:px-2 bg-surface-container-high hover:bg-surface-container-highest disabled:opacity-50 text-on-surface font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-colors border border-surface-container-highest"
+                          className="py-2 px-1 sm:py-2.5 sm:px-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest active:scale-95 disabled:opacity-50 text-on-surface font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-all border border-surface-container-highest shadow-sm"
                         >
                           <span className="material-symbols-outlined text-sm">add_shopping_cart</span>
                           <span>CARRITO</span>
@@ -539,10 +539,10 @@ function TiendaContent() {
                           href={getWhatsAppProductUrl(product)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="py-2 px-1 sm:py-2.5 sm:px-2 bg-primary-container hover:bg-surface-tint text-on-primary-container font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-colors font-bold"
+                          className="py-2 px-1 sm:py-2.5 sm:px-2 rounded-lg bg-primary-container hover:bg-surface-tint active:scale-95 text-on-primary-container font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-all font-bold shadow-sm"
                         >
                           <span className="material-symbols-outlined text-sm">chat</span>
-                          <span>COMPRAR</span>
+                          <span>WHATSAPP</span>
                         </a>
                       </div>
                     </div>
@@ -638,9 +638,9 @@ function TiendaContent() {
                     href={getWhatsAppProductUrl(selectedProductModal)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full py-3 bg-primary-container hover:bg-surface-tint text-on-primary-container font-headline-md uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 font-bold shadow-md transition-all text-center"
+                    className="w-full py-2.5 sm:py-3 rounded-xl bg-primary-container hover:bg-surface-tint active:scale-95 text-on-primary-container font-headline-md uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 font-bold shadow-md transition-all text-center"
                   >
-                    <span className="material-symbols-outlined text-lg">chat</span>
+                    <span className="material-symbols-outlined text-base sm:text-lg">chat</span>
                     <span>COMPRAR VÍA WHATSAPP</span>
                   </a>
 
@@ -649,9 +649,9 @@ function TiendaContent() {
                       addItem(selectedProductModal);
                       setSelectedProductModal(null);
                     }}
-                    className="w-full py-3 bg-surface-container hover:bg-surface-container-high border border-surface-container-highest text-on-surface font-headline-md uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 transition-colors text-center"
+                    className="w-full py-2.5 sm:py-3 rounded-xl bg-surface-container hover:bg-surface-container-high active:scale-95 border border-surface-container-highest text-on-surface font-headline-md uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 transition-all text-center"
                   >
-                    <span className="material-symbols-outlined text-lg text-primary-container">add_shopping_cart</span>
+                    <span className="material-symbols-outlined text-base sm:text-lg text-primary-container">add_shopping_cart</span>
                     <span>AGREGAR AL CARRITO</span>
                   </button>
                 </div>
