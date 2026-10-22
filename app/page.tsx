@@ -252,14 +252,14 @@ export default function HomePage() {
                 Hot Wheels, premium y piezas especiales para tu colección.
               </p>
 
-              {/* Action Buttons with identical rounded-xl corners & crisp SVGs */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
+              {/* Action Buttons: Compact side-by-side on mobile, elegant & balanced */}
+              <div className="grid grid-cols-2 sm:flex sm:flex-row items-center gap-2 sm:gap-3 pt-0.5 sm:pt-1 w-full sm:w-auto max-w-xl">
                 <Link
                   href="/tienda"
-                  className="px-5 sm:px-7 py-3 sm:py-3.5 bg-gradient-to-r from-[#FFC200] via-[#FF6000] to-[#FF1E27] text-black font-extrabold text-xs sm:text-sm md:text-base uppercase tracking-wider rounded-xl flex items-center justify-center gap-2.5 sm:gap-3 hover:brightness-110 active:scale-95 transition-all shadow-[0_8px_20px_rgba(255,96,0,0.35)]"
+                  className="w-full sm:w-auto px-2.5 sm:px-7 py-2.5 sm:py-3.5 bg-gradient-to-r from-[#FFC200] via-[#FF6000] to-[#FF1E27] text-black font-extrabold text-[11px] min-[390px]:text-xs sm:text-sm md:text-base uppercase tracking-wide sm:tracking-wider rounded-xl sm:rounded-2xl flex items-center justify-center gap-1.5 sm:gap-2.5 hover:brightness-110 active:scale-95 transition-all shadow-[0_4px_16px_rgba(255,96,0,0.35)] whitespace-nowrap"
                 >
                   <svg
-                    className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-black shrink-0"
+                    className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-black shrink-0"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -276,10 +276,10 @@ export default function HomePage() {
 
                 <a
                   href="#encargos"
-                  className="px-5 sm:px-7 py-3 sm:py-3.5 bg-[#151518]/90 hover:bg-[#202025] border border-neutral-600/90 text-white font-extrabold text-xs sm:text-sm md:text-base uppercase tracking-wider rounded-xl flex items-center justify-center gap-2.5 sm:gap-3 transition-colors"
+                  className="w-full sm:w-auto px-2.5 sm:px-7 py-2.5 sm:py-3.5 bg-[#151518]/90 hover:bg-[#202025] border border-neutral-600/90 text-white font-extrabold text-[11px] min-[390px]:text-xs sm:text-sm md:text-base uppercase tracking-wide sm:tracking-wider rounded-xl sm:rounded-2xl flex items-center justify-center gap-1.5 sm:gap-2.5 transition-colors active:scale-95 whitespace-nowrap"
                 >
                   <svg
-                    className="w-4.5 h-4.5 sm:w-5 sm:h-5 text-white shrink-0"
+                    className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white shrink-0"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
