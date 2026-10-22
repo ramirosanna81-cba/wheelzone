@@ -908,84 +908,130 @@ export default function HomePage() {
       </section>
 
       {/* ==============================================================================
-          4. SECCIÓN DE CONFIANZA Y BLINDAJE DE BLÍSTERS
+          4. SECCIÓN DE CONFIANZA Y COMPROMISOS CON TU COLECCIÓN
       ============================================================================== */}
-      <section className="w-full bg-surface py-10 sm:py-16 md:py-24 border-b border-surface-container overflow-hidden">
-        <div className="w-full px-3 sm:px-6 md:px-8 mx-auto max-w-7xl flex flex-col gap-8 sm:gap-10">
-          <div className="flex flex-col items-center text-center gap-1">
+      <section className="relative w-full bg-[#111111] py-12 sm:py-16 md:py-24 border-b border-surface-container overflow-hidden">
+        {/* Diamond Plate Industrial Floor Texture at Bottom */}
+        <div className="absolute inset-x-0 bottom-0 h-44 sm:h-56 bg-diamond-plate opacity-50 pointer-events-none"></div>
+        <div className="absolute inset-x-0 bottom-0 h-44 sm:h-56 bg-gradient-to-t from-transparent via-[#111111]/70 to-[#111111] pointer-events-none"></div>
+
+        <div className="relative w-full px-3 sm:px-6 md:px-8 mx-auto max-w-7xl flex flex-col gap-6 sm:gap-8 z-10">
+          {/* Section Header */}
+          <div className="flex flex-col items-center text-center gap-1.5">
             <span className="font-label-telemetry text-[11px] sm:text-xs uppercase tracking-widest text-primary-container font-bold">
               ESTÁNDAR DE OPERACIONES WHEELS ZONE
             </span>
-            <h2 className="font-display-hero text-2xl sm:text-3xl md:text-5xl uppercase tracking-tight text-on-surface">
-              BLINDAJE Y <span className="text-secondary-container italic">GARANTÍA TOTAL</span>
+            <h2 className="font-display-hero text-2xl sm:text-3xl md:text-5xl uppercase tracking-tight text-white">
+              NUESTROS <span className="text-secondary-container">COMPROMISOS CON TU COLECCIÓN</span>
             </h2>
-            <p className="font-body-md text-xs sm:text-sm text-on-surface-variant max-w-xl">
-              Sabemos el valor intrínseco de cada tarjeta y burbuja. Por eso diseñamos un circuito de empaque sin margen de daño mecánico.
+            <p className="font-body-md text-xs sm:text-sm md:text-base text-neutral-300 max-w-2xl leading-relaxed">
+              Sabemos lo valiosa que es cada pieza para vos. Por eso, nos encargamos de que todo llegue impecable.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-            {/* Card 1 */}
-            <div className="bg-surface-container-low border border-surface-container p-4 sm:p-6 flex flex-col gap-3.5 sm:gap-4 hover:border-secondary transition-colors">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-secondary-container text-on-secondary-container flex items-center justify-center">
-                <span className="material-symbols-outlined text-xl sm:text-2xl">shield</span>
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-6 lg:gap-8 items-stretch pt-6 sm:pt-8">
+            {/* Card 1: Protección Total */}
+            <div className="bg-[#161618] border border-neutral-800 p-5 sm:p-6 md:p-7 flex flex-col justify-between gap-4 transition-colors hover:border-neutral-700">
+              <div className="flex flex-col gap-3.5 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-secondary-container text-white flex items-center justify-center shrink-0 shadow-md">
+                  <span className="material-symbols-outlined text-xl sm:text-2xl">shield</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="font-display-hero text-lg sm:text-xl uppercase font-bold tracking-tight text-white leading-tight">
+                    PROTECCIÓN TOTAL EN CADA ENVÍO
+                  </h3>
+                  <span className="font-label-telemetry text-[11px] sm:text-xs text-secondary-container uppercase font-bold tracking-wider">
+                    ENVOLTURA SEGURA + CAJA RESISTENTE
+                  </span>
+                </div>
+                <p className="font-body-sm text-xs sm:text-[13px] text-neutral-300 leading-relaxed">
+                  Cada blister va en su protector individual, cubierto por doble capa de plástico de burbujas y embalado en cajas súper resistentes para asegurar que llegue intacto.
+                </p>
               </div>
-              <div className="flex flex-col gap-1">
-                <h3 className="font-headline-md text-lg sm:text-xl uppercase text-on-surface">
-                  Embalaje de Grado Militar
-                </h3>
-                <span className="font-label-telemetry text-[11px] sm:text-xs text-secondary uppercase">
-                  BURBUJA ANTI-IMPACTO + CAJA TRICAPA
-                </span>
-              </div>
-              <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
-                Cada blíster viaja en su protector individual, recubierto por doble capa de plástico de burbujas de alta densidad y embalado en cajas corrugadas tricapa para resistir cualquier aplastamiento en tránsito.
-              </p>
-              <div className="pt-2 font-label-telemetry text-xs text-primary-container flex items-center gap-1 font-bold">
+
+              <div className="pt-2 font-label-telemetry text-xs text-primary-container flex items-center gap-1.5 font-bold tracking-wider">
                 <span className="material-symbols-outlined text-base">check</span>
                 <span>CERO ESQUINAS DOBLADAS GARANTIZADO</span>
               </div>
             </div>
 
-            {/* Card 2 */}
-            <div className="bg-surface-container-low border border-surface-container p-4 sm:p-6 flex flex-col gap-3.5 sm:gap-4 hover:border-primary-container transition-colors">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-container text-on-primary-container flex items-center justify-center">
-                <span className="material-symbols-outlined text-xl sm:text-2xl">verified_user</span>
+            {/* Card 2: Autenticidad 100% */}
+            <div className="bg-[#161618] border-2 border-[#FFC200] p-5 sm:p-6 md:p-7 flex flex-col justify-between gap-4 shadow-[0_4px_25px_rgba(0,0,0,0.6)] transition-all relative">
+              <div className="flex flex-col gap-3.5 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-container text-black flex items-center justify-center shrink-0 shadow-md">
+                  <span className="material-symbols-outlined text-xl sm:text-2xl font-bold">verified_user</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="font-display-hero text-lg sm:text-xl uppercase font-bold tracking-tight text-white leading-tight">
+                    AUTENTICIDAD 100% GARANTIZADA
+                  </h3>
+                  <span className="font-label-telemetry text-[11px] sm:text-xs text-primary-container uppercase font-bold tracking-wider">
+                    CALIDAD Y ORIGINALIDAD ASEGURADAS
+                  </span>
+                </div>
+                <p className="font-body-sm text-xs sm:text-[13px] text-neutral-300 leading-relaxed">
+                  Todas nuestras piezas son completamente originales y pasan por un control previo riguroso. Comprá con total tranquilidad.
+                </p>
               </div>
-              <div className="flex flex-col gap-1">
-                <h3 className="font-headline-md text-lg sm:text-xl uppercase text-on-surface">
-                  Autenticidad 100% Garantizada
-                </h3>
-                <span className="font-label-telemetry text-[11px] sm:text-xs text-primary-container uppercase">
-                  VERIFICACIÓN OFICIAL DE REMACHES
-                </span>
-              </div>
-              <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
-                Supervisamos remaches originales de fundición, tampografía de fábrica, número de serie y sello holográfico para descartar falsificaciones, resellos no oficiales o reempaquetados caseros.
-              </p>
-              <div className="pt-2 font-label-telemetry text-xs text-primary-container flex items-center gap-1 font-bold">
-                <span className="material-symbols-outlined text-base">check</span>
-                <span>CASTINGS CERTIFICADOS POR EXPERTOS</span>
+
+              <div className="pt-2 flex flex-col gap-2 font-label-telemetry text-xs text-primary-container font-bold tracking-wider">
+                <div className="flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-base">check</span>
+                  <span>CASTINGS CERTIFICADOS POR EXPERTOS</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-base">check</span>
+                  <span>MODELOS CONTROLADOS Y VERIFICADOS</span>
+                </div>
               </div>
             </div>
 
-            {/* Card 3 */}
-            <div className="bg-surface-container-low border border-surface-container p-4 sm:p-6 flex flex-col gap-3.5 sm:gap-4 hover:border-surface-tint transition-colors">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-surface-container-highest text-on-surface flex items-center justify-center">
-                <span className="material-symbols-outlined text-xl sm:text-2xl">savings</span>
+            {/* Card 3: Transferencia con 20% OFF (Featured with Glowing Halo) */}
+            <div className="bg-[#161618] border-2 border-[#FFC200] p-5 sm:p-6 md:p-7 flex flex-col justify-between gap-4 shadow-[0_0_35px_rgba(255,194,0,0.35)] relative transition-all">
+              {/* Floating Top Badge with Golden Radial Glow */}
+              <div className="absolute -top-9 sm:-top-11 right-6 sm:right-8 md:right-4 lg:right-8 flex flex-col items-center pointer-events-none select-none z-20">
+                {/* Radial Golden Halo */}
+                <div className="absolute inset-0 -inset-x-8 -inset-y-4 bg-primary-container/35 blur-xl rounded-full pointer-events-none"></div>
+
+                <div className="relative flex flex-col items-center leading-none">
+                  <span className="font-display-hero font-bold text-[11px] sm:text-[12px] lg:text-[13px] text-white tracking-widest uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+                    TRANSFERENCIA CON
+                  </span>
+                  <div className="flex items-start text-white drop-shadow-[0_4px_16px_rgba(0,0,0,0.95)]">
+                    <span className="font-display-hero font-black text-5xl sm:text-6xl lg:text-7xl tracking-tighter leading-none text-white drop-shadow-[0_0_20px_rgba(255,194,0,0.6)]">
+                      20
+                    </span>
+                    <div className="flex flex-col ml-0.5 justify-center leading-none pt-0.5 sm:pt-1">
+                      <span className="font-display-hero font-black text-2xl sm:text-3xl lg:text-4xl leading-none text-white drop-shadow-[0_0_15px_rgba(255,194,0,0.6)]">
+                        %
+                      </span>
+                      <span className="font-display-hero font-black text-lg sm:text-xl lg:text-2xl leading-none text-white tracking-tight -mt-0.5">
+                        OFF
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-col gap-1">
-                <h3 className="font-headline-md text-lg sm:text-xl uppercase text-on-surface">
-                  Transferencia con 10% OFF
-                </h3>
-                <span className="font-label-telemetry text-[11px] sm:text-xs text-outline uppercase">
-                  DESCUENTO DIRECTO EN CHECKOUT
-                </span>
+
+              <div className="flex flex-col gap-3.5 sm:gap-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-neutral-800 text-neutral-300 flex items-center justify-center shrink-0 shadow-md">
+                  <span className="material-symbols-outlined text-xl sm:text-2xl">savings</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h3 className="font-display-hero text-lg sm:text-xl uppercase font-bold tracking-tight text-white leading-tight">
+                    TRANSFERENCIA CON 20% OFF
+                  </h3>
+                  <span className="font-label-telemetry text-[11px] sm:text-xs text-neutral-300 uppercase font-bold tracking-wider">
+                    ¡APROVECHÁ EL DESCUENTO MÁS GRANDE!
+                  </span>
+                </div>
+                <p className="font-body-sm text-xs sm:text-[13px] text-neutral-300 leading-relaxed">
+                  Pagá de forma directa por transferencia bancaria instantánea y aplicá un 20% de ahorro en tu compra. Aceptamos tarjetas vía Mercado Pago.
+                </p>
               </div>
-              <p className="font-body-sm text-xs text-on-surface-variant leading-relaxed">
-                Aboná de forma segura por transferencia bancaria directa instantánea y aplicá un 10% de ahorro directo en cualquier pieza. También aceptamos todas las tarjetas vía Mercado Pago.
-              </p>
-              <div className="pt-2 font-label-telemetry text-xs text-primary-container flex items-center gap-1 font-bold">
+
+              <div className="pt-2 font-label-telemetry text-xs text-primary-container flex items-center gap-1.5 font-bold tracking-wider">
                 <span className="material-symbols-outlined text-base">check</span>
                 <span>DESPACHO EXPRESS CON TELEMETRÍA</span>
               </div>

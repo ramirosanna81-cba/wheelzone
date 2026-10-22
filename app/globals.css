@@ -69,6 +69,13 @@ body {
   background-size: 24px 24px;
 }
 
+/* Industrial Diamond Plate Floor Pattern */
+.bg-diamond-plate {
+  background-image: url('/images/diamond-plate.svg');
+  background-repeat: repeat;
+  background-size: 64px 64px;
+}
+
 /* Aggressive Chamfered Corner Cuts (Racing Aero Panels) */
 .chamfer-tr {
   clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
