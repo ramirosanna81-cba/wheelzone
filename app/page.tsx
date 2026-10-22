@@ -336,7 +336,7 @@ export default function HomePage() {
                     100%
                   </span>
                   <span className="font-label-telemetry text-[9px] xs:text-[10px] sm:text-[11px] uppercase text-on-surface-variant mt-1 leading-tight">
-                    Blíster C-10 Mint
+                    Productos Originales
                   </span>
                 </div>
                 <div className="p-2 sm:p-3 bg-surface-container-low/80 backdrop-blur-sm border border-surface-container flex flex-col">
