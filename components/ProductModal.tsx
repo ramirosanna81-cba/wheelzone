@@ -260,19 +260,24 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                 </div>
               </div>
 
-              {/* Botones de Acción (Optimizados: Compactos & Equilibrados en Celular) */}
-              <div className="flex flex-col gap-2 pt-2 border-t border-neutral-800">
-                {/* Comprar por WhatsApp */}
+              {/* Botones de Acción (Optimizados y Proporcionados para PC y Celular) */}
+              <div className="flex flex-col gap-2.5 pt-3 border-t border-neutral-800">
+                {/* Comprar o Consultar por WhatsApp */}
                 <a
                   href={getWhatsAppProductUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full py-2.5 sm:py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#25D366] via-[#22c55e] to-[#16a34a] hover:brightness-110 active:scale-95 text-white font-sans font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(37,211,102,0.35)] transition-all text-center cursor-pointer select-none"
+                  className="w-full h-11 sm:h-12 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba59] active:scale-95 text-white font-display-hero uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 shadow-[0_4px_14px_rgba(37,211,102,0.3)] transition-all text-center cursor-pointer select-none font-bold"
                 >
-                  <svg className="w-4.5 h-4.5 fill-current text-white shrink-0" viewBox="0 0 24 24">
+                  <svg
+                    className="w-5 h-5 shrink-0 fill-current"
+                    style={{ width: '20px', height: '20px', minWidth: '20px', minHeight: '20px', maxWidth: '20px', maxHeight: '20px' }}
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
                     <path d="M17.472 14.382c-.301-.15-1.767-.867-2.04-.966-.274-.101-.473-.15-.673.15-.197.295-.771.966-.944 1.162-.175.197-.349.222-.65.074-.301-.15-1.27-.467-2.42-1.485-.896-.795-1.501-1.777-1.677-2.077-.175-.3-.019-.461.13-.61.134-.133.301-.347.451-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.01-.371-.01-.571-.01-.2 0-.523.074-.797.372-.272.296-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                   </svg>
-                  <span>CONSULTAR O COMPRAR POR WHATSAPP</span>
+                  <span className="whitespace-nowrap">CONSULTAR POR WHATSAPP</span>
                 </a>
 
                 {/* Agregar al Carrito */}
@@ -280,16 +285,16 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                   type="button"
                   onClick={handleAddToCart}
                   disabled={product.stock <= 0}
-                  className={`w-full py-2.5 sm:py-3 px-4 rounded-xl font-display-hero uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 transition-all text-center cursor-pointer active:scale-95 border ${
+                  className={`w-full h-11 sm:h-12 px-4 rounded-xl font-display-hero uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 transition-all text-center cursor-pointer active:scale-95 border ${
                     addedFeedback
-                      ? 'bg-emerald-600 text-white border-emerald-500 shadow-[0_4px_16px_rgba(16,185,129,0.4)]'
-                      : 'bg-primary-container hover:bg-[#ffd033] text-black font-extrabold border-amber-300/60 shadow-[0_4px_16px_rgba(255,194,0,0.3)]'
+                      ? 'bg-emerald-600 text-white border-emerald-500 shadow-[0_4px_14px_rgba(16,185,129,0.4)]'
+                      : 'bg-primary-container hover:bg-[#ffd033] text-black font-extrabold border-amber-300/60 shadow-[0_4px_14px_rgba(255,194,0,0.25)]'
                   } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
-                  <span className="material-symbols-outlined text-base sm:text-lg">
+                  <span className="material-symbols-outlined text-base sm:text-lg shrink-0">
                     {addedFeedback ? 'check_circle' : 'add_shopping_cart'}
                   </span>
-                  <span>{addedFeedback ? '¡AGREGADO AL CARRITO!' : 'AGREGAR AL CARRITO'}</span>
+                  <span className="whitespace-nowrap">{addedFeedback ? '¡AGREGADO AL CARRITO!' : 'AGREGAR AL CARRITO'}</span>
                 </button>
               </div>
 
