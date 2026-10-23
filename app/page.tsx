@@ -28,12 +28,19 @@ export default function HomePage() {
   // Filter hero products
   const heroProducts = useMemo(() => {
     const featured = featuredProducts.filter((p) => p.destacado);
-    const list = featured.length > 0 ? featured : INITIAL_PRODUCTS.filter((p) => p.destacado);
-    // Sort by hero_order if available
-    return [...list].sort((a, b) => (a.hero_order || 99) - (b.hero_order || 99)).slice(0, 5);
-  }, [featuredProducts]);
+    if (featured.length > 0) {
+      return [...featured].sort((a, b) => (a.hero_order || 99) - (b.hero_order || 99)).slice(0, 5);
+    }
+    // Si aún está cargando desde Supabase, no mostramos los mock-data viejos para evitar parpadeo
+    if (loadingProducts) return [];
+    // Si ya terminó de cargar y no hay ningún destacado en Supabase, usamos el primer producto disponible
+    if (featuredProducts.length > 0) {
+      return featuredProducts.slice(0, 5);
+    }
+    return [];
+  }, [featuredProducts, loadingProducts]);
 
-  const activeSpotlight = heroProducts[heroIndex] || heroProducts[0] || INITIAL_PRODUCTS[0];
+  const activeSpotlight = heroProducts[heroIndex] || heroProducts[0] || null;
 
   // Auto-play timer for Hero Spotlight (5s per car with telemetry progress bar)
   useEffect(() => {
@@ -363,125 +370,156 @@ export default function HomePage() {
                 onMouseLeave={() => setIsHeroPaused(false)}
                 className="relative z-10 w-full max-w-[320px] xs:max-w-sm sm:max-w-[420px] flex flex-col items-center gap-2.5 sm:gap-3 group select-none"
               >
-                {/* Blister Image Frame (100% Clean, Unobstructed Art & Bubble) */}
-                <div
-                  onClick={() => setSelectedProductModal(activeSpotlight)}
-                  className="relative w-full h-[320px] xs:h-[370px] sm:h-[440px] md:h-[470px] rounded-2xl overflow-hidden border border-neutral-700/80 bg-neutral-950/90 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-sm transition-transform duration-500 group-hover:scale-[1.01] cursor-pointer"
-                  title="Hacé clic para ver la foto en alta resolución y ficha técnica con lupa"
-                >
-                  
-                  {/* Telemetry RPM Progress Bar at Top */}
-                  <div className="absolute top-0 left-0 right-0 h-1 bg-neutral-800/80 z-30 overflow-hidden">
+                {!activeSpotlight || loadingProducts ? (
+                  /* Elegant Dark Skeleton Loading Frame */
+                  <div className="w-full flex flex-col items-center gap-2.5 sm:gap-3 animate-pulse">
+                    <div className="relative w-full h-[320px] xs:h-[370px] sm:h-[440px] md:h-[470px] rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-900/60 shadow-[0_20px_50px_rgba(0,0,0,0.85)] flex flex-col items-center justify-center p-6 text-center">
+                      <div className="w-16 h-16 rounded-full bg-neutral-800/80 border border-white/5 flex items-center justify-center mb-4">
+                        <span className="material-symbols-outlined text-3xl text-amber-400/50 animate-spin">
+                          autorenew
+                        </span>
+                      </div>
+                      <span className="font-label-telemetry text-xs uppercase tracking-widest text-neutral-400">
+                        CONECTANDO AL HANGAR...
+                      </span>
+                      <span className="font-sans text-[11px] text-neutral-500 mt-1">
+                        Cargando piezas exclusivas de Wheels Zone
+                      </span>
+                    </div>
+
+                    <div className="w-full bg-[#121214]/90 border border-neutral-800 rounded-xl sm:rounded-2xl px-4 py-3 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-neutral-800"></div>
+                        <div className="flex flex-col gap-1.5">
+                          <div className="w-28 h-3.5 bg-neutral-800 rounded"></div>
+                          <div className="w-20 h-2.5 bg-neutral-800/70 rounded"></div>
+                        </div>
+                      </div>
+                      <div className="w-16 h-5 bg-neutral-800 rounded"></div>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {/* Blister Image Frame (100% Clean, Unobstructed Art & Bubble) */}
                     <div
-                      className="h-full bg-gradient-to-r from-primary-container via-amber-400 to-race-red transition-all duration-75 ease-linear"
-                      style={{ width: `${heroProgress}%` }}
-                    ></div>
-                  </div>
-
-                  <Image
-                    key={activeSpotlight.id}
-                    src={activeSpotlight.imagen_url}
-                    alt={activeSpotlight.modelo}
-                    fill
-                    className="object-cover object-center transition-all duration-500"
-                    priority
-                    sizes="(max-width: 768px) 100vw, 500px"
-                  />
-                  {/* Subtle lighting sheen without blocking the bottom card or vehicle */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10 pointer-events-none"></div>
-
-                  {/* Quality / Rarity Badge Top Left */}
-                  <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-20 flex items-center gap-1.5 bg-black/80 backdrop-blur-md px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border border-neutral-700 text-[10px] sm:text-[11px] font-label-telemetry text-primary-container uppercase font-bold tracking-wider shadow-lg max-w-[85%] truncate">
-                    <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-secondary-container animate-ping shrink-0"></span>
-                    <span className="truncate">{badgeText}</span>
-                  </div>
-
-                  {/* Auto-play pause indicator */}
-                  {isHeroPaused && (
-                    <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 z-20 bg-black/80 backdrop-blur-md px-2 sm:px-2.5 py-0.5 rounded text-[9px] sm:text-[10px] font-label-telemetry text-neutral-300 uppercase tracking-widest border border-neutral-700/60 shadow">
-                      PAUSADO
-                    </div>
-                  )}
-
-                  {/* Hover Floating Hint for Zoom / Technical Sheet */}
-                  <div className="absolute bottom-3 left-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/80 text-white font-label-telemetry text-[11px] uppercase tracking-wider backdrop-blur-md border border-neutral-700 shadow-xl pointer-events-none">
-                    <span className="material-symbols-outlined text-sm text-primary-container">zoom_in</span>
-                    <span>Ver Ficha & Zoom</span>
-                  </div>
-
-                  {/* Manual Arrow Controls (< and >) - Visible on touch/mobile, hover on desktop */}
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handlePrevHero();
-                    }}
-                    className="absolute left-2 sm:left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/75 hover:bg-black text-white border border-neutral-700/80 flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg cursor-pointer"
-                    aria-label="Anterior modelo"
-                  >
-                    <span className="material-symbols-outlined text-base">chevron_left</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleNextHero();
-                    }}
-                    className="absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/75 hover:bg-black text-white border border-neutral-700/80 flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg cursor-pointer"
-                    aria-label="Siguiente modelo"
-                  >
-                    <span className="material-symbols-outlined text-base">chevron_right</span>
-                  </button>
-                </div>
-
-                {/* Dedicated Lower Information Bar (Anchored and perfectly centered under the blister image) */}
-                <div
-                  onClick={() => setSelectedProductModal(activeSpotlight)}
-                  className="w-full bg-[#121214]/90 backdrop-blur-md border border-neutral-800/90 hover:border-neutral-700 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2 sm:py-3 shadow-xl flex items-center justify-between gap-2.5 sm:gap-3 transition-all duration-300 cursor-pointer"
-                  title="Hacé clic para ver la ficha técnica completa"
-                >
-                  <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                    {/* Model Acronym Chip */}
-                    <div className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-lg bg-red-600/15 border border-red-500/30 flex items-center justify-center text-red-500 font-extrabold text-[10px] sm:text-xs tracking-tighter shrink-0 font-sans">
-                      {modelAcronym}
-                    </div>
-                    {/* Model Name & Serie/Category */}
-                    <div className="flex flex-col min-w-0">
-                      <span className="font-sans font-bold text-xs sm:text-[15px] text-white leading-tight truncate">
-                        {activeSpotlight.modelo}
-                      </span>
-                      <span className="font-sans text-[10px] sm:text-[11px] text-neutral-400 truncate mt-0.5">
-                        {activeSpotlight.serie || `${activeSpotlight.marca} // ${activeSpotlight.categoria}`}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Price & Compact Harmonious CTA Button */}
-                  <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-                    <span className="font-sans font-extrabold text-[#FFC200] text-sm sm:text-lg whitespace-nowrap">
-                      ${activeSpotlight.precio.toLocaleString('es-AR')}
-                    </span>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleAddSpotlight();
-                      }}
-                      title={spotlightAdded ? '¡Agregado al carrito!' : 'Agregar al carrito'}
-                      className={`w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold transition-all shrink-0 shadow-md ${
-                        spotlightAdded
-                          ? 'bg-emerald-500 text-white scale-105'
-                          : 'bg-primary-container hover:bg-amber-400 text-black hover:scale-105 active:scale-95'
-                      }`}
-                      aria-label="Agregar al carrito"
+                      onClick={() => setSelectedProductModal(activeSpotlight)}
+                      className="relative w-full h-[320px] xs:h-[370px] sm:h-[440px] md:h-[470px] rounded-2xl overflow-hidden border border-neutral-700/80 bg-neutral-950/90 shadow-[0_20px_50px_rgba(0,0,0,0.85)] backdrop-blur-sm transition-transform duration-500 group-hover:scale-[1.01] cursor-pointer"
+                      title="Hacé clic para ver la foto en alta resolución y ficha técnica con lupa"
                     >
-                      {spotlightAdded ? (
-                        <span className="material-symbols-outlined text-sm sm:text-base">check</span>
-                      ) : (
-                        <span className="material-symbols-outlined text-sm sm:text-base">shopping_cart</span>
+                      {/* Telemetry RPM Progress Bar at Top */}
+                      <div className="absolute top-0 left-0 right-0 h-1 bg-neutral-800/80 z-30 overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-primary-container via-amber-400 to-race-red transition-all duration-75 ease-linear"
+                          style={{ width: `${heroProgress}%` }}
+                        ></div>
+                      </div>
+
+                      <Image
+                        key={activeSpotlight.id}
+                        src={activeSpotlight.imagen_url}
+                        alt={activeSpotlight.modelo}
+                        fill
+                        className="object-cover object-center transition-all duration-500"
+                        priority
+                        sizes="(max-width: 768px) 100vw, 500px"
+                      />
+                      {/* Subtle lighting sheen without blocking the bottom card or vehicle */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10 pointer-events-none"></div>
+
+                      {/* Quality / Rarity Badge Top Left */}
+                      <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-20 flex items-center gap-1.5 bg-black/80 backdrop-blur-md px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md border border-neutral-700 text-[10px] sm:text-[11px] font-label-telemetry text-primary-container uppercase font-bold tracking-wider shadow-lg max-w-[85%] truncate">
+                        <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-secondary-container animate-ping shrink-0"></span>
+                        <span className="truncate">{badgeText}</span>
+                      </div>
+
+                      {/* Auto-play pause indicator */}
+                      {isHeroPaused && (
+                        <div className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 z-20 bg-black/80 backdrop-blur-md px-2 sm:px-2.5 py-0.5 rounded text-[9px] sm:text-[10px] font-label-telemetry text-neutral-300 uppercase tracking-widest border border-neutral-700/60 shadow">
+                          PAUSADO
+                        </div>
                       )}
-                    </button>
-                  </div>
-                </div>
+
+                      {/* Hover Floating Hint for Zoom / Technical Sheet */}
+                      <div className="absolute bottom-3 left-3 z-20 opacity-0 group-hover:opacity-100 transition-opacity hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/80 text-white font-label-telemetry text-[11px] uppercase tracking-wider backdrop-blur-md border border-neutral-700 shadow-xl pointer-events-none">
+                        <span className="material-symbols-outlined text-sm text-primary-container">zoom_in</span>
+                        <span>Ver Ficha & Zoom</span>
+                      </div>
+
+                      {/* Manual Arrow Controls (< and >) - Visible on touch/mobile, hover on desktop */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePrevHero();
+                        }}
+                        className="absolute left-2 sm:left-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/75 hover:bg-black text-white border border-neutral-700/80 flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg cursor-pointer"
+                        aria-label="Anterior modelo"
+                      >
+                        <span className="material-symbols-outlined text-base">chevron_left</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleNextHero();
+                        }}
+                        className="absolute right-2 sm:right-2.5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-black/75 hover:bg-black text-white border border-neutral-700/80 flex items-center justify-center opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity backdrop-blur-sm shadow-lg cursor-pointer"
+                        aria-label="Siguiente modelo"
+                      >
+                        <span className="material-symbols-outlined text-base">chevron_right</span>
+                      </button>
+                    </div>
+
+                    {/* Dedicated Lower Information Bar (Anchored and perfectly centered under the blister image) */}
+                    <div
+                      onClick={() => setSelectedProductModal(activeSpotlight)}
+                      className="w-full bg-[#121214]/90 backdrop-blur-md border border-neutral-800/90 hover:border-neutral-700 rounded-xl sm:rounded-2xl px-3 sm:px-4 py-2 sm:py-3 shadow-xl flex items-center justify-between gap-2.5 sm:gap-3 transition-all duration-300 cursor-pointer"
+                      title="Hacé clic para ver la ficha técnica completa"
+                    >
+                      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                        {/* Model Acronym Chip */}
+                        <div className="w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-lg bg-red-600/15 border border-red-500/30 flex items-center justify-center text-red-500 font-extrabold text-[10px] sm:text-xs tracking-tighter shrink-0 font-sans">
+                          {modelAcronym}
+                        </div>
+                        {/* Model Name & Serie/Category */}
+                        <div className="flex flex-col min-w-0">
+                          <span className="font-sans font-bold text-xs sm:text-[15px] text-white leading-tight truncate">
+                            {activeSpotlight.modelo}
+                          </span>
+                          <span className="font-sans text-[10px] sm:text-[11px] text-neutral-400 truncate mt-0.5">
+                            {activeSpotlight.serie || `${activeSpotlight.marca} // ${activeSpotlight.categoria}`}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Price & Compact Harmonious CTA Button */}
+                      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                        <span className="font-sans font-extrabold text-[#FFC200] text-sm sm:text-lg whitespace-nowrap">
+                          ${activeSpotlight.precio.toLocaleString('es-AR')}
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddSpotlight();
+                          }}
+                          title={spotlightAdded ? '¡Agregado al carrito!' : 'Agregar al carrito'}
+                          className={`w-7.5 h-7.5 sm:w-9 sm:h-9 rounded-full flex items-center justify-center font-bold transition-all shrink-0 shadow-md ${
+                            spotlightAdded
+                              ? 'bg-emerald-500 text-white scale-105'
+                              : 'bg-primary-container hover:bg-amber-400 text-black hover:scale-105 active:scale-95'
+                          }`}
+                          aria-label="Agregar al carrito"
+                        >
+                          {spotlightAdded ? (
+                            <span className="material-symbols-outlined text-sm sm:text-base">check</span>
+                          ) : (
+                            <span className="material-symbols-outlined text-sm sm:text-base">shopping_cart</span>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
