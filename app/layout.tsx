@@ -10,6 +10,16 @@ export const metadata: Metadata = {
   description: 'La zona definitiva para coleccionistas de alta velocidad. Hot Wheels Premium, Super Treasure Hunts ($TH), RLC, Kaido House y Matchbox con embalaje de grado militar y certificación de blíster en Argentina.',
   keywords: ['Hot Wheels', 'Super Treasure Hunt', 'Coleccionables', 'Diecast 1:64', 'Kaido House', 'RLC', 'Wheels Zone'],
   authors: [{ name: 'Wheels Zone Team' }],
+  icons: {
+    icon: [
+      { url: '/images/logos/logo-badge-dark.jpg', sizes: 'any' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    apple: [
+      { url: '/images/logos/logo-badge-dark.jpg', sizes: '180x180' },
+    ],
+    shortcut: ['/images/logos/logo-badge-dark.jpg'],
+  },
 };
 
 export const viewport: Viewport = {
@@ -26,6 +36,8 @@ export default function RootLayout({
   return (
     <html lang="es" className="dark">
       <head>
+        <link rel="icon" href="/images/logos/logo-badge-dark.jpg" type="image/jpeg" />
+        <link rel="apple-touch-icon" href="/images/logos/logo-badge-dark.jpg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
