@@ -161,11 +161,34 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                   )}
                 </div>
 
-                {/* Badge de Estado del Blíster */}
+                {/* Badge de Estado del Blíster o Suelto (Siempre en Español) */}
                 <div className="absolute top-3 right-3 z-10 pointer-events-none">
-                  <span className="bg-black/85 backdrop-blur-md text-amber-400 font-label-telemetry text-[11px] sm:text-xs px-2.5 py-1 rounded-md border border-amber-400/30 font-bold uppercase shadow-lg">
-                    BLÍSTER: {product.estado_blister === 'Impecable' ? '10/10 MINT' : product.estado_blister}
-                  </span>
+                  {(() => {
+                    const est = product.estado_blister || 'Impecable';
+                    const isSuelto = est.toLowerCase().includes('suelto') || est.toLowerCase().includes('loose');
+                    
+                    if (isSuelto) {
+                      const label = est.toLowerCase().includes('usado') ? 'SUELTO USADO' : 'SUELTO NUEVO';
+                      return (
+                        <span className="bg-black/90 backdrop-blur-md text-sky-400 font-label-telemetry text-[11px] sm:text-xs px-2.5 py-1 rounded-md border border-sky-400/40 font-bold uppercase shadow-lg flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                          <span>{label}</span>
+                        </span>
+                      );
+                    }
+
+                    let displayBlister: string = est;
+                    if (est === 'Impecable') displayBlister = '10/10 IMPECABLE';
+                    else if (est === 'Muy Bueno') displayBlister = 'MUY BUENO';
+                    else if (est === 'Desgaste / Abrir') displayBlister = 'DESGASTE / ABRIR';
+
+                    return (
+                      <span className="bg-black/85 backdrop-blur-md text-amber-400 font-label-telemetry text-[11px] sm:text-xs px-2.5 py-1 rounded-md border border-amber-400/30 font-bold uppercase shadow-lg flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                        <span>BLÍSTER: {displayBlister}</span>
+                      </span>
+                    );
+                  })()}
                 </div>
 
                 {/* Botón Flotante: Abrir en Pantalla Completa (Lightbox) */}
@@ -226,18 +249,33 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
 
                 {/* Tabla de Especificaciones de Grado Coleccionista */}
                 <div className="p-3 sm:p-3.5 bg-[#17171c] border border-neutral-800 rounded-xl flex flex-col gap-2 font-label-telemetry text-xs">
-                  <div className="flex justify-between border-b border-neutral-800/80 pb-1.5">
-                    <span className="text-neutral-400 uppercase">Condición:</span>
-                    <span className="text-white font-bold uppercase">NUEVO (BLÍSTER ORIGINAL)</span>
-                  </div>
-                  <div className="flex justify-between border-b border-neutral-800/80 pb-1.5">
-                    <span className="text-neutral-400 uppercase">Año de Lanzamiento:</span>
-                    <span className="text-white font-bold">{product.anio}</span>
-                  </div>
-                  <div className="flex justify-between border-b border-neutral-800/80 pb-1.5">
-                    <span className="text-neutral-400 uppercase">Estado del Cartón:</span>
-                    <span className="text-primary-container font-bold uppercase">{product.estado_blister}</span>
-                  </div>
+                  {(() => {
+                    const est = product.estado_blister || 'Impecable';
+                    const isSuelto = est.toLowerCase().includes('suelto') || est.toLowerCase().includes('loose');
+                    const condicionText = isSuelto
+                      ? (est.toLowerCase().includes('usado') ? 'PIEZA SUELTA (USADA / VITRINA)' : 'PIEZA SUELTA (NUEVA / SIN BLÍSTER)')
+                      : 'NUEVO (EN BLÍSTER ORIGINAL)';
+                    const empaqueText = isSuelto ? 'SIN CARTÓN (PIEZA SUELTA)' : est;
+
+                    return (
+                      <>
+                        <div className="flex justify-between border-b border-neutral-800/80 pb-1.5">
+                          <span className="text-neutral-400 uppercase">Condición:</span>
+                          <span className={`font-bold uppercase ${isSuelto ? 'text-sky-400' : 'text-white'}`}>
+                            {condicionText}
+                          </span>
+                        </div>
+                        <div className="flex justify-between border-b border-neutral-800/80 pb-1.5">
+                          <span className="text-neutral-400 uppercase">Año de Lanzamiento:</span>
+                          <span className="text-white font-bold">{product.anio}</span>
+                        </div>
+                        <div className="flex justify-between border-b border-neutral-800/80 pb-1.5">
+                          <span className="text-neutral-400 uppercase">Estado del Empaque:</span>
+                          <span className="text-primary-container font-bold uppercase">{empaqueText}</span>
+                        </div>
+                      </>
+                    );
+                  })()}
                   <div className="flex justify-between border-b border-neutral-800/80 pb-1.5">
                     <span className="text-neutral-400 uppercase">Inspección de Ruedas:</span>
                     <span className="text-white font-bold uppercase">Neumáticos de Aleación / Real Riders</span>

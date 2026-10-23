@@ -50,7 +50,8 @@ export const CATALOG_BLISTER_CONDITIONS: BlisterCondition[] = [
   'Impecable',
   'Muy Bueno',
   'Desgaste / Abrir',
-  'Loose',
+  'Suelto Nuevo',
+  'Suelto Usado',
 ];
 
 /**

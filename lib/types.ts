@@ -1,4 +1,10 @@
-export type BlisterCondition = 'Impecable' | 'Muy Bueno' | 'Desgaste / Abrir' | 'Loose';
+export type BlisterCondition =
+  | 'Impecable'
+  | 'Muy Bueno'
+  | 'Desgaste / Abrir'
+  | 'Suelto Nuevo'
+  | 'Suelto Usado'
+  | 'Loose'; // Retrocompatibilidad
 
 export type DestacadoTipo = 'semanal' | 'mensual' | 'spotlight' | 'general';
 

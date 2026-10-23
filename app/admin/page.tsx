@@ -1006,13 +1006,13 @@ export default function AdminPage() {
                 <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
                   Condición del Blíster / Empaque *
                 </label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
                   {CATALOG_BLISTER_CONDITIONS.map((cond) => (
                     <button
                       key={cond}
                       type="button"
                       onClick={() => setNewProd({ ...newProd, estado_blister: cond })}
-                      className={`p-2.5 font-label-telemetry text-xs uppercase border transition-all ${
+                      className={`p-2.5 font-label-telemetry text-xs uppercase border transition-all text-center ${
                         newProd.estado_blister === cond
                           ? 'bg-primary-container text-on-primary-container border-primary-container font-bold'
                           : 'bg-surface-container text-on-surface-variant border-surface-container hover:text-on-surface'
