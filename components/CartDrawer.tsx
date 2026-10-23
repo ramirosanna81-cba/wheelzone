@@ -12,7 +12,7 @@ export default function CartDrawer() {
     clearCart,
     totalItems,
     subtotal,
-    discount10,
+    discount20,
     totalWithDiscount,
     isCartOpen,
     closeCart,
@@ -215,11 +215,11 @@ export default function CartDrawer() {
                 <span>${subtotal.toLocaleString('es-AR')}</span>
               </div>
               <div className="flex justify-between text-secondary">
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-1 font-bold">
                   <span className="material-symbols-outlined text-xs">savings</span>
-                  10% OFF Transferencia:
+                  20% OFF Transferencia:
                 </span>
-                <span>-${discount10.toLocaleString('es-AR')}</span>
+                <span className="font-bold">-${discount20.toLocaleString('es-AR')}</span>
               </div>
               <div className="flex justify-between text-cyan-400 font-bold bg-cyan-950/30 px-2 py-1 rounded border border-cyan-500/20">
                 <span className="flex items-center gap-1">

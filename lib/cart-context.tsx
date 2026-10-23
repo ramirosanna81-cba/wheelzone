@@ -11,7 +11,8 @@ interface CartContextType {
   clearCart: () => void;
   totalItems: number;
   subtotal: number;
-  discount10: number;
+  discount20: number;
+  discount10?: number;
   totalWithDiscount: number;
   isCartOpen: boolean;
   openCart: () => void;
@@ -93,8 +94,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
   const subtotal = items.reduce((acc, item) => acc + item.product.precio * item.quantity, 0);
-  const discount10 = Math.round(subtotal * 0.10);
-  const totalWithDiscount = subtotal - discount10;
+  const discount20 = Math.round(subtotal * 0.20);
+  const totalWithDiscount = subtotal - discount20;
 
   const openCart = () => setIsCartOpen(true);
   const closeCart = () => setIsCartOpen(false);
@@ -113,7 +114,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     message += `📦 *Total de piezas:* ${totalItems}\n`;
     message += `💵 *Subtotal:* $${subtotal.toLocaleString('es-AR')}\n`;
-    message += `⚡ *10% OFF Transferencia:* -$${discount10.toLocaleString('es-AR')}\n`;
+    message += `⚡ *20% OFF Transferencia:* -$${discount20.toLocaleString('es-AR')}\n`;
     message += `🏁 *TOTAL A ABONAR:* $${totalWithDiscount.toLocaleString('es-AR')}\n\n`;
 
     if (customerName) message += `👤 *Coleccionista:* ${customerName}\n`;
@@ -139,7 +140,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         clearCart,
         totalItems,
         subtotal,
-        discount10,
+        discount20,
+        discount10: discount20,
         totalWithDiscount,
         isCartOpen,
         openCart,
