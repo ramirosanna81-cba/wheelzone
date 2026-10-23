@@ -457,14 +457,24 @@ function TiendaContent() {
                 >
                   {/* Photo area */}
                   <div
-                    className="relative w-full h-48 xs:h-44 sm:h-64 bg-surface-container-lowest overflow-hidden cursor-pointer"
+                    className="relative w-full aspect-[4/5] sm:h-64 sm:aspect-auto bg-surface-container-lowest overflow-hidden cursor-pointer"
                     onClick={() => setSelectedProductModal(product)}
                   >
+                    {/* Atmospheric ambient blur behind (ensures no boring empty borders) */}
+                    <Image
+                      src={product.imagen_url}
+                      alt=""
+                      fill
+                      aria-hidden="true"
+                      className="object-cover blur-md opacity-30 scale-110 pointer-events-none"
+                    />
+
+                    {/* Main crisp uncropped die-cast photo */}
                     <Image
                       src={product.imagen_url}
                       alt={product.modelo}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="object-contain p-2 group-hover:scale-105 transition-transform duration-500 relative z-0"
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
                     />
 
