@@ -209,7 +209,7 @@ export default function CartDrawer() {
             </div>
 
             {/* Price Breakdown */}
-            <div className="flex flex-col gap-1 text-xs font-label-telemetry uppercase">
+            <div className="flex flex-col gap-1.5 text-xs font-label-telemetry uppercase">
               <div className="flex justify-between text-on-surface-variant">
                 <span>Subtotal ({totalItems} piezas):</span>
                 <span>${subtotal.toLocaleString('es-AR')}</span>
@@ -220,6 +220,13 @@ export default function CartDrawer() {
                   10% OFF Transferencia:
                 </span>
                 <span>-${discount10.toLocaleString('es-AR')}</span>
+              </div>
+              <div className="flex justify-between text-cyan-400 font-bold bg-cyan-950/30 px-2 py-1 rounded border border-cyan-500/20">
+                <span className="flex items-center gap-1">
+                  <span className="material-symbols-outlined text-xs">credit_card</span>
+                  O en 3 cuotas sin interés de:
+                </span>
+                <span>${Math.round(subtotal / 3).toLocaleString('es-AR')}</span>
               </div>
               <div className="flex justify-between text-base font-bold text-on-surface pt-1 border-t border-surface-container-highest">
                 <span className="font-headline-sm uppercase text-sm">Total Transferencia:</span>
@@ -239,7 +246,7 @@ export default function CartDrawer() {
             </button>
 
             <div className="flex items-center justify-between text-[11px] font-label-telemetry text-outline">
-              <span>💳 Aceptamos Transferencias y MP</span>
+              <span className="text-neutral-400">💳 3 Cuotas sin interés • Transferencias</span>
               <button
                 onClick={clearCart}
                 className="underline hover:text-race-red transition-colors"

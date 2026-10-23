@@ -245,6 +245,17 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                       {product.stock > 0 ? `Stock: ${product.stock} disp.` : 'Agotado'}
                     </span>
                   </div>
+
+                  {/* Beneficio de Financiación 3 Cuotas Sin Interés */}
+                  <div className="flex items-center gap-2 mt-2 px-3 py-1.5 rounded-lg bg-cyan-950/40 border border-cyan-500/30 text-cyan-300 font-label-telemetry text-xs">
+                    <span className="material-symbols-outlined text-base text-cyan-400 shrink-0">credit_card</span>
+                    <div className="flex flex-wrap items-center gap-x-1.5 font-bold">
+                      <span className="uppercase text-white tracking-wide">3 cuotas sin interés de</span>
+                      <span className="text-cyan-400 font-black text-sm">
+                        ${Math.round(product.precio / 3).toLocaleString('es-AR')}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Tabla de Especificaciones de Grado Coleccionista */}

@@ -527,6 +527,12 @@ function TiendaContent() {
                         </span>
                       </div>
 
+                      {/* 3 Cuotas Sin Interés */}
+                      <div className="flex items-center gap-1 text-[11px] font-label-telemetry text-cyan-400 font-bold">
+                        <span className="material-symbols-outlined text-xs">credit_card</span>
+                        <span>3 cuotas sin interés de ${Math.round(product.precio / 3).toLocaleString('es-AR')}</span>
+                      </div>
+
                       <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
                         <button
                           onClick={() => addItem(product)}

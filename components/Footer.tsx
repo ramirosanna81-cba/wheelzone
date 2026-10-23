@@ -67,7 +67,7 @@ export default function Footer() {
             Pasarela &amp; Despachos | Pagos y Envíos
           </span>
           <p className="font-body-sm text-xs text-neutral-300 leading-relaxed">
-            Pagá de forma directa por transferencia bancaria instantánea y aprovechá un 20% de descuento directo en tu compra. También podés abonar con todas las tarjetas vía Mercado Pago.
+            Aboná en <strong className="text-cyan-400 font-bold">3 cuotas sin interés</strong> con todas las tarjetas o aprovechá un <strong className="text-[#FFC200] font-bold">20% de descuento directo</strong> abonando por transferencia bancaria.
           </p>
 
           {/* Card: Despacho Rápido y Seguro */}
