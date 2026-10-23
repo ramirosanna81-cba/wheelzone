@@ -27,6 +27,9 @@ export const CATALOG_BRANDS: CatalogBrandOption[] = [
   { label: 'GreenLight', value: 'GreenLight', aliases: ['greenlight'] },
   { label: 'M2 Machines', value: 'M2 Machines', aliases: ['m2 machines', 'm2'] },
   { label: 'Johnny Lightning', value: 'Johnny Lightning', aliases: ['johnny lightning'] },
+  { label: 'Kinsmart', value: 'Kinsmart', aliases: ['kinsmart'] },
+  { label: 'Jada', value: 'Jada', aliases: ['jada', 'jada toys'] },
+  { label: 'Welly', value: 'Welly', aliases: ['welly', 'welly nex'] },
   { label: 'Otra marca o categoría', value: 'Otra marca o categoría', aliases: [] },
 ];
 
