@@ -140,7 +140,7 @@ export default function HomePage() {
     telefono: '',
     serie: '',
     modelo_buscado: '',
-    estado_empaque: 'Blíster Mint C-10 (Perfecto)',
+    estado_empaque: '1:64',
     presupuesto: '',
   });
   const [submitting, setSubmitting] = useState(false);
@@ -194,7 +194,7 @@ export default function HomePage() {
         telefono: '',
         serie: '',
         modelo_buscado: '',
-        estado_empaque: 'Blíster Mint C-10 (Perfecto)',
+        estado_empaque: '1:64',
         presupuesto: '',
       });
     } catch (err) {
@@ -687,58 +687,64 @@ export default function HomePage() {
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 bg-primary-container rounded-sm shadow-[0_0_8px_rgba(255,194,0,0.6)]"></span>
                   <span className="font-label-telemetry text-[11px] sm:text-xs uppercase tracking-widest text-primary-container font-bold">
-                    GARAJE DE BÚSQUEDA & IMPORTACIÓN
+                    GARAJE DE BÚSQUEDA &amp; IMPORTACIÓN
                   </span>
                 </div>
                 <h2 className="font-display-hero text-2xl sm:text-3xl md:text-5xl uppercase tracking-tight text-white leading-none">
-                  ¿BUSCÁS UNA PIEZA <span className="text-primary-container italic font-black drop-shadow-[0_2px_12px_rgba(255,194,0,0.35)]">INCONSEGUIBLE</span>?
+                  ¿BUSCÁS UNA PIEZA QUE TE PARECE <span className="text-primary-container italic font-black drop-shadow-[0_2px_12px_rgba(255,194,0,0.35)]">IMPOSIBLE DE ENCONTRAR</span>?
                 </h2>
                 <p className="font-body-md text-xs sm:text-sm md:text-base text-neutral-300 leading-relaxed">
-                  Nosotros la rastreamos, verificamos su autenticidad y estado de blíster bajo lupa, y la traemos directo a tus manos a través de nuestra red de coleccionistas internacionales en Japón, Estados Unidos y Europa.
+                  Nosotros nos encargamos de rastrearla, revisamos con la lupa su autenticidad y te la acercamos directo a tus manos. Contamos con una red de coleccionistas amigos en todo el país.
                 </p>
               </div>
 
               {/* Protocol steps - High-end modern card */}
               <div className="flex flex-col gap-3.5 sm:gap-4 bg-gradient-to-b from-surface-container/90 to-surface-container-low/95 backdrop-blur-md p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-white/10 border-l-4 border-l-primary-container shadow-xl">
                 <div className="flex items-center gap-2.5 pb-2 border-b border-white/10">
-                  <span className="material-symbols-outlined text-primary-container text-xl">verified</span>
+                  <span className="material-symbols-outlined text-primary-container text-xl">saved_search</span>
                   <span className="font-headline-sm text-sm sm:text-base uppercase text-white font-bold tracking-wide">
-                    Protocolo de Cacería Wheels Zone
+                    Proceso de Búsqueda (Paso a Paso)
                   </span>
                 </div>
-                <div className="flex flex-col gap-3 font-body-sm text-xs sm:text-sm">
-                  <div className="flex items-center gap-2.5 sm:gap-3">
-                    <div className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0">
-                      <span className="material-symbols-outlined text-primary-container text-sm sm:text-base">radar</span>
+                <div className="flex flex-col gap-3.5 font-body-sm text-xs sm:text-sm">
+                  <div className="flex items-start gap-2.5 sm:gap-3">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="font-display-hero font-black text-primary-container text-sm">1</span>
                     </div>
-                    <span className="text-neutral-200 leading-snug">Escaneo en subastas RLC y clubes cerrados de coleccionistas</span>
+                    <span className="text-neutral-200 leading-snug">
+                      Buscamos en subastas privadas, clubes de coleccionistas exclusivos y grupos de fans de todo el país.
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2.5 sm:gap-3">
-                    <div className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0">
-                      <span className="material-symbols-outlined text-primary-container text-sm sm:text-base">saved_search</span>
+                  <div className="flex items-start gap-2.5 sm:gap-3">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="font-display-hero font-black text-primary-container text-sm">2</span>
                     </div>
-                    <span className="text-neutral-200 leading-snug">Verificación fotográfica de esquinas, tampografía y burbuja</span>
+                    <span className="text-neutral-200 leading-snug">
+                      Hacemos un control fotográfico detallado y revisamos el estado del producto.
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2.5 sm:gap-3">
-                    <div className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0">
-                      <span className="material-symbols-outlined text-primary-container text-sm sm:text-base">lock</span>
+                  <div className="flex items-start gap-2.5 sm:gap-3">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary-container/10 border border-primary-container/25 flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="font-display-hero font-black text-primary-container text-sm">3</span>
                     </div>
-                    <span className="text-neutral-200 leading-snug">Seña congelada hasta aprobación de fotos reales en mano</span>
+                    <span className="text-neutral-200 leading-snug">
+                      Solo cobramos una seña que queda congelada y pagás el resto recién cuando veas las fotos reales de la pieza ya en nuestras manos y das tu okay.
+                    </span>
                   </div>
                 </div>
               </div>
 
-              {/* Guarantee alert box - Reassuring sober dark gray with amber/gold shield */}
-              <div className="p-3.5 sm:p-4.5 bg-[#18181b]/95 backdrop-blur-md rounded-xl border border-primary-container/25 border-l-4 border-l-primary-container flex items-center gap-3 sm:gap-3.5 shadow-md">
-                <div className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full bg-primary-container/15 flex items-center justify-center shrink-0 text-primary-container">
-                  <span className="material-symbols-outlined text-lg sm:text-xl">shield</span>
+              {/* Guarantee alert box */}
+              <div className="p-3.5 sm:p-4.5 bg-[#18181b]/95 backdrop-blur-md rounded-xl border border-primary-container/25 border-l-4 border-l-primary-container flex items-start gap-3 sm:gap-3.5 shadow-md">
+                <div className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full bg-primary-container/15 flex items-center justify-center shrink-0 text-primary-container mt-0.5">
+                  <span className="material-symbols-outlined text-lg sm:text-xl">verified</span>
                 </div>
-                <div className="flex flex-col gap-0.5">
-                  <span className="font-label-telemetry text-[10px] sm:text-[11px] uppercase tracking-wider text-primary-container font-extrabold">
-                    Garantía y Tranquilidad Total
+                <div className="flex flex-col gap-1">
+                  <span className="font-label-telemetry text-xs uppercase tracking-wider text-primary-container font-extrabold">
+                    COMPROMISO DE CALIDAD Y CONFIANZA
                   </span>
-                  <p className="font-label-telemetry text-[11px] sm:text-xs text-neutral-300 uppercase leading-snug">
-                    Sin compromiso de compra si el estado del blíster no coincide exactamente con el acordado previamente.
+                  <p className="font-body-sm text-xs sm:text-[13px] text-neutral-300 leading-relaxed">
+                    Si la pieza no llega en las condiciones acordadas, se te devolverá el total de lo abonado previa devolución del producto.
                   </p>
                 </div>
               </div>
@@ -752,7 +758,7 @@ export default function HomePage() {
                     <span className="material-symbols-outlined text-primary-container text-base sm:text-lg">assignment</span>
                   </div>
                   <span className="font-headline-sm text-base sm:text-lg md:text-xl uppercase text-white font-bold tracking-wide">
-                    FORMULARIO DE CACERÍA TELEMÉTRICA
+                    FORMULARIO DE BÚSQUEDA PERSONALIZADA
                   </span>
                 </div>
                 <span className="font-label-telemetry text-xs text-primary-container hidden sm:inline-flex items-center gap-1.5 font-bold px-2.5 py-1 rounded-full bg-primary-container/10 border border-primary-container/20">
@@ -766,7 +772,7 @@ export default function HomePage() {
                   {/* Nombre */}
                   <div className="flex flex-col gap-1.5">
                     <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
-                      Nombre Completo del Coleccionista <span className="text-primary-container">*</span>
+                      CONTANOS TU NOMBRE <span className="text-primary-container">*</span>
                     </label>
                     <input
                       type="text"
@@ -781,7 +787,7 @@ export default function HomePage() {
                   {/* Teléfono */}
                   <div className="flex flex-col gap-1.5">
                     <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
-                      WhatsApp / Teléfono Móvil <span className="text-primary-container">*</span>
+                      WHATSAPP O TELÉFONO MÓVIL <span className="text-primary-container">*</span>
                     </label>
                     <input
                       type="tel"
@@ -798,7 +804,7 @@ export default function HomePage() {
                   {/* Marca y Categoría */}
                   <div className="flex flex-col gap-1.5">
                     <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
-                      Marca y Categoría Deseada <span className="text-primary-container">*</span>
+                      INDICÁ MARCA Y CATEGORÍA DE LA PIEZA <span className="text-primary-container">*</span>
                     </label>
                     <select
                       required
@@ -806,7 +812,7 @@ export default function HomePage() {
                       onChange={(e) => setFormData({ ...formData, serie: e.target.value })}
                       className="w-full px-4 py-3 sm:py-3.5 rounded-lg bg-[#141416] border border-neutral-700/80 hover:border-neutral-500 text-white font-body-sm text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all cursor-pointer"
                     >
-                      <option value="">Seleccioná una línea...</option>
+                      <option value="">Seleccioná una línea o marca...</option>
                       {CATALOG_BRANDS.map((brand) => (
                         <option key={brand.value} value={brand.value} className="bg-[#18181b] text-white">
                           {brand.label}
@@ -818,14 +824,15 @@ export default function HomePage() {
                   {/* Escala Automotor */}
                   <div className="flex flex-col gap-1.5">
                     <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
-                      Escala Requerida
+                      ESCALA REQUERIDA
                     </label>
                     <select
                       value={formData.estado_empaque}
                       onChange={(e) => setFormData({ ...formData, estado_empaque: e.target.value })}
                       className="w-full px-4 py-3 sm:py-3.5 rounded-lg bg-[#141416] border border-neutral-700/80 hover:border-neutral-500 text-white font-body-sm text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all cursor-pointer"
                     >
-                      {CATALOG_SCALES.map((scale) => (
+                      <option value="1:64" className="bg-[#18181b] text-white">1:64 (Escala Principal)</option>
+                      {CATALOG_SCALES.filter((scale) => scale !== '1:64').map((scale) => (
                         <option key={scale} value={scale} className="bg-[#18181b] text-white">
                           {scale}
                         </option>
@@ -838,7 +845,7 @@ export default function HomePage() {
                 {/* Modelo exacto */}
                 <div className="flex flex-col gap-1.5">
                   <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
-                    Modelo exacto, año o variante de color <span className="text-primary-container">*</span>
+                    DESCRIBÍ EL MODELO EXACTO <span className="text-primary-container">*</span>
                   </label>
                   <input
                     type="text"
@@ -853,11 +860,11 @@ export default function HomePage() {
                 {/* Presupuesto */}
                 <div className="flex flex-col gap-1.5">
                   <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
-                    Presupuesto Estimado / Rango Dispuesto (ARS o USD)
+                    ¿CUÁL ES TU PRESUPUESTO APROXIMADO?
                   </label>
                   <input
                     type="text"
-                    placeholder="Ej: Hasta $40.000 ARS o aprox. 45 USD"
+                    placeholder="Ej: Hasta $40.000 ARS o 45 USD"
                     value={formData.presupuesto}
                     onChange={(e) => setFormData({ ...formData, presupuesto: e.target.value })}
                     className="w-full px-4 py-3 sm:py-3.5 rounded-lg bg-[#141416] border border-neutral-700/80 hover:border-neutral-500 text-white font-body-sm text-sm placeholder:text-neutral-500 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all"
@@ -878,8 +885,8 @@ export default function HomePage() {
                       </>
                     ) : (
                       <>
-                        <span className="material-symbols-outlined text-[22px] transition-transform duration-200 group-hover:translate-x-1 shrink-0">send</span>
-                        <span>ENVIAR ENCARGO A CACERÍA</span>
+                        <span className="material-symbols-outlined text-[22px] transition-transform duration-200 group-hover:translate-x-1 shrink-0">search</span>
+                        <span>¡EMPEZAR LA BÚSQUEDA!</span>
                       </>
                     )}
                   </button>
@@ -889,7 +896,7 @@ export default function HomePage() {
                     <div className="p-3.5 rounded-lg bg-primary-container/15 border border-primary-container/30 text-on-surface font-label-telemetry text-xs flex items-center gap-2.5">
                       <span className="material-symbols-outlined text-primary-container text-lg">check_circle</span>
                       <span className="text-primary-container font-bold uppercase tracking-wider">
-                        ¡ENCARGO RECIBIDO! NOS CONTACTAREMOS VÍA WHATSAPP EN BREVE CON LAS PRIMERAS OPCIONES DE PISTA.
+                        ¡BÚSQUEDA ENVIADA! NOS CONTACTAREMOS VÍA WHATSAPP EN BREVE CON LAS PRIMERAS OPCIONES.
                       </span>
                     </div>
                   )}
