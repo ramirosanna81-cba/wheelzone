@@ -1175,15 +1175,15 @@ export default function HomePage() {
                   <span>COORDINAR VISITA POR WHATSAPP</span>
                 </a>
 
-                {/* Botones Secundarios con logos originales sutiles y adaptados para móvil y PC */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5">
+                {/* Botones Secundarios: Estilo compacto, sutil y elegante */}
+                <div className="flex flex-row items-center gap-2">
                   <a
                     href="https://www.google.com/maps/dir/?api=1&destination=Rioja+281,+6002+Jun%C3%ADn,+Provincia+de+Buenos+Aires"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="h-10 sm:h-11 px-3 rounded-lg bg-[#18181b] hover:bg-[#232328] border border-neutral-700/80 hover:border-neutral-500 text-white font-sans font-bold text-[11px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 group cursor-pointer text-center"
+                    className="flex-1 h-8 sm:h-9 px-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-neutral-300 hover:text-white font-sans font-medium text-[11px] sm:text-xs tracking-wide flex items-center justify-center gap-1.5 transition-colors cursor-pointer text-center"
                   >
-                    <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" width="16" height="16">
+                    <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" width="14" height="14">
                       <path fill="#4285F4" d="M12 2C7.58 2 4 5.58 4 10c0 5.25 7 12.25 7.42 12.67a.8.8 0 001.16 0C13 22.25 20 15.25 20 10c0-4.42-3.58-8-8-8z"/>
                       <circle cx="12" cy="10" r="3.2" fill="#FFFFFF"/>
                       <path fill="#EA4335" d="M12 2C7.58 2 4 5.58 4 10c0 2.37 1.05 4.84 2.62 7.15l5.38-7.15z"/>
@@ -1198,9 +1198,9 @@ export default function HomePage() {
                     href="https://waze.com/ul?q=Rioja+281,+6002+Jun%C3%ADn,+Argentina&navigate=yes"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="h-10 sm:h-11 px-3 rounded-lg bg-[#18181b] hover:bg-[#232328] border border-neutral-700/80 hover:border-neutral-500 text-white font-sans font-bold text-[11px] sm:text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 group cursor-pointer text-center"
+                    className="flex-1 h-8 sm:h-9 px-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-neutral-300 hover:text-white font-sans font-medium text-[11px] sm:text-xs tracking-wide flex items-center justify-center gap-1.5 transition-colors cursor-pointer text-center"
                   >
-                    <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" width="16" height="16">
+                    <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" width="14" height="14">
                       <path fill="#33CCFF" d="M20.54 13.13a7.48 7.48 0 0 0-1.46-4.63 7.84 7.84 0 0 0-6.19-3.23 8.35 8.35 0 0 0-3.79.88A7.8 7.8 0 0 0 5.4 9.17a7.6 7.6 0 0 0-.82 3.82c0 .63.07 1.25.21 1.86a4.2 4.2 0 0 0-1.74 3.44 4.29 4.29 0 0 0 4.29 4.28h9.85a4.84 4.84 0 0 0 4.84-4.84 4.67 4.67 0 0 0-1.49-3.4zm-11.4 3.43a1.43 1.43 0 1 1 0-2.86 1.43 1.43 0 0 1 0 2.86zm5.72 0a1.43 1.43 0 1 1 0-2.86 1.43 1.43 0 0 1 0 2.86z"/>
                       <circle cx="9.14" cy="14.56" r="1.4" fill="#000000"/>
                       <circle cx="14.86" cy="14.56" r="1.4" fill="#000000"/>
