@@ -33,7 +33,7 @@ export const CATALOG_BRANDS: CatalogBrandOption[] = [
   { label: 'Otra marca o categoría', value: 'Otra marca o categoría', aliases: [] },
 ];
 
-export const CATALOG_SCALES = ['1:64', '1:43', '1:24', '1:36', '1:18'];
+export const CATALOG_SCALES = ['1:64', '1:43', '1:36', '1:32', '1:24', '1:18'];
 
 export const CATALOG_THEMES = [
   'JDM',
