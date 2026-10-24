@@ -1876,64 +1876,74 @@ export default function AdminPage() {
             <span className="font-label-telemetry text-xs text-outline">TABLE: COMMUNITY_POSTS</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {community.map((item) => (
-              <div
-                key={item.id}
-                className="bg-surface-container border border-surface-container-high p-3 sm:p-4 flex flex-col xs:flex-row gap-3 sm:gap-4 relative"
-              >
-                <div className="relative w-full xs:w-24 h-40 xs:h-24 bg-surface-container-lowest flex-shrink-0 overflow-hidden border border-surface-container">
-                  <Image src={item.image_url} alt={item.featured_piece} fill className="object-cover" />
-                </div>
-                <div className="flex flex-col justify-between flex-grow min-w-0">
-                  <div>
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-headline-sm uppercase text-sm text-on-surface font-bold truncate">
-                        {item.collector_handle}
-                      </span>
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-label-telemetry text-xs text-primary-container">
-                          ★ {item.rating}/5
+          {community.length === 0 ? (
+            <div className="p-8 text-center text-outline font-label-telemetry bg-surface-container border border-surface-container">
+              No hay publicaciones comunitarias registradas aún.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {community.map((item) => (
+                <div
+                  key={item.id}
+                  className={`bg-surface-container border p-3 sm:p-4 flex flex-col xs:flex-row gap-3 sm:gap-4 relative ${
+                    item.approved
+                      ? 'border-surface-container-high'
+                      : 'border-amber-500/60 bg-amber-950/10'
+                  }`}
+                >
+                  <div className="relative w-full xs:w-24 h-40 xs:h-24 bg-surface-container-lowest flex-shrink-0 overflow-hidden border border-surface-container">
+                    <Image src={item.image_url} alt={item.featured_piece} fill className="object-cover" />
+                  </div>
+                  <div className="flex flex-col justify-between flex-grow min-w-0">
+                    <div>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-headline-sm uppercase text-sm text-on-surface font-bold truncate">
+                          {item.collector_handle}
                         </span>
-                        {/* Approval badge */}
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-label-telemetry text-xs text-primary-container">
+                            ★ {item.rating}/5
+                          </span>
+                          {/* Approval badge */}
+                          <button
+                            onClick={() => handleToggleCommunityApproval(item)}
+                            className={`text-[10px] uppercase font-label-telemetry px-2 py-0.5 border font-bold transition-all ${
+                              item.approved
+                                ? 'bg-emerald-900/40 text-emerald-300 border-emerald-500 hover:bg-emerald-800/40'
+                                : 'bg-amber-500 text-black border-amber-400 hover:bg-amber-400 animate-pulse'
+                            }`}
+                            title={item.approved ? 'Hacer clic para ocultar de la web' : 'Hacer clic para aprobar y publicar'}
+                          >
+                            {item.approved ? '✓ Publicado' : '⏳ Aprobar'}
+                          </button>
+                        </div>
+                      </div>
+                      <span className="text-[11px] font-label-telemetry text-outline block">
+                        {item.featured_piece} // {item.location}
+                      </span>
+                      <p className="font-body-sm text-xs text-on-surface-variant line-clamp-2 mt-1 italic">
+                        "{item.review}"
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between pt-2 border-t border-surface-container text-xs font-label-telemetry">
+                      <span className="text-secondary font-bold">🔥 {item.likes} Likes</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-primary-container uppercase">{item.tag}</span>
+                        {/* Delete community message button */}
                         <button
-                          onClick={() => handleToggleCommunityApproval(item)}
-                          className={`text-[10px] uppercase font-label-telemetry px-1.5 py-0.5 border ${
-                            item.approved
-                              ? 'bg-emerald-900/30 text-emerald-400 border-emerald-600'
-                              : 'bg-surface-container-highest text-outline border-surface-container-highest'
-                          }`}
-                          title={item.approved ? 'Hacer clic para ocultar' : 'Hacer clic para aprobar'}
+                          onClick={() => handleDeleteCommunityPost(item.id, item.collector_handle)}
+                          className="p-1 text-outline hover:text-race-red transition-colors"
+                          title="Eliminar publicación permanentemente"
                         >
-                          {item.approved ? 'Visible' : 'Oculto'}
+                          <span className="material-symbols-outlined text-sm">delete</span>
                         </button>
                       </div>
                     </div>
-                    <span className="text-[11px] font-label-telemetry text-outline block">
-                      {item.featured_piece} // {item.location}
-                    </span>
-                    <p className="font-body-sm text-xs text-on-surface-variant line-clamp-2 mt-1 italic">
-                      "{item.review}"
-                    </p>
-                  </div>
-                  <div className="flex items-center justify-between pt-2 border-t border-surface-container text-xs font-label-telemetry">
-                    <span className="text-secondary font-bold">🔥 {item.likes} Likes</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-primary-container uppercase">{item.tag}</span>
-                      {/* Delete community message button */}
-                      <button
-                        onClick={() => handleDeleteCommunityPost(item.id, item.collector_handle)}
-                        className="p-1 text-outline hover:text-race-red transition-colors"
-                        title="Eliminar publicación permanentemente"
-                      >
-                        <span className="material-symbols-outlined text-sm">delete</span>
-                      </button>
-                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 

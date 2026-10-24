@@ -62,7 +62,7 @@ export default function ComunidadPage() {
         finalImageUrl = imagePreview;
       }
 
-      const newPost = await createCommunityPost({
+      await createCommunityPost({
         collector_handle: handle.startsWith('@') ? handle : `@${handle}`,
         location,
         featured_piece: featuredPiece,
@@ -71,8 +71,6 @@ export default function ComunidadPage() {
         tag,
         image_url: finalImageUrl,
       });
-
-      setPosts((prev) => [newPost, ...prev]);
 
       confetti({
         particleCount: 70,
@@ -89,8 +87,8 @@ export default function ComunidadPage() {
       setImageFile(null);
       setImagePreview('');
 
-      // Auto-hide success after 4 seconds
-      setTimeout(() => setSubmitSuccess(false), 4000);
+      // Auto-hide success after 8 seconds
+      setTimeout(() => setSubmitSuccess(false), 8000);
     } catch (err) {
       console.error('Error submitting community post:', err);
     } finally {
@@ -422,11 +420,16 @@ export default function ComunidadPage() {
               </button>
 
               {submitSuccess && (
-                <div className="p-3 bg-secondary-container/20 border border-secondary-container text-on-surface font-label-telemetry text-xs flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary-container text-base shrink-0">check_circle</span>
-                  <span className="text-primary-container font-bold uppercase text-[11px] sm:text-xs">
-                    ¡VITRINA PUBLICADA EXITOSAMENTE EN EL GARAJE DE WHEELS ZONE!
-                  </span>
+                <div className="p-3.5 bg-emerald-950/40 border border-emerald-500/60 text-on-surface font-label-telemetry text-xs flex items-center gap-2.5 rounded-sm">
+                  <span className="material-symbols-outlined text-emerald-400 text-lg shrink-0">check_circle</span>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-emerald-400 font-bold uppercase text-[11px] sm:text-xs">
+                      ¡FOTO Y RESEÑA ENVIADAS CORRECTAMENTE!
+                    </span>
+                    <span className="text-neutral-300 text-[10px] sm:text-[11px] font-sans">
+                      Tu publicación fue enviada a revisión y será visible en la vitrina una vez aprobada por el equipo de Wheels Zone.
+                    </span>
+                  </div>
                 </div>
               )}
             </div>
@@ -474,6 +477,26 @@ export default function ComunidadPage() {
               {[1, 2, 3].map((n) => (
                 <div key={n} className="h-80 sm:h-96 bg-surface-container-low animate-pulse border border-surface-container"></div>
               ))}
+            </div>
+          ) : filteredPosts.length === 0 ? (
+            <div className="bg-surface-container-low border border-surface-container p-8 sm:p-14 text-center flex flex-col items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-surface-container-high border border-surface-container-highest flex items-center justify-center">
+                <span className="material-symbols-outlined text-3xl text-primary-container">camera_alt</span>
+              </div>
+              <div className="flex flex-col gap-1.5 max-w-md">
+                <h3 className="font-headline-md text-lg sm:text-xl uppercase text-on-surface">
+                  Sé el primero en exhibir tu vitrina
+                </h3>
+                <p className="font-body-sm text-xs sm:text-sm text-on-surface-variant leading-relaxed">
+                  Sumá la foto de tu colección o unboxing de tu última pieza adquirida en Wheels Zone usando el formulario de Boxes de arriba.
+                </p>
+              </div>
+              <a
+                href="#boxes-ingreso"
+                className="mt-2 px-5 py-2.5 bg-primary-container hover:bg-surface-tint text-on-primary-container font-headline-sm uppercase text-xs tracking-wider font-bold transition-all"
+              >
+                Subir Mi Colección
+              </a>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">

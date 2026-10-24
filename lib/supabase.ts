@@ -330,8 +330,8 @@ export async function createCommunityPost(post: Omit<CommunityPost, 'id' | 'like
   const newPost: CommunityPost = {
     ...post,
     id: `post-${Date.now()}`,
-    likes: 1,
-    approved: true,
+    likes: 0,
+    approved: false, // Requiere moderación previa del administrador
     created_at: new Date().toISOString(),
   };
 
@@ -339,7 +339,7 @@ export async function createCommunityPost(post: Omit<CommunityPost, 'id' | 'like
     try {
       const { data, error } = await supabase
         .from('community_posts')
-        .insert([{ ...post, likes: 1, approved: true }])
+        .insert([{ ...post, likes: 0, approved: false }])
         .select()
         .single();
 
