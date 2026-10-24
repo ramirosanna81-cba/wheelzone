@@ -984,20 +984,27 @@ export default function AdminPage() {
 
                 {/* Categoría */}
                 <div className="flex flex-col gap-1">
-                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                    Temática Motorsport / Categoría *
-                  </label>
-                  <select
+                  <div className="flex items-center justify-between">
+                    <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                      Temática / Categoría *
+                    </label>
+                    <span className="text-[10px] font-label-telemetry text-outline">
+                      Elegí de la lista o escribí una propia
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    list="theme-suggestions-quick"
                     value={newProd.categoria}
                     onChange={(e) => setNewProd({ ...newProd, categoria: e.target.value })}
+                    placeholder="Ej: Línea Premium, JDM, Básicos, Dakar..."
                     className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
-                  >
+                  />
+                  <datalist id="theme-suggestions-quick">
                     {CATALOG_THEMES.map((t) => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
+                      <option key={t} value={t} />
                     ))}
-                  </select>
+                  </datalist>
                 </div>
               </div>
 
@@ -2008,20 +2015,27 @@ export default function AdminPage() {
 
                 {/* Categoria */}
                 <div className="flex flex-col gap-1">
-                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                    Temática Motorsport / Categoría *
-                  </label>
-                  <select
+                  <div className="flex items-center justify-between">
+                    <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
+                      Temática / Categoría *
+                    </label>
+                    <span className="text-[10px] font-label-telemetry text-outline">
+                      Elegí o escribí
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    list="theme-suggestions-edit"
                     value={editingProduct.categoria}
                     onChange={(e) => setEditingProduct({ ...editingProduct, categoria: e.target.value })}
+                    placeholder="Ej: Línea Premium, JDM, Básicos..."
                     className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
-                  >
+                  />
+                  <datalist id="theme-suggestions-edit">
                     {CATALOG_THEMES.map((t) => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
+                      <option key={t} value={t} />
                     ))}
-                  </select>
+                  </datalist>
                 </div>
 
                 {/* Serie */}

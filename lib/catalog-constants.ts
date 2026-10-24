@@ -36,17 +36,20 @@ export const CATALOG_BRANDS: CatalogBrandOption[] = [
 export const CATALOG_SCALES = ['1:64', '1:43', '1:36', '1:32', '1:24', '1:18'];
 
 export const CATALOG_THEMES = [
+  'Línea Premium',
+  'Básicos / Mainline',
   'JDM',
   'Muscle Cars',
-  'Car Culture',
-  'Boulevard',
+  'Carreras / GT / Rally / F1',
+  'Exóticos / Hiperautos',
   'Camionetas Off-Road',
+  'Autos Inolvidables / Kiosco',
+  'Edición Limitada / Especial',
   'Super Treasure Hunt ($TH)',
   'Treasure Hunt (TH)',
-  'Básicos',
-  'Fast & Furious Premium',
+  'Car Culture / Boulevard',
   'Red Line Club (RLC)',
-  'Exóticos / Hiperautos',
+  'Colección General',
 ];
 
 export const CATALOG_BLISTER_CONDITIONS: BlisterCondition[] = [
