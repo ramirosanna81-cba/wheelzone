@@ -56,17 +56,21 @@ export async function POST(req: NextRequest) {
 
     // 3. Fallback: Desafío Telemétrico Anti-Bot de Carrera (HMAC / Challenge Serverless Seguro)
     // Permite protección activa inmediata sin obligar a registrar keys externas inmediatamente
-    if (token && token.startsWith('telemetry-pass-')) {
+    if (token && typeof token === 'string' && token.startsWith('telemetry-pass-')) {
       const parts = token.split('-');
       const timestamp = parseInt(parts[2], 10);
       const now = Date.now();
 
-      // Validar que el token haya sido generado recientemente (máximo 15 minutos) y no en el futuro
-      if (isNaN(timestamp) || now - timestamp > 15 * 60 * 1000 || timestamp > now + 30000) {
-        return NextResponse.json(
-          { success: false, error: 'La sesión de verificación caducó. Por favor resolvé el desafío anti-bot nuevamente.' },
-          { status: 400 }
-        );
+      // Permitir amplio margen de tolerancia horaria para evitar desfasajes entre el reloj del cliente y el servidor en Vercel
+      if (!isNaN(timestamp)) {
+        const diff = Math.abs(now - timestamp);
+        // Margen de hasta 24 horas para rellenar el formulario con calma
+        if (diff > 24 * 60 * 60 * 1000) {
+          return NextResponse.json(
+            { success: false, error: 'La sesión de verificación caducó. Por favor resolvé el desafío anti-bot nuevamente.' },
+            { status: 400 }
+          );
+        }
       }
 
       return NextResponse.json({ success: true, provider: 'telemetry_challenge' });
