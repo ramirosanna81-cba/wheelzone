@@ -178,12 +178,8 @@ function TiendaContent() {
             <span className="text-on-surface-variant uppercase hidden xs:inline">SERIE 2024 - BATCH IMPORTADO</span>
           </div>
           <div className="flex items-center gap-3 text-outline">
-            <span className="flex items-center gap-1 text-secondary">
-              <span className="material-symbols-outlined text-sm">verified_user</span>
-              CARD PROTECTOR CASE INCLUIDO
-            </span>
-            <span className="hidden md:inline text-primary-container">
-              10% OFF EN TRANSFERENCIA
+            <span className="text-primary-container font-bold">
+              20% OFF EN TRANSFERENCIA
             </span>
           </div>
         </div>
