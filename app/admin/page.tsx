@@ -867,6 +867,7 @@ export default function AdminPage() {
                     src={newProd.imagen_url}
                     alt="Preview producto"
                     fill
+                    unoptimized
                     className="object-contain"
                   />
                   <div className="absolute bottom-2 right-2 px-2 py-0.5 bg-black/80 text-primary font-label-telemetry text-[11px] uppercase">
@@ -1298,7 +1299,7 @@ export default function AdminPage() {
                     {/* Thumbnail */}
                     <td className="p-3">
                       <div className="relative w-12 h-12 bg-surface-container-lowest border border-surface-container overflow-hidden">
-                        <Image src={p.imagen_url} alt={p.modelo} fill className="object-cover" />
+                        <Image src={p.imagen_url} alt={p.modelo} fill unoptimized className="object-cover" />
                       </div>
                     </td>
 
@@ -1494,6 +1495,7 @@ export default function AdminPage() {
                         src={p.imagen_url}
                         alt={p.modelo}
                         fill
+                        unoptimized
                         className="object-cover"
                       />
                     </div>
@@ -1664,6 +1666,7 @@ export default function AdminPage() {
                               src={p.imagen_url}
                               alt={p.modelo}
                               fill
+                              unoptimized
                               className="object-cover"
                             />
                           </div>
@@ -1892,7 +1895,7 @@ export default function AdminPage() {
                   }`}
                 >
                   <div className="relative w-full xs:w-24 h-40 xs:h-24 bg-surface-container-lowest flex-shrink-0 overflow-hidden border border-surface-container">
-                    <Image src={item.image_url} alt={item.featured_piece} fill className="object-cover" />
+                    <Image src={item.image_url} alt={item.featured_piece} fill unoptimized className="object-cover" />
                   </div>
                   <div className="flex flex-col justify-between flex-grow min-w-0">
                     <div>
@@ -2158,7 +2161,7 @@ export default function AdminPage() {
                 <div className="flex flex-col sm:flex-row items-center gap-4">
                   <div className="relative w-20 h-20 bg-surface-container-lowest border border-surface-container flex-shrink-0 overflow-hidden">
                     {editingProduct.imagen_url ? (
-                      <Image src={editingProduct.imagen_url} alt="Preview" fill className="object-cover" />
+                      <Image src={editingProduct.imagen_url} alt="Preview" fill unoptimized className="object-cover" />
                     ) : (
                       <span className="material-symbols-outlined text-outline text-3xl flex items-center justify-center h-full">
                         image

@@ -92,6 +92,7 @@ export default function CartDrawer() {
                     src={product.imagen_url}
                     alt={product.modelo}
                     fill
+                    unoptimized={product.imagen_url.startsWith('data:')}
                     className="object-cover"
                     sizes="80px"
                   />

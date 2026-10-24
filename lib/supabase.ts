@@ -451,7 +451,7 @@ export async function uploadImageToStorage(file: File, bucket = 'diecast-media')
 
       const { error: uploadError } = await supabase.storage
         .from(bucket)
-        .upload(filePath, file, { cacheControl: '3600', upsert: false });
+        .upload(filePath, file, { cacheControl: '31536000, immutable', upsert: false });
 
       if (!uploadError) {
         const { data } = supabase.storage.from(bucket).getPublicUrl(filePath);

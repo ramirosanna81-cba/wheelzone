@@ -142,6 +142,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                     src={product.imagen_url}
                     alt={product.modelo}
                     fill
+                    unoptimized={product.imagen_url.startsWith('data:')}
                     className="object-contain p-2 sm:p-4"
                     sizes="(max-width: 1024px) 100vw, 650px"
                     priority
@@ -431,6 +432,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                 src={product.imagen_url}
                 alt={product.modelo}
                 fill
+                unoptimized={product.imagen_url.startsWith('data:')}
                 className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)]"
                 sizes="100vw"
                 priority

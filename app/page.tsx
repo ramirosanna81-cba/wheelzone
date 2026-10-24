@@ -606,22 +606,17 @@ export default function HomePage() {
                     className="relative w-full aspect-[4/5] sm:h-64 sm:aspect-auto bg-surface-container-lowest overflow-hidden cursor-pointer"
                     title="Hacé clic para ver fotos en alta resolución, lupa y ficha técnica"
                   >
-                    {/* Atmospheric ambient blur behind */}
-                    <Image
-                      src={product.imagen_url}
-                      alt=""
-                      fill
-                      aria-hidden="true"
-                      className="object-cover blur-md opacity-30 scale-110 pointer-events-none"
-                    />
+                    {/* Atmospheric ambient lighting via CSS (zero transformation cost) */}
+                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-800/35 via-surface-container-lowest to-surface-container-lowest pointer-events-none" />
 
                     {/* Main crisp uncropped die-cast photo */}
                     <Image
                       src={product.imagen_url}
                       alt={product.modelo}
                       fill
+                      unoptimized={product.imagen_url.startsWith('data:')}
                       className="object-contain p-2 group-hover:scale-105 transition-transform duration-500 relative z-0"
-                      sizes="(max-width: 768px) 100vw, 25vw"
+                      sizes="(max-width: 768px) 50vw, 384px"
                     />
 
                     {/* Scale and series badges */}
