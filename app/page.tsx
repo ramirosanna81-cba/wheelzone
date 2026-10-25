@@ -14,8 +14,8 @@ import ProductModal from '@/components/ProductModal';
 
 export default function HomePage() {
   const { addItem } = useCart();
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
-  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+  const [loadingProducts, setLoadingProducts] = useState(false);
   const [spotlightAdded, setSpotlightAdded] = useState(false);
   const [selectedProductModal, setSelectedProductModal] = useState<Product | null>(null);
 
@@ -25,20 +25,17 @@ export default function HomePage() {
   const [heroProgress, setHeroProgress] = useState(0);
   const [destacadosHovered, setDestacadosHovered] = useState(false);
 
-  // Filter hero products
+  // Filter hero products (immediate initial render for zero LCP delay)
   const heroProducts = useMemo(() => {
     const featured = featuredProducts.filter((p) => p.destacado);
     if (featured.length > 0) {
       return [...featured].sort((a, b) => (a.hero_order || 99) - (b.hero_order || 99)).slice(0, 5);
     }
-    // Si aún está cargando desde Supabase, no mostramos los mock-data viejos para evitar parpadeo
-    if (loadingProducts) return [];
-    // Si ya terminó de cargar y no hay ningún destacado en Supabase, usamos el primer producto disponible
     if (featuredProducts.length > 0) {
       return featuredProducts.slice(0, 5);
     }
     return [];
-  }, [featuredProducts, loadingProducts]);
+  }, [featuredProducts]);
 
   const activeSpotlight = heroProducts[heroIndex] || heroProducts[0] || null;
 
@@ -370,7 +367,7 @@ export default function HomePage() {
                 onMouseLeave={() => setIsHeroPaused(false)}
                 className="relative z-10 w-full max-w-[320px] xs:max-w-sm sm:max-w-[420px] flex flex-col items-center gap-2.5 sm:gap-3 group select-none"
               >
-                {!activeSpotlight || loadingProducts ? (
+                {!activeSpotlight ? (
                   /* Elegant Dark Skeleton Loading Frame */
                   <div className="w-full flex flex-col items-center gap-2.5 sm:gap-3 animate-pulse">
                     <div className="relative w-full h-[320px] xs:h-[370px] sm:h-[440px] md:h-[470px] rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-900/60 shadow-[0_20px_50px_rgba(0,0,0,0.85)] flex flex-col items-center justify-center p-6 text-center">
@@ -582,7 +579,7 @@ export default function HomePage() {
           </div>
 
           {/* Cards Carousel */}
-          {loadingProducts ? (
+          {loadingProducts && featuredProducts.length === 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((n) => (
                 <div key={n} className="h-96 bg-surface-container-low animate-pulse border border-surface-container"></div>

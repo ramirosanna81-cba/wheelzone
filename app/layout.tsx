@@ -114,10 +114,35 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/images/logos/logo-badge-dark.jpg" type="image/jpeg" />
         <link rel="apple-touch-icon" href="/images/logos/logo-badge-dark.jpg" />
+        {/* Preconexiones para acelerar Handshake DNS / TLS crítico */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://olkumxhhhcviuuhevaag.supabase.co" />
+        <link rel="dns-prefetch" href="https://olkumxhhhcviuuhevaag.supabase.co" />
+
+        {/* Material Symbols Outlined optimizado (ejes controlados: ~460KB vs 3.9MB y carga no bloqueante) */}
         <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+          rel="preload"
+          as="style"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=swap"
         />
+        <link
+          id="material-symbols-css"
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=swap"
+          media="print"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var e=document.getElementById("material-symbols-css");if(e){if(e.sheet){e.media="all"}else{e.addEventListener("load",function(){e.media="all"});setTimeout(function(){e.media="all"},150)}}})();`,
+          }}
+        />
+        <noscript>
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=swap"
+          />
+        </noscript>
         {/* Schema.org Datos Estructurados para Google (LocalBusiness & Tienda) */}
         <script
           type="application/ld+json"
