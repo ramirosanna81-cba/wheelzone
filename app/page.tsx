@@ -421,7 +421,7 @@ export default function HomePage() {
                         fill
                         className="object-cover object-center transition-all duration-500"
                         priority
-                        sizes="(max-width: 768px) 100vw, 500px"
+                        sizes="(max-width: 640px) 320px, (max-width: 1024px) 420px, 470px"
                       />
                       {/* Subtle lighting sheen without blocking the bottom card or vehicle */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/10 pointer-events-none"></div>
@@ -616,7 +616,7 @@ export default function HomePage() {
                       fill
                       unoptimized={product.imagen_url.startsWith('data:')}
                       className="object-contain p-2 group-hover:scale-105 transition-transform duration-500 relative z-0"
-                      sizes="(max-width: 768px) 50vw, 384px"
+                      sizes="(max-width: 640px) 260px, 298px"
                     />
 
                     {/* Scale and series badges */}

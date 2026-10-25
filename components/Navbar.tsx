@@ -92,6 +92,7 @@ export default function Navbar() {
                 src="/images/logos/logo-swoosh-transparent.png"
                 alt="Wheels Zone Official Logo"
                 fill
+                sizes="(max-width: 640px) 160px, 245px"
                 className="object-contain object-left drop-shadow-[0_2px_12px_rgba(229,25,55,0.25)]"
                 priority
               />
