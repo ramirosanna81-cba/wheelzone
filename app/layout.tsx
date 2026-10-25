@@ -20,6 +20,9 @@ export const metadata: Metadata = {
     ],
     shortcut: ['/images/logos/logo-badge-dark.jpg'],
   },
+  verification: {
+    google: 'UBnkzVNhvckcLTQb_V1RXBwCPvAyyGOE4oKm9K7WjKE',
+  },
 };
 
 export const viewport: Viewport = {
