@@ -169,3 +169,99 @@ export function matchesBrand(product: Product, brandFilterValue: string): boolea
 
   return fullText.includes(brandValLower);
 }
+
+export interface DescriptionTemplate {
+  label: string;
+  category: string;
+  text: string;
+}
+
+export const DESCRIPTION_TEMPLATES: DescriptionTemplate[] = [
+  {
+    label: 'Básico en Blíster',
+    category: 'Hot Wheels',
+    text: 'Hot Wheels escala 1:64 en blíster original cerrado. Casting metálico con base plástica y gráficos originales de fábrica.',
+  },
+  {
+    label: 'Premium / Real Riders',
+    category: 'Hot Wheels',
+    text: 'Edición Premium para coleccionistas: carrocería y chasis Metal/Metal, neumáticos de goma Real Riders y tampografía nítida.',
+  },
+  {
+    label: 'Tarjeta Protegida',
+    category: 'Protegido',
+    text: 'Pieza de colección en blíster cerrado con tarjeta protegida en protector rígido. Ideal para colgar o exhibir.',
+  },
+  {
+    label: 'Suelto Nuevo (Vitrina)',
+    category: 'Suelto',
+    text: 'Pieza suelta 1:64 nueva, retirada de blíster únicamente para exhibición en vitrina. Sin detalles ni marcas de rodado.',
+  },
+  {
+    label: 'Suelto Usado / Vintage',
+    category: 'Suelto',
+    text: 'Pieza suelta vintage en buen estado general. Pintura y ruedas revisadas para colección o restauración.',
+  },
+  {
+    label: 'Mini GT / Kaido House',
+    category: 'Alta Gama',
+    text: 'Modelo de alta precisión en escala 1:64 con chasis de aleación, interior detallado y caja original con blíster protector interior.',
+  },
+  {
+    label: 'Matchbox / Moving Parts',
+    category: 'Matchbox',
+    text: 'Matchbox escala 1:64 serie Moving Parts con partes funcionales móviles (aperturas) y detalles realistas de carrocería.',
+  },
+  {
+    label: 'Autos Inolvidables',
+    category: 'Kiosco',
+    text: 'Réplica a escala con carrocería die-cast detallada, interiores fieles y base expositora con peana identificatoria.',
+  },
+];
+
+/**
+ * Genera una descripción inteligente según el estado del blíster, marca y escala si el producto no tiene una personalizada
+ */
+export function getDefaultProductDescription(product: Partial<Product>): string {
+  const marca = product.marca || 'Hot Wheels';
+  const escala = product.escala || '1:64';
+  const blister = (product.estado_blister || '').toLowerCase();
+  const cat = (product.categoria || '').toLowerCase();
+  const marcaLower = marca.toLowerCase();
+
+  // 1. Piezas sueltas
+  if (blister.includes('suelto') || blister.includes('loose')) {
+    if (blister.includes('usado')) {
+      return `Pieza suelta en escala ${escala} en buen estado general, revisada para colección o exhibición en vitrina.`;
+    }
+    return `Pieza suelta en escala ${escala} nueva, impecable sin rodar, ideal para vitrina o diorama.`;
+  }
+
+  // 2. Marcas de alta gama
+  if (marcaLower.includes('mini gt') || marcaLower.includes('kaido') || marcaLower.includes('inno64') || marcaLower.includes('tarmac')) {
+    return `${marca} en escala ${escala} de alta precisión para coleccionistas, chasis de aleación y caja original.`;
+  }
+
+  // 3. Super Treasure Hunt / RLC / Especiales
+  if (cat.includes('super treasure') || cat.includes('sth') || cat.includes('$th') || cat.includes('rlc')) {
+    return `Edición especial ${marca} escala ${escala} con pintura Spectraflame de alto brillo, neumáticos Real Riders y tarjeta protegida.`;
+  }
+
+  // 4. Líneas Premium
+  if (cat.includes('premium') || marcaLower.includes('premium') || cat.includes('car culture') || cat.includes('boulevard')) {
+    return `${marca} Premium escala ${escala}: construcción Metal/Metal con neumáticos de goma Real Riders en blíster original.`;
+  }
+
+  // 5. Matchbox Moving Parts
+  if (marcaLower.includes('matchbox') && cat.includes('moving parts')) {
+    return `Matchbox escala ${escala} serie Moving Parts con aperturas funcionales y detalles realistas de carrocería.`;
+  }
+
+  // 6. Autos Inolvidables / Kiosco
+  if (marcaLower.includes('inolvidable')) {
+    return `Modelo die-cast escala ${escala} con interiores detallados y base expositora para coleccionistas.`;
+  }
+
+  // 7. General / Básico por defecto
+  return `${marca} escala ${escala} en blíster original cerrado con casting detallado.`;
+}

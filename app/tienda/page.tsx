@@ -12,6 +12,7 @@ import {
   CATALOG_SCALES,
   CATALOG_THEMES,
   matchesBrand,
+  getDefaultProductDescription,
 } from '@/lib/catalog-constants';
 
 function TiendaContent() {
@@ -514,7 +515,7 @@ function TiendaContent() {
                         {product.modelo}
                       </h3>
                       <p className="font-body-sm text-xs text-on-surface-variant line-clamp-2">
-                        {product.descripcion || `${product.marca} escala ${product.escala} con pintura detallada y tarjeta protegida.`}
+                        {product.descripcion || getDefaultProductDescription(product)}
                       </p>
                     </div>
 

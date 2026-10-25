@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { Product } from '@/lib/types';
 import { useCart } from '@/lib/cart-context';
+import { getDefaultProductDescription } from '@/lib/catalog-constants';
 
 interface ProductModalProps {
   product: Product | null;
@@ -304,8 +305,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                     DESCRIPCIÓN DEL CASTING & BLÍSTER
                   </span>
                   <p className="font-body-sm text-xs sm:text-[13px] text-neutral-200 leading-relaxed bg-[#111114] p-3 rounded-xl border border-neutral-800/60">
-                    {product.descripcion ||
-                      `${product.marca} en escala ${product.escala} con pintura especial de alta resistencia, tampos nítidos y tarjeta protegida. Despacho en caja rígida con acolchado anti-impactos.`}
+                    {product.descripcion || getDefaultProductDescription(product)}
                   </p>
                 </div>
               </div>

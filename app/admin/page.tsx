@@ -26,6 +26,7 @@ import {
   CATALOG_THEMES,
   CATALOG_BLISTER_CONDITIONS,
   matchesBrand,
+  DESCRIPTION_TEMPLATES,
 } from '@/lib/catalog-constants';
 
 export default function AdminPage() {
@@ -1030,6 +1031,52 @@ export default function AdminPage() {
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* Descripción con Plantillas Rápidas */}
+              <div className="flex flex-col gap-1.5 p-3.5 bg-surface-container-low border border-surface-container rounded-lg">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant font-bold flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-sm text-primary-container">description</span>
+                    <span>Descripción y Detalles de la Pieza</span>
+                  </label>
+                  <span className="text-[11px] text-outline font-label-telemetry">
+                    Opcional (si se deja vacío, se genera una automática según la marca/estado)
+                  </span>
+                </div>
+
+                {/* Botones de plantillas rápidas */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-1 pb-1">
+                  <span className="text-[10px] uppercase font-label-telemetry text-outline font-semibold">Plantillas 1-clic:</span>
+                  {DESCRIPTION_TEMPLATES.map((tmpl) => (
+                    <button
+                      key={tmpl.label}
+                      type="button"
+                      onClick={() => setNewProd({ ...newProd, descripcion: tmpl.text })}
+                      className="px-2.5 py-1 text-[11px] font-label-telemetry bg-surface-container hover:bg-primary-container hover:text-on-primary-container text-on-surface-variant border border-surface-container-high rounded transition-colors"
+                      title={tmpl.text}
+                    >
+                      + {tmpl.label}
+                    </button>
+                  ))}
+                  {newProd.descripcion && (
+                    <button
+                      type="button"
+                      onClick={() => setNewProd({ ...newProd, descripcion: '' })}
+                      className="px-2 py-1 text-[10px] font-label-telemetry text-race-red hover:underline ml-auto"
+                    >
+                      Limpiar
+                    </button>
+                  )}
+                </div>
+
+                <textarea
+                  rows={2}
+                  value={newProd.descripcion || ''}
+                  onChange={(e) => setNewProd({ ...newProd, descripcion: e.target.value })}
+                  placeholder="Ej: Hot Wheels escala 1:64 en blíster original con pintura detallada y chasis metálico..."
+                  className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container rounded"
+                />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -2195,15 +2242,48 @@ export default function AdminPage() {
               </div>
 
               {/* Descripción */}
-              <div className="flex flex-col gap-1">
-                <label className="font-label-telemetry text-xs uppercase text-on-surface-variant">
-                  Descripción y Detalles Técnicos (Ruedas, librea, tampografía)
-                </label>
+              <div className="flex flex-col gap-1.5 p-3 bg-surface-container-low border border-surface-container rounded-lg">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <label className="font-label-telemetry text-xs uppercase text-on-surface-variant font-bold flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-sm text-primary-container">description</span>
+                    <span>Descripción y Detalles Técnicos</span>
+                  </label>
+                  <span className="text-[11px] text-outline font-label-telemetry">
+                    Si se deja vacío, se genera una automática según la marca/estado
+                  </span>
+                </div>
+
+                {/* Botones de plantillas rápidas */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-1 pb-1">
+                  <span className="text-[10px] uppercase font-label-telemetry text-outline font-semibold">Plantillas 1-clic:</span>
+                  {DESCRIPTION_TEMPLATES.map((tmpl) => (
+                    <button
+                      key={tmpl.label}
+                      type="button"
+                      onClick={() => setEditingProduct({ ...editingProduct, descripcion: tmpl.text })}
+                      className="px-2.5 py-1 text-[11px] font-label-telemetry bg-surface-container hover:bg-primary-container hover:text-on-primary-container text-on-surface-variant border border-surface-container-high rounded transition-colors"
+                      title={tmpl.text}
+                    >
+                      + {tmpl.label}
+                    </button>
+                  ))}
+                  {editingProduct.descripcion && (
+                    <button
+                      type="button"
+                      onClick={() => setEditingProduct({ ...editingProduct, descripcion: '' })}
+                      className="px-2 py-1 text-[10px] font-label-telemetry text-race-red hover:underline ml-auto"
+                    >
+                      Limpiar
+                    </button>
+                  )}
+                </div>
+
                 <textarea
                   rows={3}
                   value={editingProduct.descripcion || ''}
                   onChange={(e) => setEditingProduct({ ...editingProduct, descripcion: e.target.value })}
-                  className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container"
+                  placeholder="Ej: Hot Wheels escala 1:64 en blíster original con pintura detallada y chasis metálico..."
+                  className="w-full bg-surface-container border border-surface-container-high px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary-container rounded"
                 />
               </div>
 
