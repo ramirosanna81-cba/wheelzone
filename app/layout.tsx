@@ -30,23 +30,32 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   metadataBase: new URL('https://wheelszone.com.ar'),
   title: {
-    default: 'Wheels Zone | Plataforma y Vidriera de Hot Wheels & Coleccionables',
+    default: 'Wheels Zone | Autitos de Colección, Hot Wheels y Autos a Escala',
     template: '%s | Wheels Zone',
   },
   description:
-    'La zona definitiva para coleccionistas en Argentina. Hot Wheels Premium, Super Treasure Hunts ($TH), RLC, Kaido House, Mini GT y Matchbox con embalaje blindado de grado militar y certificación de blíster en Junín y envíos a todo el país.',
+    'Tienda de autitos de colección, autos de metal, Hot Wheels y Matchbox originales. Modelos nuevos para jugar o coleccionar. Envíos a todo el país y showroom en Junín.',
+  alternates: {
+    canonical: '/',
+  },
   keywords: [
-    'Hot Wheels Argentina',
-    'Hot Wheels Premium',
-    'Super Treasure Hunt',
-    'STH Hot Wheels',
-    'Kaido House Argentina',
-    'Mini GT',
-    'Matchbox Moving Parts',
-    'Diecast 1:64',
-    'Red Line Club RLC',
-    'Comprar Hot Wheels Junin',
     'Wheels Zone',
+    'autitos de coleccion',
+    'autitos de metal',
+    'hot wheels originales',
+    'matchbox originales',
+    'autitos de juguete',
+    'autos a escala argentina',
+    'autitos escala 1 64',
+    'autos escala 1 43',
+    'autitos escala 1 32',
+    'autitos escala 1 36',
+    'comprar hot wheels junin',
+    'matchbox junin',
+    'autitos de coleccion junin',
+    'autitos para regalar',
+    'tienda de autitos junin',
+    'envios a todo el pais',
   ],
   authors: [{ name: 'Wheels Zone Team', url: 'https://wheelszone.com.ar' }],
   creator: 'Wheels Zone',
@@ -56,32 +65,38 @@ export const metadata: Metadata = {
     address: true,
     telephone: true,
   },
-  alternates: {
-    canonical: 'https://wheelszone.com.ar',
-  },
   openGraph: {
-    title: 'Wheels Zone | Plataforma y Vidriera de Hot Wheels & Coleccionables',
+    title: 'Wheels Zone | Autitos de Colección, Hot Wheels y Autos a Escala',
     description:
-      'La zona definitiva para coleccionistas. Hot Wheels Premium, STH, RLC, Kaido House y Matchbox con 3 cuotas sin interés y envíos blindados a toda la Argentina.',
+      'Venta de autitos de colección, Hot Wheels y Matchbox 100% nuevos en blíster cerrado. Showroom en Junín y envíos a toda Argentina.',
     url: 'https://wheelszone.com.ar',
-    siteName: 'Wheels Zone Argentina',
+    siteName: 'Wheels Zone',
     locale: 'es_AR',
     type: 'website',
     images: [
       {
-        url: '/images/logos/logo-badge-dark.jpg',
-        width: 800,
-        height: 800,
-        alt: 'Wheels Zone - Plataforma de Hot Wheels y Coleccionables',
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Wheels Zone - Autitos de Colección',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Wheels Zone | Hot Wheels Premium & Coleccionables',
+    title: 'Wheels Zone | Autitos de Colección y Autos a Escala',
     description:
-      'Hot Wheels Premium, Super Treasure Hunts ($TH), Kaido House y Mini GT con 3 cuotas sin interés y envíos blindados en Argentina.',
-    images: ['/images/logos/logo-badge-dark.jpg'],
+      'Modelos nuevos en blíster cerrado. Hot Wheels, Matchbox y escalas de colección. Envíos a todo el país.',
+    images: ['/og-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+    },
   },
   icons: {
     icon: [
@@ -143,17 +158,17 @@ export default function RootLayout({
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=swap"
           />
         </noscript>
-        {/* Schema.org Datos Estructurados para Google (LocalBusiness & Tienda) */}
+        {/* Schema.org Datos Estructurados para Google (HobbyShop / Store) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@type': 'Store',
+              '@type': 'HobbyShop',
               name: 'Wheels Zone',
-              image: 'https://wheelszone.com.ar/images/logos/logo-badge-dark.jpg',
+              image: 'https://wheelszone.com.ar/og-image.jpg',
               description:
-                'Plataforma y tienda de Hot Wheels, Super Treasure Hunts ($TH), RLC, Kaido House y autos a escala 1:64 en Argentina.',
+                'Tienda de autitos de colección, autos de metal, Hot Wheels y Matchbox originales 100% nuevos en blíster cerrado. Showroom en Junín y envíos a todo el país.',
               url: 'https://wheelszone.com.ar',
               telephone: '+5492364275322',
               priceRange: '$$',
@@ -162,13 +177,17 @@ export default function RootLayout({
                 streetAddress: 'Rioja 281',
                 addressLocality: 'Junín',
                 addressRegion: 'Buenos Aires',
-                postalCode: 'B6022',
+                postalCode: '6000',
                 addressCountry: 'AR',
               },
               geo: {
                 '@type': 'GeoCoordinates',
-                latitude: -34.5888,
-                longitude: -60.9463,
+                latitude: -34.5838,
+                longitude: -60.9433,
+              },
+              areaServed: {
+                '@type': 'Country',
+                name: 'Argentina',
               },
               openingHoursSpecification: [
                 {

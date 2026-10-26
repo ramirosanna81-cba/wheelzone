@@ -18,7 +18,7 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Inicio', href: '/', icon: 'home', badge: 'Portada' },
     { name: 'Tienda', href: '/tienda', icon: 'storefront', badge: 'Catálogo' },
-    { name: 'Showroom', href: '/#showroom', icon: 'location_on', badge: 'Junín' },
+    { name: 'Showroom', href: '/showroom', icon: 'location_on', badge: 'Junín' },
     { name: 'El Garaje', href: '/comunidad', icon: 'garage_home', badge: 'Comunidad' },
     { name: 'Encargos', href: '/#encargos', icon: 'radar', badge: 'Cacería' },
     { name: 'Panel Admin', href: '/admin', icon: 'admin_panel_settings', badge: 'Gestión' },

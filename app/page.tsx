@@ -11,6 +11,7 @@ import { INITIAL_PRODUCTS } from '@/lib/mock-data';
 import { useCart } from '@/lib/cart-context';
 import { CATALOG_BRANDS, CATALOG_SCALES } from '@/lib/catalog-constants';
 import ProductModal from '@/components/ProductModal';
+import { getProductSlug } from '@/lib/product-seo';
 
 export default function HomePage() {
   const { addItem } = useCart();
@@ -249,6 +250,9 @@ export default function HomePage() {
                   </span>
                   <span className="text-gradient-flame block">
                     JOYA ESTÁ ACÁ
+                  </span>
+                  <span className="sr-only">
+                    {' '}- Autitos de Colección, Hot Wheels y Autos a Escala en Argentina
                   </span>
                 </h1>
               </div>
@@ -592,89 +596,93 @@ export default function HomePage() {
               onMouseLeave={() => setDestacadosHovered(false)}
               className="flex items-stretch gap-3 sm:gap-4 overflow-x-auto pb-4 scroll-smooth no-scrollbar -mx-3 px-3 sm:mx-0 sm:px-0"
             >
-              {featuredProducts.map((product) => (
-                <div
-                  key={product.id}
-                  className="w-[240px] xs:w-[260px] sm:w-[280px] lg:w-[285px] xl:w-[298px] shrink-0 group bg-surface-container-low hover:bg-surface-container transition-all duration-300 flex flex-col border border-surface-container hover:border-primary-container relative overflow-hidden"
-                >
-                  {/* Photo area */}
+              {featuredProducts.map((product, index) => {
+                const productSlug = getProductSlug(product);
+                return (
                   <div
-                    onClick={() => setSelectedProductModal(product)}
-                    className="relative w-full aspect-[4/5] sm:h-64 sm:aspect-auto bg-surface-container-lowest overflow-hidden cursor-pointer"
-                    title="Hacé clic para ver fotos en alta resolución, lupa y ficha técnica"
+                    key={product.id}
+                    className="w-[240px] xs:w-[260px] sm:w-[280px] lg:w-[285px] xl:w-[298px] shrink-0 group bg-surface-container-low hover:bg-surface-container transition-all duration-300 flex flex-col border border-surface-container hover:border-primary-container relative overflow-hidden"
                   >
-                    {/* Atmospheric ambient lighting via CSS (zero transformation cost) */}
-                    <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-800/35 via-surface-container-lowest to-surface-container-lowest pointer-events-none" />
+                    {/* Photo area */}
+                    <div
+                      onClick={() => setSelectedProductModal(product)}
+                      className="relative w-full aspect-[4/5] sm:h-64 sm:aspect-auto bg-surface-container-lowest overflow-hidden cursor-pointer"
+                      title="Hacé clic para ver fotos en alta resolución, lupa y ficha técnica"
+                    >
+                      {/* Atmospheric ambient lighting via CSS (zero transformation cost) */}
+                      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-800/35 via-surface-container-lowest to-surface-container-lowest pointer-events-none" />
 
-                    {/* Main crisp uncropped die-cast photo */}
-                    <Image
-                      src={product.imagen_url}
-                      alt={product.modelo}
-                      fill
-                      unoptimized={product.imagen_url.startsWith('data:')}
-                      className="object-contain p-2 group-hover:scale-105 transition-transform duration-500 relative z-0"
-                      sizes="(max-width: 640px) 260px, 298px"
-                    />
+                      {/* Main crisp uncropped die-cast photo with priority for LCP */}
+                      <Image
+                        src={product.imagen_url}
+                        alt={`${product.modelo} - ${product.marca} escala ${product.escala}`}
+                        fill
+                        priority={index < 4}
+                        unoptimized={product.imagen_url.startsWith('data:')}
+                        className="object-contain p-2 group-hover:scale-105 transition-transform duration-500 relative z-0"
+                        sizes="(max-width: 640px) 260px, 298px"
+                      />
 
-                    {/* Scale and series badges */}
-                    <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
-                      {product.destacado_tipo === 'mensual' ? (
-                        <span className="bg-amber-400 text-black font-label-telemetry text-[11px] px-2 py-0.5 uppercase font-black tracking-wider flex items-center gap-1 shadow-md">
-                          <span>💎 JOYA DEL MES</span>
-                        </span>
-                      ) : product.destacado_tipo === 'semanal' ? (
-                        <span className="bg-secondary-container text-white font-label-telemetry text-[11px] px-2 py-0.5 uppercase font-black tracking-wider flex items-center gap-1 shadow-md">
-                          <span>🔥 DESTACADO DE LA SEMANA</span>
-                        </span>
-                      ) : null}
+                      {/* Scale and series badges */}
+                      <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
+                        {product.destacado_tipo === 'mensual' ? (
+                          <span className="bg-amber-400 text-black font-label-telemetry text-[11px] px-2 py-0.5 uppercase font-black tracking-wider flex items-center gap-1 shadow-md">
+                            <span>💎 JOYA DEL MES</span>
+                          </span>
+                        ) : product.destacado_tipo === 'semanal' ? (
+                          <span className="bg-secondary-container text-white font-label-telemetry text-[11px] px-2 py-0.5 uppercase font-black tracking-wider flex items-center gap-1 shadow-md">
+                            <span>🔥 DESTACADO DE LA SEMANA</span>
+                          </span>
+                        ) : null}
 
-                      <span className="bg-surface-container-highest/90 text-on-surface font-label-telemetry text-[11px] px-2 py-0.5 uppercase tracking-wider">
-                        ESCALA {product.escala}
-                      </span>
-                      {product.categoria.includes('Super Treasure Hunt') ? (
-                        <span className="bg-secondary-container text-on-secondary-container font-label-telemetry text-[11px] px-2 py-0.5 uppercase font-bold tracking-wider flex items-center gap-1">
-                          <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: '"FILL" 1' }}>whatshot</span>
-                          STH ULTRA RARO
+                        <span className="bg-surface-container-highest/90 text-on-surface font-label-telemetry text-[11px] px-2 py-0.5 uppercase tracking-wider">
+                          ESCALA {product.escala}
                         </span>
-                      ) : (
-                        <span className="bg-primary-container text-on-primary-container font-label-telemetry text-[11px] px-2 py-0.5 uppercase font-bold tracking-wider">
-                          {product.categoria}
+                        {product.categoria.includes('Super Treasure Hunt') ? (
+                          <span className="bg-secondary-container text-on-secondary-container font-label-telemetry text-[11px] px-2 py-0.5 uppercase font-bold tracking-wider flex items-center gap-1">
+                            <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: '"FILL" 1' }}>whatshot</span>
+                            STH ULTRA RARO
+                          </span>
+                        ) : (
+                          <span className="bg-primary-container text-on-primary-container font-label-telemetry text-[11px] px-2 py-0.5 uppercase font-bold tracking-wider">
+                            {product.categoria}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="absolute top-2 right-2 z-10">
+                        <span className="bg-surface-container-lowest/90 text-primary-container font-label-telemetry text-[11px] px-2 py-0.5 border border-primary-container/40 font-bold uppercase">
+                          100% NUEVO CERRADO
                         </span>
-                      )}
+                      </div>
+
+                      {/* Hover Hint Overlay */}
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none z-20">
+                        <span className="px-3 py-1.5 rounded-full bg-black/85 backdrop-blur-md border border-neutral-600 text-white font-label-telemetry text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-xl">
+                          <span className="material-symbols-outlined text-sm text-primary-container">zoom_in</span>
+                          <span>Ver Ficha & Zoom</span>
+                        </span>
+                      </div>
                     </div>
 
-                    <div className="absolute top-2 right-2 z-10">
-                      <span className="bg-surface-container-lowest/90 text-tertiary-fixed font-label-telemetry text-[11px] px-2 py-0.5 border border-surface-container">
-                        BLÍSTER {product.estado_blister === 'Impecable' ? '10/10' : product.estado_blister}
-                      </span>
-                    </div>
-
-                    {/* Hover Hint Overlay */}
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none z-20">
-                      <span className="px-3 py-1.5 rounded-full bg-black/85 backdrop-blur-md border border-neutral-600 text-white font-label-telemetry text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-xl">
-                        <span className="material-symbols-outlined text-sm text-primary-container">zoom_in</span>
-                        <span>Ver Ficha & Zoom</span>
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Body area */}
-                  <div className="p-4 flex flex-col flex-grow justify-between gap-3">
-                    <div className="flex flex-col gap-1">
-                      <span className="font-label-telemetry text-[11px] uppercase text-outline truncate">
-                        {product.serie || product.marca}
-                      </span>
-                      <h3
-                        onClick={() => setSelectedProductModal(product)}
-                        className="font-headline-md text-lg uppercase text-on-surface group-hover:text-primary transition-colors leading-snug line-clamp-1 cursor-pointer"
-                        title="Ver ficha técnica"
-                      >
-                        {product.modelo}
-                      </h3>
-                      <p className="font-body-sm text-xs text-on-surface-variant line-clamp-2">
-                        {product.descripcion || `${product.marca} escala ${product.escala} con detalles de fundición coleccionable.`}
-                      </p>
-                    </div>
+                    {/* Body area */}
+                    <div className="p-4 flex flex-col flex-grow justify-between gap-3">
+                      <div className="flex flex-col gap-1">
+                        <span className="font-label-telemetry text-[11px] uppercase text-outline truncate">
+                          {product.serie || product.marca}
+                        </span>
+                        <h3
+                          className="font-headline-md text-lg uppercase text-on-surface group-hover:text-primary transition-colors leading-snug line-clamp-1 cursor-pointer"
+                          title="Ver ficha técnica"
+                        >
+                          <Link href={`/tienda/${productSlug}`} className="hover:underline">
+                            {product.modelo}
+                          </Link>
+                        </h3>
+                        <p className="font-body-sm text-xs text-on-surface-variant line-clamp-2">
+                          {product.descripcion || `${product.marca} escala ${product.escala} con detalles de fundición coleccionable.`}
+                        </p>
+                      </div>
 
                     <div className="flex flex-col gap-2 pt-2 border-t border-surface-container">
                       <div className="flex items-baseline justify-between">
@@ -713,8 +721,9 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              );
+            })}
+          </div>
           )}
         </div>
       </section>

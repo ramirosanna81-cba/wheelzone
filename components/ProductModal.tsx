@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { Product } from '@/lib/types';
 import { useCart } from '@/lib/cart-context';
 import { getDefaultProductDescription } from '@/lib/catalog-constants';
+import { getProductSlug } from '@/lib/product-seo';
 
 interface ProductModalProps {
   product: Product | null;
@@ -346,6 +348,16 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                   </span>
                   <span className="whitespace-nowrap">{addedFeedback ? '¡AGREGADO AL CARRITO!' : 'AGREGAR AL CARRITO'}</span>
                 </button>
+
+                {/* Enlace Canónico a la Ficha Completa del Producto */}
+                <Link
+                  href={`/tienda/${getProductSlug(product)}`}
+                  onClick={onClose}
+                  className="w-full h-10 px-4 rounded-xl bg-neutral-800/80 hover:bg-neutral-700/90 text-neutral-300 hover:text-white font-label-telemetry text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-neutral-700 hover:border-primary-container transition-all"
+                >
+                  <span className="material-symbols-outlined text-base text-[#FFC200]">open_in_new</span>
+                  <span>VER FICHA WEB COMPLETA &amp; CALCULAR ENVÍO</span>
+                </Link>
               </div>
 
             </div>

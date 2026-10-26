@@ -1,17 +1,33 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Catálogo de Hot Wheels & Autos a Escala 1:64',
+  title: 'Tienda de Autitos de Colección, Hot Wheels y Matchbox',
   description:
-    'Explorá el catálogo completo de Wheels Zone: Hot Wheels Básicos, Línea Premium, Super Treasure Hunts ($TH), Kaido House, Mini GT y Matchbox en Argentina. Stock real y 3 cuotas sin interés.',
+    'Comprá autitos de colección, autos de metal, Hot Wheels y Matchbox nuevos en blíster. Todas las escalas para jugar o coleccionar con envíos a todo el país.',
   alternates: {
-    canonical: 'https://wheelszone.com.ar/tienda',
+    canonical: '/tienda',
   },
   openGraph: {
-    title: 'Catálogo y Tienda de Hot Wheels | Wheels Zone Argentina',
+    title: 'Tienda de Autitos de Colección, Hot Wheels y Matchbox | Wheels Zone',
     description:
-      'Piezas de colección certificadas en escala 1:64. Hot Wheels Premium, STH, RLC, Kaido House y Matchbox con envíos blindados a todo el país.',
+      'Comprá autitos de colección, autos de metal, Hot Wheels y Matchbox nuevos en blíster. Todas las escalas para jugar o coleccionar con envíos a todo el país.',
     url: 'https://wheelszone.com.ar/tienda',
+    type: 'website',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Tienda Wheels Zone - Autitos de Colección y Autos a Escala',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Tienda de Autitos de Colección, Hot Wheels y Matchbox | Wheels Zone',
+    description:
+      'Comprá autitos de colección, autos de metal, Hot Wheels y Matchbox nuevos en blíster con envíos a todo el país.',
+    images: ['/og-image.jpg'],
   },
 };
 
@@ -22,3 +38,4 @@ export default function TiendaLayout({
 }) {
   return <>{children}</>;
 }
+

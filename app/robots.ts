@@ -4,19 +4,13 @@ export default function robots(): MetadataRoute.Robots {
   const baseUrl = 'https://wheelszone.com.ar';
 
   return {
-    rules: [
-      {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/admin', '/api/'],
-      },
-      {
-        userAgent: 'Googlebot',
-        allow: '/',
-        disallow: ['/admin', '/api/'],
-      },
-    ],
+    rules: {
+      userAgent: '*',
+      allow: '/',
+      disallow: ['/api/', '/admin/', '/checkout/', '/cuenta/'],
+    },
     sitemap: `${baseUrl}/sitemap.xml`,
     host: baseUrl,
   };
 }
+

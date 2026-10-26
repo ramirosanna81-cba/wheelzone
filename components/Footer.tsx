@@ -130,6 +130,12 @@ export default function Footer() {
           </span>
           <ul className="flex flex-col gap-2.5 font-body-sm text-xs text-on-surface-variant">
             <li>
+              <Link href="/showroom" className="hover:text-primary-container transition-colors flex items-center gap-1.5 text-neutral-300 group">
+                <span className="text-[#FFC200] font-bold group-hover:translate-x-0.5 transition-transform">&gt;</span>
+                <span>Showroom en Junín (Punto de Retiro)</span>
+              </Link>
+            </li>
+            <li>
               <Link href="/comunidad" className="hover:text-primary-container transition-colors flex items-center gap-1.5 text-neutral-300 group">
                 <span className="text-[#FFC200] font-bold group-hover:translate-x-0.5 transition-transform">&gt;</span>
                 <span>Reseñas de la Comunidad</span>
