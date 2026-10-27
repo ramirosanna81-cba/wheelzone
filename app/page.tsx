@@ -609,8 +609,6 @@ export default function HomePage() {
                       className="relative w-full aspect-[4/5] sm:h-64 sm:aspect-auto bg-surface-container-lowest overflow-hidden cursor-pointer"
                       title="Hacé clic para ver fotos en alta resolución, lupa y ficha técnica"
                     >
-                      {/* Atmospheric ambient lighting via CSS (zero transformation cost) */}
-                      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-800/35 via-surface-container-lowest to-surface-container-lowest pointer-events-none" />
 
                       {/* Main crisp uncropped die-cast photo with priority for LCP */}
                       <Image

@@ -108,8 +108,6 @@ export default function ProductDetailClient({
             className="relative w-full aspect-square sm:aspect-[4/3] bg-[#111114] border border-neutral-800 rounded-2xl overflow-hidden cursor-pointer group shadow-2xl"
             onClick={() => setIsLightboxOpen(true)}
           >
-            {/* Ambient halo glow */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-800/40 via-[#111114] to-[#111114] pointer-events-none" />
 
             {/* Main high resolution product image with priority for LCP */}
             <Image

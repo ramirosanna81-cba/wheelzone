@@ -130,7 +130,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                 onMouseLeave={() => setIsHovering(false)}
                 onMouseMove={handleMouseMove}
                 onClick={() => setIsLightboxOpen(true)}
-                className="relative w-full h-[320px] xs:h-[380px] sm:h-[450px] md:h-[480px] lg:h-[500px] bg-gradient-to-b from-[#0e0e11] via-[#111115] to-[#0e0e11] border border-neutral-700/80 rounded-2xl overflow-hidden cursor-zoom-in group select-none shadow-xl"
+                className="relative w-full h-[320px] xs:h-[380px] sm:h-[450px] md:h-[480px] lg:h-[500px] bg-[#111114] border border-neutral-700/80 rounded-2xl overflow-hidden cursor-zoom-in group select-none shadow-xl"
                 title="Hacé clic para ver en Pantalla Completa de ultra detalle"
               >
                 {/* Imagen del Producto con Zoom de Lupa suave en desktop */}
@@ -445,7 +445,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                 alt={product.modelo}
                 fill
                 unoptimized={product.imagen_url.startsWith('data:')}
-                className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.9)]"
+                className="object-contain"
                 sizes="100vw"
                 priority
               />

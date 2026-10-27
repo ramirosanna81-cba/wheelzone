@@ -532,8 +532,8 @@ function TiendaContent() {
                         </div>
 
                         {/* Inspect button overlay */}
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none z-10">
-                          <span className="px-3 py-1.5 bg-black/80 text-white font-label-telemetry text-xs uppercase tracking-wider flex items-center gap-1 border border-primary-container">
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none z-10">
+                          <span className="px-3 py-1.5 bg-black/90 text-white font-label-telemetry text-xs uppercase tracking-wider flex items-center gap-1 border border-primary-container shadow-xl">
                             <span className="material-symbols-outlined text-sm text-primary-container">zoom_in</span>
                             VER DETALLE
                           </span>

@@ -33,8 +33,6 @@ export default function ProductCardImage({
         </div>
       )}
 
-      {/* Ambient gradient lighting */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-800/35 via-[#111114] to-[#111114] pointer-events-none z-[2]" />
 
       {/* Imagen optimizada con fade-in suave */}
       <Image
