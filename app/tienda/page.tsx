@@ -8,6 +8,7 @@ import { Product, BlisterCondition } from '@/lib/types';
 import { fetchProducts } from '@/lib/supabase';
 import { useCart } from '@/lib/cart-context';
 import ProductModal from '@/components/ProductModal';
+import ProductCardImage from '@/components/ProductCardImage';
 import { getProductSlug } from '@/lib/product-seo';
 import {
   CATALOG_BRANDS,
@@ -16,6 +17,8 @@ import {
   matchesBrand,
   getDefaultProductDescription,
 } from '@/lib/catalog-constants';
+
+const PAGE_SIZE = 24;
 
 function TiendaContent() {
   const searchParams = useSearchParams();
@@ -157,6 +160,22 @@ function TiendaContent() {
         return (new Date(b.created_at || '').getTime() || 0) - (new Date(a.created_at || '').getTime() || 0);
       });
   }, [products, search, selectedBrands, selectedScales, selectedCategory, maxPrice, maxCatalogPrice, onlyInStock, sortBy]);
+
+  // Progressive loading (24 products per batch)
+  const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE);
+
+  // Reset pagination when filters or sort change
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [search, selectedBrands, selectedScales, selectedCategory, maxPrice, onlyInStock, sortBy]);
+
+  const displayedProducts = useMemo(() => {
+    return filteredProducts.slice(0, visibleCount);
+  }, [filteredProducts, visibleCount]);
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, filteredProducts.length));
+  };
 
   const getWhatsAppProductUrl = (product: Product) => {
     const msg = `¡Hola Wheels Zone! Quiero comprar la siguiente pieza:\n*${product.modelo}*\nMarca: ${product.marca} | Escala: ${product.escala}\nPrecio: $${product.precio.toLocaleString('es-AR')}\nCondición: Nuevo en empaque original\n¿Me confirman disponibilidad para despacho en caja protegida?`;
@@ -418,7 +437,7 @@ function TiendaContent() {
 
               <div className="flex items-center gap-2 font-label-telemetry text-[11px] sm:text-xs">
                 <span className="text-on-surface font-bold whitespace-nowrap">
-                  {filteredProducts.length} MODELOS
+                  MOSTRANDO {displayedProducts.length} DE {filteredProducts.length} MODELOS
                 </span>
                 <span className="text-outline hidden xs:inline">|</span>
                 <span className="text-outline hidden xs:inline">STOCK INMEDIATO</span>
@@ -467,122 +486,145 @@ function TiendaContent() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-              {filteredProducts.map((product, index) => {
-                const productSlug = getProductSlug(product);
-                return (
-                  <div
-                    key={product.id}
-                    className="group bg-surface-container-low hover:bg-surface-container border border-surface-container hover:border-primary-container transition-all duration-300 flex flex-col relative overflow-hidden"
-                  >
-                    {/* Photo area */}
+            <div className="flex flex-col gap-6">
+              <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                {displayedProducts.map((product, index) => {
+                  const productSlug = getProductSlug(product);
+                  return (
                     <div
-                      className="relative w-full aspect-[4/5] sm:h-64 sm:aspect-auto bg-surface-container-lowest overflow-hidden cursor-pointer"
-                      onClick={() => setSelectedProductModal(product)}
+                      key={product.id}
+                      className="group bg-surface-container-low hover:bg-surface-container border border-surface-container hover:border-primary-container transition-all duration-300 flex flex-col relative overflow-hidden"
                     >
-                      {/* Atmospheric ambient lighting via CSS (zero transformation cost) */}
-                      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-800/35 via-surface-container-lowest to-surface-container-lowest pointer-events-none" />
+                      {/* Photo area */}
+                      <div
+                        className="relative w-full aspect-[4/5] sm:h-64 sm:aspect-auto bg-surface-container-lowest overflow-hidden cursor-pointer"
+                        onClick={() => setSelectedProductModal(product)}
+                      >
+                        {/* Shimmer skeleton + optimized image */}
+                        <ProductCardImage
+                          src={product.imagen_url}
+                          alt={`${product.modelo} - ${product.marca} escala ${product.escala}`}
+                          priority={index < 4}
+                        />
 
-                      {/* Main crisp uncropped die-cast photo with priority on first 4 images */}
-                      <Image
-                        src={product.imagen_url}
-                        alt={`${product.modelo} - ${product.marca} escala ${product.escala}`}
-                        fill
-                        priority={index < 4}
-                        unoptimized={product.imagen_url.startsWith('data:')}
-                        className="object-contain p-2 group-hover:scale-105 transition-transform duration-500 relative z-0"
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 384px"
-                      />
+                        {/* Telemetry badges */}
+                        <div className="absolute top-2 left-2 flex flex-col gap-1 z-10 max-w-[85%]">
+                          <span className="bg-surface-container-highest/90 text-on-surface font-label-telemetry text-[10px] sm:text-[11px] px-2 py-0.5 uppercase tracking-wider w-fit">
+                            {product.escala}
+                          </span>
+                          {product.categoria.includes('Super Treasure Hunt') ? (
+                            <span className="bg-secondary-container text-on-secondary-container font-label-telemetry text-[10px] sm:text-[11px] px-2 py-0.5 uppercase font-bold tracking-wider flex items-center gap-1 w-fit">
+                              <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: '"FILL" 1' }}>whatshot</span>
+                              STH // RARO
+                            </span>
+                          ) : (
+                            <span className="bg-primary-container text-on-primary-container font-label-telemetry text-[10px] sm:text-[11px] px-2 py-0.5 uppercase font-bold tracking-wider truncate w-fit max-w-full">
+                              {product.categoria}
+                            </span>
+                          )}
+                        </div>
 
-                      {/* Telemetry badges */}
-                      <div className="absolute top-2 left-2 flex flex-col gap-1 z-10 max-w-[85%]">
-                        <span className="bg-surface-container-highest/90 text-on-surface font-label-telemetry text-[10px] sm:text-[11px] px-2 py-0.5 uppercase tracking-wider w-fit">
-                          {product.escala}
-                        </span>
-                        {product.categoria.includes('Super Treasure Hunt') ? (
-                          <span className="bg-secondary-container text-on-secondary-container font-label-telemetry text-[10px] sm:text-[11px] px-2 py-0.5 uppercase font-bold tracking-wider flex items-center gap-1 w-fit">
-                            <span className="material-symbols-outlined text-xs" style={{ fontVariationSettings: '"FILL" 1' }}>whatshot</span>
-                            STH // RARO
+                        {/* Badge: 100% Nuevo en Blíster Cerrado */}
+                        <div className="absolute top-2 right-2 z-10">
+                          <span className="font-label-telemetry text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.5 uppercase border bg-surface-container-lowest/90 text-primary-container border-primary-container/40 font-bold">
+                            100% NUEVO // CERRADO
                           </span>
-                        ) : (
-                          <span className="bg-primary-container text-on-primary-container font-label-telemetry text-[10px] sm:text-[11px] px-2 py-0.5 uppercase font-bold tracking-wider truncate w-fit max-w-full">
-                            {product.categoria}
+                        </div>
+
+                        {/* Inspect button overlay */}
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none z-10">
+                          <span className="px-3 py-1.5 bg-black/80 text-white font-label-telemetry text-xs uppercase tracking-wider flex items-center gap-1 border border-primary-container">
+                            <span className="material-symbols-outlined text-sm text-primary-container">zoom_in</span>
+                            VER DETALLE
                           </span>
-                        )}
+                        </div>
                       </div>
 
-                      {/* Badge: 100% Nuevo en Blíster Cerrado */}
-                      <div className="absolute top-2 right-2 z-10">
-                        <span className="font-label-telemetry text-[10px] sm:text-[11px] px-1.5 sm:px-2 py-0.5 uppercase border bg-surface-container-lowest/90 text-primary-container border-primary-container/40 font-bold">
-                          100% NUEVO // CERRADO
-                        </span>
-                      </div>
+                      {/* Body details */}
+                      <div className="p-3 sm:p-4 flex flex-col flex-grow justify-between gap-2.5 sm:gap-3">
+                        <div className="flex flex-col gap-1 min-w-0">
+                          <span className="font-label-telemetry text-[10px] sm:text-[11px] uppercase text-outline truncate">
+                            {product.serie || product.marca}
+                          </span>
+                          <h3 className="font-headline-md text-sm sm:text-base uppercase text-on-surface group-hover:text-primary transition-colors leading-snug line-clamp-1">
+                            <Link href={`/tienda/${productSlug}`} className="hover:underline">
+                              {product.modelo}
+                            </Link>
+                          </h3>
+                          <p className="font-body-sm text-xs text-on-surface-variant line-clamp-2">
+                            {product.descripcion || getDefaultProductDescription(product)}
+                          </p>
+                        </div>
 
-                      {/* Inspect button overlay */}
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                        <span className="px-3 py-1.5 bg-black/80 text-white font-label-telemetry text-xs uppercase tracking-wider flex items-center gap-1 border border-primary-container">
-                          <span className="material-symbols-outlined text-sm text-primary-container">zoom_in</span>
-                          VER DETALLE
-                        </span>
+                        <div className="flex flex-col gap-2 pt-2 border-t border-surface-container">
+                          <div className="flex items-baseline justify-between">
+                            <span className="font-label-price text-lg sm:text-2xl text-primary-container">
+                              ${product.precio.toLocaleString('es-AR')}
+                            </span>
+                            <span className="font-label-telemetry text-[10px] sm:text-xs text-outline">
+                              {product.stock > 0 ? `STOCK: ${product.stock}` : 'AGOTADO'}
+                            </span>
+                          </div>
+
+                          {/* 3 Cuotas Sin Interés */}
+                          <div className="flex items-center gap-1 text-[11px] font-label-telemetry text-cyan-400 font-bold">
+                            <span className="material-symbols-outlined text-xs">credit_card</span>
+                            <span>3 cuotas sin interés de ${Math.round(product.precio / 3).toLocaleString('es-AR')}</span>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
+                            <button
+                              onClick={() => addItem(product)}
+                              disabled={product.stock <= 0}
+                              className="py-2 px-1 sm:py-2.5 sm:px-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest active:scale-95 disabled:opacity-50 text-on-surface font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-all border border-surface-container-highest shadow-sm"
+                            >
+                              <span className="material-symbols-outlined text-sm">add_shopping_cart</span>
+                              <span>CARRITO</span>
+                            </button>
+                            <a
+                              href={getWhatsAppProductUrl(product)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="py-2 px-1 sm:py-2.5 sm:px-2 rounded-lg bg-primary-container hover:bg-surface-tint active:scale-95 text-on-primary-container font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-all font-bold shadow-sm"
+                            >
+                              <span className="material-symbols-outlined text-sm">chat</span>
+                              <span>WHATSAPP</span>
+                            </a>
+                          </div>
+                        </div>
                       </div>
                     </div>
+                  );
+                })}
+              </div>
 
-                    {/* Body details */}
-                    <div className="p-3 sm:p-4 flex flex-col flex-grow justify-between gap-2.5 sm:gap-3">
-                      <div className="flex flex-col gap-1 min-w-0">
-                        <span className="font-label-telemetry text-[10px] sm:text-[11px] uppercase text-outline truncate">
-                          {product.serie || product.marca}
-                        </span>
-                        <h3 className="font-headline-md text-sm sm:text-base uppercase text-on-surface group-hover:text-primary transition-colors leading-snug line-clamp-1">
-                          <Link href={`/tienda/${productSlug}`} className="hover:underline">
-                            {product.modelo}
-                          </Link>
-                        </h3>
-                        <p className="font-body-sm text-xs text-on-surface-variant line-clamp-2">
-                          {product.descripcion || getDefaultProductDescription(product)}
-                        </p>
-                      </div>
-
-                      <div className="flex flex-col gap-2 pt-2 border-t border-surface-container">
-                        <div className="flex items-baseline justify-between">
-                          <span className="font-label-price text-lg sm:text-2xl text-primary-container">
-                            ${product.precio.toLocaleString('es-AR')}
-                          </span>
-                          <span className="font-label-telemetry text-[10px] sm:text-xs text-outline">
-                            {product.stock > 0 ? `STOCK: ${product.stock}` : 'AGOTADO'}
-                          </span>
-                        </div>
-
-                        {/* 3 Cuotas Sin Interés */}
-                        <div className="flex items-center gap-1 text-[11px] font-label-telemetry text-cyan-400 font-bold">
-                          <span className="material-symbols-outlined text-xs">credit_card</span>
-                          <span>3 cuotas sin interés de ${Math.round(product.precio / 3).toLocaleString('es-AR')}</span>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
-                          <button
-                            onClick={() => addItem(product)}
-                            disabled={product.stock <= 0}
-                            className="py-2 px-1 sm:py-2.5 sm:px-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest active:scale-95 disabled:opacity-50 text-on-surface font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-all border border-surface-container-highest shadow-sm"
-                          >
-                            <span className="material-symbols-outlined text-sm">add_shopping_cart</span>
-                            <span>CARRITO</span>
-                          </button>
-                          <a
-                            href={getWhatsAppProductUrl(product)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="py-2 px-1 sm:py-2.5 sm:px-2 rounded-lg bg-primary-container hover:bg-surface-tint active:scale-95 text-on-primary-container font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-all font-bold shadow-sm"
-                          >
-                            <span className="material-symbols-outlined text-sm">chat</span>
-                            <span>WHATSAPP</span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
+              {/* Paginación progresiva / Cargar más modelos */}
+              {displayedProducts.length < filteredProducts.length && (
+                <div className="flex flex-col items-center justify-center gap-3.5 pt-6 pb-2">
+                  <div className="flex items-center gap-2 font-label-telemetry text-xs text-neutral-400">
+                    <span>Mostrando</span>
+                    <span className="text-primary-container font-bold">{displayedProducts.length}</span>
+                    <span>de</span>
+                    <span className="text-white font-bold">{filteredProducts.length}</span>
+                    <span>modelos disponibles</span>
                   </div>
-                );
-              })}
+                  <div className="w-64 max-w-full h-1.5 bg-[#1a1a20] rounded-full overflow-hidden border border-neutral-800">
+                    <div
+                      className="h-full bg-gradient-to-r from-[#FFC200] via-[#FF6000] to-[#FF1E27] transition-all duration-300"
+                      style={{ width: `${Math.round((displayedProducts.length / filteredProducts.length) * 100)}%` }}
+                    />
+                  </div>
+                  <button
+                    onClick={handleLoadMore}
+                    className="px-8 py-3.5 bg-[#18181f] hover:bg-[#22222a] active:scale-95 text-white font-display-hero uppercase text-xs sm:text-sm tracking-wider font-extrabold rounded-xl border border-neutral-700 hover:border-primary-container shadow-xl flex items-center gap-2 transition-all group"
+                  >
+                    <span className="material-symbols-outlined text-base text-primary-container group-hover:translate-y-0.5 transition-transform">
+                      expand_more
+                    </span>
+                    <span>CARGAR MÁS MODELOS (+{Math.min(PAGE_SIZE, filteredProducts.length - displayedProducts.length)})</span>
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </main>
