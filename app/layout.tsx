@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { Barlow_Condensed, DM_Sans, Caveat } from 'next/font/google';
 import './globals.css';
 import { CartProvider } from '@/lib/cart-context';
@@ -206,6 +207,26 @@ export default function RootLayout({
               ],
               sameAs: ['https://www.instagram.com/wheelszoneok'],
             }),
+          }}
+        />
+
+        {/* Google Analytics 4 (GA4) */}
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-KB04TJDY5B"
+        />
+        <Script
+          id="google-analytics-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-KB04TJDY5B', {
+                page_path: window.location.pathname,
+              });
+            `,
           }}
         />
       </head>
