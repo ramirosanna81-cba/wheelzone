@@ -442,16 +442,85 @@ export async function toggleCommunityPostApproval(id: string, approved: boolean)
 // ==============================================================================
 // STORAGE UPLOAD (IMAGE COMPRESSION / WEBP)
 // ==============================================================================
+// Helper: Comprimir imagen en el navegador a WebP de alta definición
+async function compressImageToWebP(file: File, maxWidth = 1200, quality = 0.85): Promise<{ blob: Blob; ext: string }> {
+  // Si no estamos en el navegador o el archivo no es imagen, retornar tal cual
+  if (typeof window === 'undefined' || !file.type.startsWith('image/')) {
+    return { blob: file, ext: file.name.split('.').pop() || 'jpg' };
+  }
+
+  // SVG o gifs animados no conviene convertirlos a WebP con Canvas estático
+  if (file.type === 'image/svg+xml' || file.type === 'image/gif') {
+    return { blob: file, ext: file.name.split('.').pop() || 'png' };
+  }
+
+  return new Promise((resolve) => {
+    const img = document.createElement('img');
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+
+      let { width, height } = img;
+      if (width > maxWidth) {
+        height = Math.round((height * maxWidth) / width);
+        width = maxWidth;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        resolve({ blob: file, ext: file.name.split('.').pop() || 'jpg' });
+        return;
+      }
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Convertir a WebP
+      canvas.toBlob(
+        (blob) => {
+          if (blob && blob.size < file.size) {
+            resolve({ blob, ext: 'webp' });
+          } else {
+            // Si por alguna razón el original era más liviano, mantener original
+            resolve({ blob: file, ext: file.name.split('.').pop() || 'webp' });
+          }
+        },
+        'image/webp',
+        quality
+      );
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve({ blob: file, ext: file.name.split('.').pop() || 'jpg' });
+    };
+
+    img.src = objectUrl;
+  });
+}
+
 export async function uploadImageToStorage(file: File, bucket = 'diecast-media'): Promise<string> {
+  // Comprimir y convertir automáticamente a WebP antes de enviar
+  const { blob, ext } = await compressImageToWebP(file, 1200, 0.85);
+
   if (isSupabaseConfigured && supabase) {
     try {
-      const fileExt = file.name.split('.').pop() || 'webp';
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${ext}`;
       const filePath = `uploads/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from(bucket)
-        .upload(filePath, file, { cacheControl: '31536000, immutable', upsert: false });
+        .upload(filePath, blob, { 
+          contentType: ext === 'webp' ? 'image/webp' : file.type,
+          cacheControl: '31536000, immutable', 
+          upsert: false 
+        });
 
       if (!uploadError) {
         const { data } = supabase.storage.from(bucket).getPublicUrl(filePath);
@@ -468,6 +537,6 @@ export async function uploadImageToStorage(file: File, bucket = 'diecast-media')
     reader.onloadend = () => {
       resolve(reader.result as string);
     };
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(blob);
   });
 }
