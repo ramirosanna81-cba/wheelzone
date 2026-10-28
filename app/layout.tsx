@@ -29,36 +29,33 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://wheelszone.com.ar'),
+  metadataBase: new URL('https://www.wheelszone.com.ar'),
   title: {
-    default: 'Wheels Zone | Autitos de Colección, Hot Wheels y Autos a Escala',
+    default: 'Wheels Zone | Tienda de Hot Wheels Coleccionables, Premium y STH en Argentina',
     template: '%s | Wheels Zone',
   },
   description:
-    'Tienda de autitos de colección, autos de metal, Hot Wheels y Matchbox originales. Modelos nuevos para jugar o coleccionar. Envíos a todo el país y showroom en Junín.',
+    'Comprá Hot Wheels originales, Super Treasure Hunt (STH), Mini GT y ediciones premium a escala 1:64 en Argentina. Envíos protegidos a todo el país y showroom.',
   alternates: {
     canonical: '/',
   },
   keywords: [
+    'Hot Wheels Argentina',
+    'Super Treasure Hunt',
+    'STH',
+    'Mini GT Argentina',
+    'Hot Wheels Premium',
+    'Car Culture',
+    'Autos de coleccion escala 1:64',
+    'Wheels Zone Junin',
     'Wheels Zone',
     'autitos de coleccion',
     'autitos de metal',
     'hot wheels originales',
     'matchbox originales',
-    'autitos de juguete',
-    'autos a escala argentina',
-    'autitos escala 1 64',
-    'autos escala 1 43',
-    'autitos escala 1 32',
-    'autitos escala 1 36',
     'comprar hot wheels junin',
-    'matchbox junin',
-    'autitos de coleccion junin',
-    'autitos para regalar',
-    'tienda de autitos junin',
-    'envios a todo el pais',
   ],
-  authors: [{ name: 'Wheels Zone Team', url: 'https://wheelszone.com.ar' }],
+  authors: [{ name: 'Wheels Zone Team', url: 'https://www.wheelszone.com.ar' }],
   creator: 'Wheels Zone',
   publisher: 'Wheels Zone',
   formatDetection: {
@@ -67,10 +64,10 @@ export const metadata: Metadata = {
     telephone: true,
   },
   openGraph: {
-    title: 'Wheels Zone | Autitos de Colección, Hot Wheels y Autos a Escala',
+    title: 'Wheels Zone | Tienda de Hot Wheels Coleccionables, Premium y STH en Argentina',
     description:
-      'Venta de autitos de colección, Hot Wheels y Matchbox 100% nuevos en blíster cerrado. Showroom en Junín y envíos a toda Argentina.',
-    url: 'https://wheelszone.com.ar',
+      'Comprá Hot Wheels originales, Super Treasure Hunt (STH), Mini GT y ediciones premium a escala 1:64 en Argentina. Envíos protegidos a todo el país y showroom.',
+    url: 'https://www.wheelszone.com.ar',
     siteName: 'Wheels Zone',
     locale: 'es_AR',
     type: 'website',
@@ -79,15 +76,15 @@ export const metadata: Metadata = {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Wheels Zone - Autitos de Colección',
+        alt: 'Wheels Zone - Hot Wheels Coleccionables y Autos a Escala',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Wheels Zone | Autitos de Colección y Autos a Escala',
+    title: 'Wheels Zone | Tienda de Hot Wheels Coleccionables, Premium y STH en Argentina',
     description:
-      'Modelos nuevos en blíster cerrado. Hot Wheels, Matchbox y escalas de colección. Envíos a todo el país.',
+      'Comprá Hot Wheels originales, Super Treasure Hunt (STH), Mini GT y ediciones premium a escala 1:64 en Argentina. Envíos protegidos a todo el país y showroom.',
     images: ['/og-image.jpg'],
   },
   robots: {
@@ -159,26 +156,28 @@ export default function RootLayout({
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&display=swap"
           />
         </noscript>
-        {/* Schema.org Datos Estructurados para Google (HobbyShop / Store) */}
+        {/* Schema.org Datos Estructurados para Google (Store / LocalBusiness) */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
-              '@type': 'HobbyShop',
+              '@type': ['Store', 'LocalBusiness', 'HobbyShop'],
               name: 'Wheels Zone',
-              image: 'https://wheelszone.com.ar/og-image.jpg',
+              image: 'https://www.wheelszone.com.ar/images/logos/logo-badge-dark.jpg',
               description:
-                'Tienda de autitos de colección, autos de metal, Hot Wheels y Matchbox originales 100% nuevos en blíster cerrado. Showroom en Junín y envíos a todo el país.',
-              url: 'https://wheelszone.com.ar',
+                'Comprá Hot Wheels originales, Super Treasure Hunt (STH), Mini GT y ediciones premium a escala 1:64 en Argentina. Envíos protegidos a todo el país y showroom.',
+              url: 'https://www.wheelszone.com.ar',
               telephone: '+5492364275322',
               priceRange: '$$',
+              currenciesAccepted: 'ARS',
+              paymentAccepted: 'Cash, Credit Card, Bank Transfer, Mercado Pago',
               address: {
                 '@type': 'PostalAddress',
                 streetAddress: 'Rioja 281',
                 addressLocality: 'Junín',
                 addressRegion: 'Buenos Aires',
-                postalCode: '6000',
+                postalCode: '6002',
                 addressCountry: 'AR',
               },
               geo: {
@@ -205,7 +204,10 @@ export default function RootLayout({
                   closes: '20:00',
                 },
               ],
-              sameAs: ['https://www.instagram.com/wheelszoneok'],
+              sameAs: [
+                'https://www.instagram.com/wheelszoneok',
+                'https://wa.me/5492364275322',
+              ],
             }),
           }}
         />

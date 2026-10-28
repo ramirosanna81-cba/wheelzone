@@ -123,7 +123,7 @@ export default function ShowroomPage() {
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3.5 bg-[#25D366] hover:bg-[#20ba59] active:scale-95 text-white font-display-hero uppercase text-xs sm:text-sm tracking-wider font-extrabold rounded-xl flex items-center gap-2 shadow-[0_4px_16px_rgba(37,211,102,0.35)] transition-all"
+              className="px-6 py-3.5 bg-[#128C7E] hover:bg-[#075E54] active:scale-95 text-white font-display-hero uppercase text-xs sm:text-sm tracking-wider font-extrabold rounded-xl flex items-center gap-2 shadow-[0_4px_16px_rgba(18,140,126,0.35)] transition-all"
             >
               <span className="material-symbols-outlined text-lg">chat</span>
               <span>COORDINAR RETIRO POR WHATSAPP</span>

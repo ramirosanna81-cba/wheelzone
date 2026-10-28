@@ -319,7 +319,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
                   href={getWhatsAppProductUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full h-11 sm:h-12 px-4 rounded-xl bg-[#25D366] hover:bg-[#20ba59] active:scale-95 text-white font-display-hero uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 shadow-[0_4px_14px_rgba(37,211,102,0.3)] transition-all text-center cursor-pointer select-none font-bold"
+                  className="w-full h-11 sm:h-12 px-4 rounded-xl bg-[#128C7E] hover:bg-[#075E54] active:scale-95 text-white font-display-hero uppercase text-xs sm:text-sm tracking-wider flex items-center justify-center gap-2 shadow-[0_4px_14px_rgba(18,140,126,0.35)] transition-all text-center cursor-pointer select-none font-bold"
                 >
                   <svg
                     className="w-5 h-5 shrink-0 fill-current"
@@ -351,7 +351,7 @@ export default function ProductModal({ product, onClose }: ProductModalProps) {
 
                 {/* Enlace Canónico a la Ficha Completa del Producto */}
                 <Link
-                  href={`/tienda/${getProductSlug(product)}`}
+                  href={`/autos/${getProductSlug(product)}`}
                   onClick={onClose}
                   className="w-full h-10 px-4 rounded-xl bg-neutral-800/80 hover:bg-neutral-700/90 text-neutral-300 hover:text-white font-label-telemetry text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-neutral-700 hover:border-primary-container transition-all"
                 >

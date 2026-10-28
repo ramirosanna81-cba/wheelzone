@@ -547,7 +547,7 @@ function TiendaContent() {
                             {product.serie || product.marca}
                           </span>
                           <h3 className="font-headline-md text-sm sm:text-base uppercase text-on-surface group-hover:text-primary transition-colors leading-snug line-clamp-1">
-                            <Link href={`/tienda/${productSlug}`} className="hover:underline">
+                            <Link href={`/autos/${productSlug}`} className="hover:underline">
                               {product.modelo}
                             </Link>
                           </h3>
@@ -585,7 +585,7 @@ function TiendaContent() {
                               href={getWhatsAppProductUrl(product)}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="py-2 px-1 sm:py-2.5 sm:px-2 rounded-lg bg-primary-container hover:bg-surface-tint active:scale-95 text-on-primary-container font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-all font-bold shadow-sm"
+                              className="py-2 px-1 sm:py-2.5 sm:px-2 rounded-lg bg-[#128C7E] hover:bg-[#075E54] active:scale-95 text-white font-headline-sm text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 transition-all font-bold shadow-sm"
                             >
                               <span className="material-symbols-outlined text-sm">chat</span>
                               <span>WHATSAPP</span>

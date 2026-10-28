@@ -104,12 +104,12 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Coordinar retiro o consultas por WhatsApp"
-              className="text-[11px] text-[#25D366] hover:text-emerald-300 transition-colors flex items-start gap-1.5 font-bold pt-1.5 border-t border-neutral-800 leading-snug"
+              className="text-[11px] text-emerald-400 hover:text-emerald-300 transition-colors flex items-start gap-1.5 font-bold pt-1.5 border-t border-neutral-800 leading-snug"
             >
               <span className="material-symbols-outlined text-sm shrink-0">chat</span>
               <div className="flex flex-col">
                 <span className="text-[10px] text-neutral-400 uppercase font-semibold">WHATSAPP: Soporte y Coordinación Directa:</span>
-                <span className="text-xs text-[#25D366] font-bold">+54 9 2364 27-5322</span>
+                <span className="text-xs text-emerald-400 font-bold">+54 9 2364 27-5322</span>
               </div>
             </a>
             <a
