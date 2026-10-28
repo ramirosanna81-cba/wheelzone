@@ -210,14 +210,14 @@ export default function RootLayout({
           }}
         />
 
-        {/* Google Analytics 4 (GA4) */}
+        {/* Google Analytics 4 (GA4) diferido con lazyOnload para no bloquear el hilo principal */}
         <Script
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           src="https://www.googletagmanager.com/gtag/js?id=G-KB04TJDY5B"
         />
         <Script
           id="google-analytics-init"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];

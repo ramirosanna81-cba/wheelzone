@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  compress: true,
+  experimental: {
+    optimizeCss: true,
+  },
   images: {
     deviceSizes: [360, 480, 640, 750, 1080, 1920],
     imageSizes: [32, 64, 96, 128, 256, 384],

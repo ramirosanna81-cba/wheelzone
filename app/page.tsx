@@ -868,6 +868,7 @@ export default function HomePage() {
                       required
                       value={formData.serie}
                       onChange={(e) => setFormData({ ...formData, serie: e.target.value })}
+                      aria-label="Filtrar por línea o marca"
                       className="w-full px-4 py-3 sm:py-3.5 rounded-lg bg-[#141416] border border-neutral-700/80 hover:border-neutral-500 text-white font-body-sm text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all cursor-pointer"
                     >
                       <option value="">Seleccioná una línea o marca...</option>
@@ -887,6 +888,7 @@ export default function HomePage() {
                     <select
                       value={formData.estado_empaque}
                       onChange={(e) => setFormData({ ...formData, estado_empaque: e.target.value })}
+                      aria-label="Filtrar por escala"
                       className="w-full px-4 py-3 sm:py-3.5 rounded-lg bg-[#141416] border border-neutral-700/80 hover:border-neutral-500 text-white font-body-sm text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all cursor-pointer"
                     >
                       <option value="1:64" className="bg-[#18181b] text-white">1:64 (Escala Principal)</option>
@@ -1006,7 +1008,7 @@ export default function HomePage() {
                   <h3 className="font-display-hero text-lg sm:text-xl uppercase font-bold tracking-tight text-white leading-tight">
                     PROTECCIÓN TOTAL EN CADA ENVÍO
                   </h3>
-                  <span className="font-label-telemetry text-[11px] sm:text-xs text-secondary-container uppercase font-bold tracking-wider">
+                  <span className="font-label-telemetry text-[11px] sm:text-xs text-[#FF6E7F] uppercase font-bold tracking-wider">
                     ENVOLTURA SEGURA + CAJA RESISTENTE
                   </span>
                 </div>
@@ -1230,7 +1232,7 @@ export default function HomePage() {
                   <svg className="w-5 h-5 sm:w-6 sm:h-6 fill-current text-white shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
                     <path d="M17.472 14.382c-.301-.15-1.767-.867-2.04-.966-.274-.101-.473-.15-.673.15-.197.295-.771.966-.944 1.162-.175.197-.349.222-.65.074-.301-.15-1.27-.467-2.42-1.485-.896-.795-1.501-1.777-1.677-2.077-.175-.3-.019-.461.13-.61.134-.133.301-.347.451-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.01-.371-.01-.571-.01-.2 0-.523.074-.797.372-.272.296-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                   </svg>
-                  <span>COORDINAR VISITA POR WHATSAPP</span>
+                  <span className="text-white font-black tracking-wider drop-shadow-sm">COORDINAR VISITA POR WHATSAPP</span>
                 </a>
 
                 {/* Botones Secundarios: Estilo compacto, sutil y elegante */}
@@ -1311,16 +1313,16 @@ export default function HomePage() {
       {/* ==============================================================================
           6. BANNER FINAL VELOCIDAD CALL TO ACTION
       ============================================================================== */}
-      <section className="w-full bg-secondary-container text-on-secondary-container py-8 sm:py-10 relative overflow-hidden">
+      <section className="w-full bg-[#B30024] text-white py-8 sm:py-10 relative overflow-hidden">
         <div className="w-full px-3 sm:px-6 md:px-8 mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-5 sm:gap-6 relative z-10 text-center md:text-left">
           <div className="flex flex-col gap-1">
-            <span className="font-label-telemetry text-xs uppercase tracking-widest text-primary-fixed font-bold">
+            <span className="font-label-telemetry text-xs uppercase tracking-widest text-[#FFD54F] font-black drop-shadow-sm">
               ¡NO DEJES ESCAPAR ESA PIEZA!
             </span>
-            <h2 className="font-headline-lg text-xl sm:text-2xl md:text-3xl uppercase tracking-tight text-on-secondary-container">
+            <h2 className="font-headline-lg text-xl sm:text-2xl md:text-3xl uppercase tracking-tight text-white font-extrabold">
               ¿TENÉS DUDAS O QUERÉS VER FOTOS ADICIONALES DEL BLÍSTER?
             </h2>
-            <p className="font-body-md text-xs sm:text-sm text-on-secondary-container/90 max-w-2xl">
+            <p className="font-body-md text-xs sm:text-sm text-white/95 max-w-2xl font-medium">
               Chateá directamente con nuestro equipo de coleccionistas por WhatsApp y te enviamos video en vivo 360° de la pieza.
             </p>
           </div>

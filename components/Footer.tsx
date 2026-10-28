@@ -21,7 +21,7 @@ export default function Footer() {
                 fill
                 sizes="192px"
                 className="object-contain object-left"
-                loading="lazy"
+                priority
               />
             </div>
           </div>
