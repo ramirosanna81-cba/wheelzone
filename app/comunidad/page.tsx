@@ -536,7 +536,7 @@ export default function ComunidadPage() {
                       Hacé clic o arrastrá aquí la foto de tu colección
                     </span>
                     <span className="text-[11px] sm:text-xs text-primary font-label-telemetry text-center tracking-wider">
-                      Formatos JPG, WebP o PNG — Máx. 5 MB
+                      Conversión automática a WebP optimizado (Máx. 1200px) para carga ultrarrápida
                     </span>
                   </div>
                 </div>
