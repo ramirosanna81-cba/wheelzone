@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import confetti from 'canvas-confetti';
@@ -19,6 +19,7 @@ export default function HomePage() {
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [spotlightAdded, setSpotlightAdded] = useState(false);
   const [selectedProductModal, setSelectedProductModal] = useState<Product | null>(null);
+  const destacadosGridRef = useRef<HTMLDivElement | null>(null);
 
   // Hero Spotlight Carousel State
   const [heroIndex, setHeroIndex] = useState(0);
@@ -62,18 +63,21 @@ export default function HomePage() {
     return () => clearInterval(timer);
   }, [isHeroPaused, heroProducts.length]);
 
-  // Auto-scroll timer for Destacados section
+  // Auto-scroll timer for Destacados section (optimizado para evitar forced reflow con rAF)
   useEffect(() => {
     if (featuredProducts.length <= 4 || destacadosHovered) return;
     const scrollTimer = setInterval(() => {
-      const el = document.getElementById('destacados-grid');
+      const el = destacadosGridRef.current;
       if (el) {
-        const maxScroll = el.scrollWidth - el.clientWidth;
-        if (el.scrollLeft >= maxScroll - 20) {
-          el.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          el.scrollBy({ left: 320, behavior: 'smooth' });
-        }
+        requestAnimationFrame(() => {
+          if (!el) return;
+          const maxScroll = el.scrollWidth - el.clientWidth;
+          if (el.scrollLeft >= maxScroll - 20) {
+            el.scrollTo({ left: 0, behavior: 'smooth' });
+          } else {
+            el.scrollBy({ left: 320, behavior: 'smooth' });
+          }
+        });
       }
     }, 4500);
 
@@ -559,7 +563,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => {
-                    const el = document.getElementById('destacados-grid');
+                    const el = destacadosGridRef.current;
                     if (el) el.scrollBy({ left: -280, behavior: 'smooth' });
                   }}
                   className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full border border-neutral-700 bg-neutral-900/80 hover:bg-neutral-800 text-neutral-400 hover:text-white flex items-center justify-center transition-colors"
@@ -570,7 +574,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => {
-                    const el = document.getElementById('destacados-grid');
+                    const el = destacadosGridRef.current;
                     if (el) el.scrollBy({ left: 280, behavior: 'smooth' });
                   }}
                   className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-full border border-primary-container bg-primary-container/10 hover:bg-primary-container text-primary-container hover:text-black flex items-center justify-center transition-colors font-bold"
@@ -592,6 +596,7 @@ export default function HomePage() {
           ) : (
             <div
               id="destacados-grid"
+              ref={destacadosGridRef}
               onMouseEnter={() => setDestacadosHovered(true)}
               onMouseLeave={() => setDestacadosHovered(false)}
               className="flex items-stretch gap-3 sm:gap-4 overflow-x-auto pb-4 scroll-smooth no-scrollbar -mx-3 px-3 sm:mx-0 sm:px-0"

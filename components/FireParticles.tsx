@@ -32,6 +32,9 @@ export default function FireParticles() {
     let height = 0;
     let dpr = 1;
 
+    // Cache del rect para evitar forzar reflow (getBoundingClientRect) en cada mousemove
+    let cachedRect = canvas.getBoundingClientRect();
+
     // Mouse interaction for aerodynamic draft effect
     let mouseX = -1000;
     let mouseY = -1000;
@@ -39,22 +42,36 @@ export default function FireParticles() {
 
     const updateSize = () => {
       if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2 for optimal performance
-      width = rect.width;
-      height = rect.height;
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // Medición diferida en el siguiente frame de render
+      requestAnimationFrame(() => {
+        if (!canvas) return;
+        cachedRect = canvas.getBoundingClientRect();
+        dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2 for optimal performance
+        width = cachedRect.width;
+        height = cachedRect.height;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      });
     };
 
     updateSize();
-    window.addEventListener('resize', updateSize);
+
+    // ResizeObserver para observar cambios de tamaño sin polling ni forzar layouts sincrónicos
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        updateSize();
+      });
+      resizeObserver.observe(canvas);
+    } else {
+      window.addEventListener('resize', updateSize, { passive: true });
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseX = e.clientX - rect.left;
-      mouseY = e.clientY - rect.top;
+      // Usar coordenadas relativas calculadas con el rect en caché para no forzar reflow
+      mouseX = e.clientX - cachedRect.left;
+      mouseY = e.clientY - cachedRect.top;
       isHovering = true;
     };
 
@@ -64,8 +81,8 @@ export default function FireParticles() {
       mouseY = -1000;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    document.addEventListener('mouseleave', handleMouseLeave, { passive: true });
 
     const particles: Particle[] = [];
     const maxParticles = 75;
@@ -171,7 +188,11 @@ export default function FireParticles() {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', updateSize);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      } else {
+        window.removeEventListener('resize', updateSize);
+      }
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
