@@ -35,4 +35,5 @@ Thumbs.db
 # Archives & Temporary binaries
 *.zip
 /_backup_original/
+**/backup_originals/
 scripts/*.ps1

@@ -89,7 +89,7 @@ export default function Navbar() {
           >
             <div className="relative h-9 w-32 xs:h-11 xs:w-40 sm:h-16 sm:w-52 md:h-[68px] md:w-60 lg:h-[74px] lg:w-[245px] transition-transform duration-200 group-hover:scale-105">
               <Image
-                src="/images/logos/logo-swoosh-transparent.png"
+                src="/images/logos/logo-swoosh-transparent.webp"
                 alt="Wheels Zone Official Logo"
                 fill
                 sizes="(max-width: 640px) 160px, 245px"

@@ -16,11 +16,12 @@ export default function Footer() {
           <div className="flex items-center gap-3">
             <div className="relative h-12 w-48 transition-transform duration-200 hover:scale-105">
               <Image
-                src="/images/logos/logo-swoosh-transparent.png"
+                src="/images/logos/logo-swoosh-transparent.webp"
                 alt="Wheels Zone Flame Logo"
                 fill
+                sizes="192px"
                 className="object-contain object-left"
-                priority
+                loading="lazy"
               />
             </div>
           </div>
@@ -36,7 +37,7 @@ export default function Footer() {
             </span>
             <div className="flex items-center gap-2 pt-0.5 font-body-sm">
               <span className="w-2 h-2 rounded-full bg-[#E51937] animate-pulse shrink-0"></span>
-              <span className="text-neutral-300 text-xs">Asesoría y soporte personalizado</span>
+              <span className="text-neutral-300 text-xs">Consultas directas y compras personalizadas</span>
             </div>
           </div>
         </div>
@@ -92,6 +93,7 @@ export default function Footer() {
               href="https://maps.google.com/?q=Rioja+281,+B6022+Jun%C3%ADn,+Provincia+de+Buenos+Aires"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Ver ubicación del showroom en Google Maps"
               className="text-[11px] text-neutral-300 hover:text-[#FFC200] transition-colors flex items-center gap-1.5"
             >
               <span className="material-symbols-outlined text-xs text-[#FF7A66]">location_on</span>
@@ -101,6 +103,7 @@ export default function Footer() {
               href="https://wa.me/5492364275322?text=Hola%20Wheels%20Zone!%20Quiero%20coordinar%20retiro%20en%20el%20showroom."
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Coordinar retiro o consultas por WhatsApp"
               className="text-[11px] text-[#25D366] hover:text-emerald-300 transition-colors flex items-start gap-1.5 font-bold pt-1.5 border-t border-neutral-800 leading-snug"
             >
               <span className="material-symbols-outlined text-sm shrink-0">chat</span>
@@ -113,9 +116,10 @@ export default function Footer() {
               href="https://www.instagram.com/wheelszoneok?utm_source=qr&obrf=ZjZpY3QzdmVkZ2h1"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Perfil oficial de Wheels Zone en Instagram"
               className="text-[11px] text-pink-400 hover:text-pink-300 transition-colors flex items-center gap-1.5 font-bold pt-1.5 border-t border-neutral-800 leading-snug"
             >
-              <svg className="w-3.5 h-3.5 shrink-0 fill-current text-pink-400" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5 shrink-0 fill-current text-pink-400" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
               </svg>
               <span>INSTAGRAM: @wheelszoneok</span>
@@ -148,7 +152,7 @@ export default function Footer() {
               </Link>
             </li>
             <li className="pt-1">
-              <Link href="/admin" className="hover:text-primary-container transition-colors flex items-center gap-1.5 text-neutral-400 group">
+              <Link href="/admin" rel="nofollow" className="hover:text-primary-container transition-colors flex items-center gap-1.5 text-neutral-400 group">
                 <span className="material-symbols-outlined text-sm text-[#FFC200] group-hover:scale-110 transition-transform">lock</span>
                 <span>Portal de Administración (Privado)</span>
               </Link>
@@ -168,7 +172,7 @@ export default function Footer() {
             <span className="text-primary-container">//</span>
             <span>PADDOCK ENLACE SEGURO</span>
             <span className="text-primary-container">//</span>
-            <Link href="/admin" className="hover:text-primary-container transition-colors">
+            <Link href="/admin" rel="nofollow" className="hover:text-primary-container transition-colors">
               ADMIN CONTROL
             </Link>
           </div>
