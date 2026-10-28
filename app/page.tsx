@@ -829,12 +829,14 @@ export default function HomePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Nombre */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
+                    <label htmlFor="encargo-nombre" className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
                       CONTANOS TU NOMBRE <span className="text-primary-container">*</span>
                     </label>
                     <input
+                      id="encargo-nombre"
                       type="text"
                       required
+                      aria-label="Tu nombre completo"
                       placeholder="Ej: Martín Rodríguez"
                       value={formData.nombre}
                       onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
@@ -844,12 +846,14 @@ export default function HomePage() {
 
                   {/* Teléfono */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
+                    <label htmlFor="encargo-telefono" className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
                       WHATSAPP O TELÉFONO MÓVIL <span className="text-primary-container">*</span>
                     </label>
                     <input
+                      id="encargo-telefono"
                       type="tel"
                       required
+                      aria-label="Número de WhatsApp o teléfono móvil"
                       placeholder="+54 9 11 5555-0123"
                       value={formData.telefono}
                       onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
@@ -861,14 +865,15 @@ export default function HomePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Marca y Categoría */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
+                    <label htmlFor="encargo-serie" className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
                       INDICÁ MARCA Y CATEGORÍA DE LA PIEZA <span className="text-primary-container">*</span>
                     </label>
                     <select
+                      id="encargo-serie"
                       required
                       value={formData.serie}
                       onChange={(e) => setFormData({ ...formData, serie: e.target.value })}
-                      aria-label="Filtrar por línea o marca"
+                      aria-label="Seleccionar línea o marca de producto"
                       className="w-full px-4 py-3 sm:py-3.5 rounded-lg bg-[#141416] border border-neutral-700/80 hover:border-neutral-500 text-white font-body-sm text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all cursor-pointer"
                     >
                       <option value="">Seleccioná una línea o marca...</option>
@@ -882,13 +887,14 @@ export default function HomePage() {
 
                   {/* Escala Automotor */}
                   <div className="flex flex-col gap-1.5">
-                    <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
+                    <label htmlFor="encargo-escala" className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
                       ESCALA REQUERIDA
                     </label>
                     <select
+                      id="encargo-escala"
                       value={formData.estado_empaque}
                       onChange={(e) => setFormData({ ...formData, estado_empaque: e.target.value })}
-                      aria-label="Filtrar por escala"
+                      aria-label="Seleccionar escala del modelo"
                       className="w-full px-4 py-3 sm:py-3.5 rounded-lg bg-[#141416] border border-neutral-700/80 hover:border-neutral-500 text-white font-body-sm text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/40 transition-all cursor-pointer"
                     >
                       <option value="1:64" className="bg-[#18181b] text-white">1:64 (Escala Principal)</option>
@@ -904,12 +910,14 @@ export default function HomePage() {
 
                 {/* Modelo exacto */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
+                  <label htmlFor="encargo-modelo" className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
                     DESCRIBÍ EL MODELO EXACTO <span className="text-primary-container">*</span>
                   </label>
                   <input
+                    id="encargo-modelo"
                     type="text"
                     required
+                    aria-label="Descripción del modelo buscado"
                     placeholder="Ej: Toyota Supra MK4 1994 Amarillo Fast & Furious o Porsche 930 RLC Spectraflame Pink"
                     value={formData.modelo_buscado}
                     onChange={(e) => setFormData({ ...formData, modelo_buscado: e.target.value })}
@@ -919,11 +927,13 @@ export default function HomePage() {
 
                 {/* Presupuesto */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
+                  <label htmlFor="encargo-presupuesto" className="font-label-telemetry text-xs uppercase tracking-wider text-neutral-200 font-semibold">
                     ¿CUÁL ES TU PRESUPUESTO APROXIMADO?
                   </label>
                   <input
+                    id="encargo-presupuesto"
                     type="text"
+                    aria-label="Presupuesto aproximado en ARS o USD"
                     placeholder="Ej: Hasta $40.000 ARS o 45 USD"
                     value={formData.presupuesto}
                     onChange={(e) => setFormData({ ...formData, presupuesto: e.target.value })}

@@ -128,6 +128,7 @@ export default function Navbar() {
               </div>
               <input
                 type="search"
+                aria-label="Buscar autos, marcas o modelos"
                 placeholder="Buscar autos, marcas..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -219,6 +220,7 @@ export default function Navbar() {
                 </span>
                 <input
                   type="search"
+                  aria-label="Buscar modelo, marca, STH o RLC"
                   placeholder="Buscar modelo, marca, STH, RLC..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
