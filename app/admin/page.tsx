@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import confetti from 'canvas-confetti';
 import { Product, LeadEncargo, CommunityPost, BlisterCondition, LeadStatus, DestacadoTipo } from '@/lib/types';
@@ -827,6 +828,15 @@ export default function AdminPage() {
           <span className="material-symbols-outlined text-sm sm:text-base">forum</span>
           <span>Comunidad ({community.length})</span>
         </button>
+
+        <Link
+          href="/admin/eventos"
+          className="px-3 sm:px-4 py-2 font-headline-sm uppercase text-xs sm:text-sm tracking-wider flex items-center gap-1.5 sm:gap-2 transition-all whitespace-nowrap shrink-0 text-primary-container bg-primary-container/10 hover:bg-primary-container/20 border-b-2 border-transparent hover:border-primary-container rounded-t"
+        >
+          <span className="material-symbols-outlined text-sm sm:text-base">event</span>
+          <span>Agenda Ferias &amp; Eventos</span>
+          <span className="material-symbols-outlined text-xs">open_in_new</span>
+        </Link>
       </div>
 
       {/* ==============================================================================

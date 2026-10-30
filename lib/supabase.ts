@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
-import { Product, LeadEncargo, CommunityPost, LeadStatus } from './types';
-import { INITIAL_PRODUCTS, INITIAL_LEADS, INITIAL_COMMUNITY_POSTS } from './mock-data';
+import { Product, LeadEncargo, CommunityPost, LeadStatus, DiecastEvent } from './types';
+import { INITIAL_PRODUCTS, INITIAL_LEADS, INITIAL_COMMUNITY_POSTS, INITIAL_EVENTS } from './mock-data';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -23,6 +23,7 @@ const STORAGE_KEYS = {
   PRODUCTS: 'wheelszone_products_v1',
   LEADS: 'wheelszone_leads_v1',
   COMMUNITY: 'wheelszone_community_v1',
+  EVENTS: 'wheelszone_events_v1',
 };
 
 function getLocalData<T>(key: string, defaultValue: T): T {
@@ -540,3 +541,150 @@ export async function uploadImageToStorage(file: File, bucket = 'diecast-media')
     reader.readAsDataURL(blob);
   });
 }
+
+// ==============================================================================
+// DATA SERVICES: EVENTS (AGENDA DE FERIAS Y EVENTOS DIECAST)
+// ==============================================================================
+export async function fetchEvents(activeOnly = false): Promise<DiecastEvent[]> {
+  if (isSupabaseConfigured && supabase) {
+    try {
+      let query = supabase
+        .from('events')
+        .select('*')
+        .order('start_date', { ascending: true });
+
+      if (activeOnly) {
+        query = query.eq('is_active', true);
+      }
+
+      const { data, error } = await query;
+
+      if (!error && data && data.length > 0) {
+        if (!activeOnly) {
+          setLocalData(STORAGE_KEYS.EVENTS, data);
+        }
+        return data as DiecastEvent[];
+      }
+    } catch (err) {
+      console.warn('Supabase fetch events error, using local fallback:', err);
+    }
+  }
+
+  // Fallback to local storage or initial seed
+  const local = getLocalData<DiecastEvent[]>(STORAGE_KEYS.EVENTS, INITIAL_EVENTS);
+  const filtered = activeOnly ? local.filter((e) => e.is_active) : local;
+  return [...filtered].sort((a, b) => a.start_date.localeCompare(b.start_date));
+}
+
+export async function createEvent(
+  eventData: Omit<DiecastEvent, 'id' | 'created_at' | 'updated_at'>
+): Promise<{ success: boolean; event?: DiecastEvent; error?: string }> {
+  const newEvent: DiecastEvent = {
+    ...eventData,
+    id: `evt-${Date.now()}`,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('events')
+        .insert([eventData])
+        .select()
+        .single();
+
+      if (!error && data) {
+        const current = getLocalData<DiecastEvent[]>(STORAGE_KEYS.EVENTS, INITIAL_EVENTS);
+        setLocalData(STORAGE_KEYS.EVENTS, [data as DiecastEvent, ...current]);
+        return { success: true, event: data as DiecastEvent };
+      }
+
+      if (error) {
+        console.warn('Supabase insert event error:', error);
+        return { success: false, error: error.message };
+      }
+    } catch (err: any) {
+      console.warn('Supabase insert event error, using local fallback:', err);
+    }
+  }
+
+  const current = getLocalData<DiecastEvent[]>(STORAGE_KEYS.EVENTS, INITIAL_EVENTS);
+  const updated = [newEvent, ...current];
+  setLocalData(STORAGE_KEYS.EVENTS, updated);
+  return { success: true, event: newEvent };
+}
+
+export async function updateEvent(
+  id: string,
+  updates: Partial<DiecastEvent>
+): Promise<{ success: boolean; event?: DiecastEvent; error?: string }> {
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('events')
+        .update({ ...updates, updated_at: new Date().toISOString() })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (!error && data) {
+        const current = getLocalData<DiecastEvent[]>(STORAGE_KEYS.EVENTS, INITIAL_EVENTS);
+        const updatedList = current.map((e) => (e.id === id ? { ...e, ...(data as DiecastEvent) } : e));
+        setLocalData(STORAGE_KEYS.EVENTS, updatedList);
+        return { success: true, event: data as DiecastEvent };
+      }
+
+      if (error) {
+        console.warn('Supabase update event error:', error);
+        return { success: false, error: error.message };
+      }
+    } catch (err: any) {
+      console.warn('Supabase update event exception:', err);
+      return { success: false, error: err.message || 'Error al actualizar evento' };
+    }
+  }
+
+  const current = getLocalData<DiecastEvent[]>(STORAGE_KEYS.EVENTS, INITIAL_EVENTS);
+  const updated = current.map((e) => (e.id === id ? { ...e, ...updates, updated_at: new Date().toISOString() } : e));
+  setLocalData(STORAGE_KEYS.EVENTS, updated);
+  const found = updated.find((e) => e.id === id);
+  return { success: true, event: found };
+}
+
+export async function deleteEvent(id: string): Promise<{ success: boolean; error?: string }> {
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('events')
+        .delete()
+        .eq('id', id)
+        .select();
+
+      if (!error && data && data.length > 0) {
+        const current = getLocalData<DiecastEvent[]>(STORAGE_KEYS.EVENTS, INITIAL_EVENTS);
+        const updatedList = current.filter((e) => e.id !== id);
+        setLocalData(STORAGE_KEYS.EVENTS, updatedList);
+        return { success: true };
+      }
+
+      if (error) {
+        console.error('Supabase delete event error:', error);
+        return { success: false, error: error.message };
+      }
+    } catch (err: any) {
+      console.warn('Supabase delete event error, using local fallback:', err);
+    }
+  }
+
+  const current = getLocalData<DiecastEvent[]>(STORAGE_KEYS.EVENTS, INITIAL_EVENTS);
+  const updated = current.filter((e) => e.id !== id);
+  setLocalData(STORAGE_KEYS.EVENTS, updated);
+  return { success: true };
+}
+
+export async function toggleEventActive(id: string, is_active: boolean): Promise<boolean> {
+  const res = await updateEvent(id, { is_active });
+  return res.success;
+}
+

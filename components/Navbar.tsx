@@ -19,6 +19,7 @@ export default function Navbar() {
     { name: 'Inicio', href: '/', icon: 'home', badge: 'Portada' },
     { name: 'Tienda', href: '/tienda', icon: 'storefront', badge: 'Catálogo' },
     { name: 'Showroom', href: '/showroom', icon: 'location_on', badge: 'Junín' },
+    { name: 'EVENTOS', href: '/eventos', icon: 'event', badge: 'Ferias' },
     { name: 'El Garaje', href: '/comunidad', icon: 'garage_home', badge: 'Comunidad' },
     { name: 'Encargos', href: '/#encargos', icon: 'radar', badge: 'Cacería' },
     { name: 'Panel Admin', href: '/admin', icon: 'admin_panel_settings', badge: 'Gestión' },
@@ -100,16 +101,16 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1.5 xl:gap-2.5 shrink-0">
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 shrink-0">
             {navLinks.filter((l) => l.name !== 'Panel Admin').map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative font-display-hero text-base xl:text-[17px] font-extrabold uppercase tracking-wider px-3.5 py-2 xl:px-4 xl:py-2.5 whitespace-nowrap transition-all duration-150 rounded-lg ${
+                  className={`relative font-display-hero text-[15px] xl:text-[17px] font-extrabold uppercase tracking-wider px-2.5 py-1.5 xl:px-3.5 xl:py-2 whitespace-nowrap transition-all duration-150 rounded-lg ${
                     isActive
-                      ? 'text-primary-container bg-primary-container/[0.08] after:absolute after:bottom-0.5 after:left-3 after:right-3 after:h-[2.5px] after:bg-primary-container after:rounded-full after:shadow-[0_0_8px_rgba(255,194,0,0.6)]'
+                      ? 'text-primary-container bg-primary-container/[0.08] after:absolute after:bottom-0.5 after:left-2 after:right-2 after:h-[2.5px] after:bg-primary-container after:rounded-full after:shadow-[0_0_8px_rgba(255,194,0,0.6)]'
                       : 'text-neutral-300 hover:text-white hover:bg-white/[0.06]'
                   }`}
                 >

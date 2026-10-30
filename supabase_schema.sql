@@ -138,3 +138,52 @@ CREATE POLICY "Admin modera publicaciones comunitarias"
 -- 1. Ir a "Storage" -> "New bucket" -> Nombre: "diecast-media"
 -- 2. Marcar como "Public bucket" (para permitir que las fotos se visualicen en la tienda)
 -- 3. Políticas del bucket: Permitir inserción a autenticados o con anon key para comunidad.
+
+-- ==============================================================================
+-- 6. TABLA: events (Agenda de Ferias y Eventos Diecast)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS public.events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title VARCHAR(150) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NULL,
+    time_text VARCHAR(50) NOT NULL DEFAULT '15:00 hs',
+    image_url TEXT NOT NULL,
+    is_special BOOLEAN NOT NULL DEFAULT FALSE,
+    special_text VARCHAR(80) NULL,
+    maps_url TEXT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_events_date ON public.events (start_date ASC);
+CREATE INDEX IF NOT EXISTS idx_events_active ON public.events (is_active);
+
+ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Lectura pública de eventos"
+ON public.events FOR SELECT
+USING (true);
+
+CREATE POLICY "Operaciones autenticadas para administradores"
+ON public.events FOR ALL
+TO authenticated
+USING (true)
+WITH CHECK (true);
+
+-- Bucket de Storage para eventos
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('events', 'events', true)
+ON CONFLICT (id) DO NOTHING;
+
+CREATE POLICY "Lectura pública de eventos storage"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'events');
+
+CREATE POLICY "Subida autenticada para administradores storage"
+ON storage.objects FOR INSERT
+TO authenticated
+WITH CHECK (bucket_id = 'events');
+

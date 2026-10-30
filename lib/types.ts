@@ -63,3 +63,20 @@ export interface CartItem {
   product: Product;
   quantity: number;
 }
+
+export interface DiecastEvent {
+  id: string;
+  title: string;
+  city: string;
+  start_date: string; // Formato YYYY-MM-DD
+  end_date?: string | null; // Formato YYYY-MM-DD opcional
+  time_text: string;
+  image_url: string;
+  is_special: boolean;
+  special_text?: string | null;
+  maps_url?: string | null;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
