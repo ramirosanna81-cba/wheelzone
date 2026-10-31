@@ -602,6 +602,16 @@ export async function createEvent(
 
       if (error) {
         console.warn('Supabase insert event error:', error);
+        // Si la tabla no fue creada aún en Supabase (error PGRST205)
+        if (error.code === 'PGRST205' || error.message?.includes('schema cache')) {
+          const current = getLocalData<DiecastEvent[]>(STORAGE_KEYS.EVENTS, INITIAL_EVENTS);
+          setLocalData(STORAGE_KEYS.EVENTS, [newEvent, ...current]);
+          return {
+            success: true,
+            event: newEvent,
+            error: "Falta crear la tabla 'events' en Supabase. Se guardó localmente, pero ejecutá 'supabase_events_migration.sql' en el SQL Editor de Supabase para que sea visible para todos los clientes."
+          };
+        }
         return { success: false, error: error.message };
       }
     } catch (err: any) {
@@ -637,6 +647,13 @@ export async function updateEvent(
 
       if (error) {
         console.warn('Supabase update event error:', error);
+        if (error.code === 'PGRST205' || error.message?.includes('schema cache')) {
+          const current = getLocalData<DiecastEvent[]>(STORAGE_KEYS.EVENTS, INITIAL_EVENTS);
+          const updatedList = current.map((e) => (e.id === id ? { ...e, ...updates, updated_at: new Date().toISOString() } : e));
+          setLocalData(STORAGE_KEYS.EVENTS, updatedList);
+          const found = updatedList.find((e) => e.id === id);
+          return { success: true, event: found };
+        }
         return { success: false, error: error.message };
       }
     } catch (err: any) {
@@ -670,6 +687,12 @@ export async function deleteEvent(id: string): Promise<{ success: boolean; error
 
       if (error) {
         console.error('Supabase delete event error:', error);
+        if (error.code === 'PGRST205' || error.message?.includes('schema cache')) {
+          const current = getLocalData<DiecastEvent[]>(STORAGE_KEYS.EVENTS, INITIAL_EVENTS);
+          const updatedList = current.filter((e) => e.id !== id);
+          setLocalData(STORAGE_KEYS.EVENTS, updatedList);
+          return { success: true };
+        }
         return { success: false, error: error.message };
       }
     } catch (err: any) {

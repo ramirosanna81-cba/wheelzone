@@ -29,6 +29,9 @@ export default function AdminEventosPage() {
   const [loadingData, setLoadingData] = useState(true);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const [tableMissing, setTableMissing] = useState(false);
+  const [showSqlModal, setShowSqlModal] = useState(false);
+  const [copiedSql, setCopiedSql] = useState(false);
 
   // Filter States
   const [searchTerm, setSearchTerm] = useState('');
@@ -124,6 +127,16 @@ export default function AdminEventosPage() {
       try {
         const data = await fetchEvents(false);
         setEvents(data);
+
+        // Check if public.events table exists in Supabase
+        if (isSupabaseConfigured && supabase) {
+          const { error: checkError } = await supabase.from('events').select('id').limit(1);
+          if (checkError && (checkError.code === 'PGRST205' || checkError.message?.includes('schema cache'))) {
+            setTableMissing(true);
+          } else if (!checkError) {
+            setTableMissing(false);
+          }
+        }
       } catch (err) {
         console.error('Error cargando eventos:', err);
         showToast('Error al cargar la agenda de eventos.', 'error');
@@ -294,7 +307,11 @@ export default function AdminEventosPage() {
 
         if (res.success && res.event) {
           setEvents((prev) => [res.event!, ...prev]);
-          showToast(`Evento "${res.event.title}" publicado con éxito.`);
+          if (res.error) {
+            showToast(res.error, 'error');
+          } else {
+            showToast(`Evento "${res.event.title}" publicado con éxito.`);
+          }
           resetForm();
         } else {
           showToast(res.error || 'Error al crear el evento.', 'error');
@@ -554,6 +571,213 @@ export default function AdminEventosPage() {
           </button>
         </div>
       </div>
+
+      {/* Supabase Missing Table Alert Banner */}
+      {tableMissing && (
+        <div className="bg-gradient-to-r from-red-950/70 via-neutral-900 to-amber-950/70 border border-amber-600/70 p-4 sm:p-5 rounded-2xl mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-[0_4px_24px_rgba(229,25,55,0.2)]">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center shrink-0 mt-0.5">
+              <span className="material-symbols-outlined text-2xl text-[#FFC200]">database</span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <span className="text-white font-display-hero text-base uppercase font-black tracking-wide">
+                  PASO REQUERIDO: CREAR TABLA &apos;EVENTS&apos; EN SUPABASE
+                </span>
+                <span className="bg-race-red text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full">
+                  Acción requerida
+                </span>
+              </div>
+              <p className="text-xs text-neutral-300 leading-relaxed max-w-2xl">
+                La tabla de base de datos y el bucket de imágenes aún no fueron creados en tu proyecto de Supabase. Por eso el sistema arroja el error <code className="text-[#FFC200] font-mono text-[11px] bg-black/40 px-1 py-0.5 rounded">Could not find table public.events</code>. Ejecutá la migración en el editor SQL para activarlo en 30 segundos.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 shrink-0 w-full md:w-auto">
+            <a
+              href="https://supabase.com/dashboard/project/olkumxhhhcviuuhevaag/sql/new"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 md:flex-initial px-4 py-2.5 bg-[#FFC200] hover:bg-[#e6af00] text-black font-display-hero uppercase font-black text-xs sm:text-sm rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-95 select-none"
+            >
+              <span>Abrir SQL Editor</span>
+              <span className="material-symbols-outlined text-sm">open_in_new</span>
+            </a>
+            <button
+              type="button"
+              onClick={() => setShowSqlModal(true)}
+              className="flex-1 md:flex-initial px-4 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-white font-display-hero uppercase font-bold text-xs sm:text-sm rounded-xl border border-neutral-600 transition-colors flex items-center justify-center gap-1.5"
+            >
+              <span className="material-symbols-outlined text-sm">code</span>
+              <span>Ver y Copiar SQL</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* SQL Migration Modal */}
+      {showSqlModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+          <div className="bg-[#141416] border border-neutral-700 rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <div className="flex items-center justify-between p-4 border-b border-neutral-800 bg-[#18181c]">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-[#FFC200] text-xl">terminal</span>
+                <span className="font-display-hero text-lg uppercase font-bold text-white">
+                  Script SQL de Migración (Supabase)
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowSqlModal(false)}
+                className="text-neutral-400 hover:text-white p-1 rounded-lg"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-4 overflow-y-auto flex flex-col gap-3">
+              <p className="text-xs text-neutral-300">
+                1. Copiá el siguiente código.<br />
+                2. Abrí el <a href="https://supabase.com/dashboard/project/olkumxhhhcviuuhevaag/sql/new" target="_blank" rel="noopener noreferrer" className="text-[#FFC200] underline font-bold">SQL Editor de tu Supabase</a>.<br />
+                3. Pegalo y presioná <strong className="text-white">Run</strong> (o Ctrl + Enter).
+              </p>
+
+              <pre className="p-3 bg-[#0a0a0c] border border-neutral-800 rounded-xl text-[11px] font-mono text-emerald-400 overflow-x-auto select-all max-h-80">
+{`-- 1. Crear tabla de eventos
+CREATE TABLE IF NOT EXISTS public.events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title VARCHAR(150) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NULL,
+    time_text VARCHAR(50) NOT NULL DEFAULT '15:00 hs',
+    image_url TEXT NOT NULL,
+    is_special BOOLEAN NOT NULL DEFAULT FALSE,
+    special_text VARCHAR(80) NULL,
+    maps_url TEXT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 2. Índices
+CREATE INDEX IF NOT EXISTS idx_events_date ON public.events (start_date ASC);
+CREATE INDEX IF NOT EXISTS idx_events_active ON public.events (is_active);
+
+-- 3. Habilitar RLS
+ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
+
+-- 4. Políticas RLS
+DROP POLICY IF EXISTS "Lectura pública de eventos" ON public.events;
+CREATE POLICY "Lectura pública de eventos" ON public.events FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Operaciones autenticadas para administradores" ON public.events;
+DROP POLICY IF EXISTS "Operaciones completas para eventos" ON public.events;
+CREATE POLICY "Operaciones completas para eventos" ON public.events FOR ALL USING (true) WITH CHECK (true);
+
+-- 5. Bucket de Storage
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('events', 'events', true)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+-- 6. Políticas del bucket en storage.objects
+DROP POLICY IF EXISTS "Lectura pública de eventos" ON storage.objects;
+DROP POLICY IF EXISTS "Lectura pública bucket events" ON storage.objects;
+CREATE POLICY "Lectura pública bucket events" ON storage.objects FOR SELECT USING (bucket_id = 'events');
+
+DROP POLICY IF EXISTS "Subida para bucket events" ON storage.objects;
+CREATE POLICY "Subida para bucket events" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'events');
+
+DROP POLICY IF EXISTS "Actualización para bucket events" ON storage.objects;
+CREATE POLICY "Actualización para bucket events" ON storage.objects FOR UPDATE USING (bucket_id = 'events');
+
+DROP POLICY IF EXISTS "Eliminación para bucket events" ON storage.objects;
+CREATE POLICY "Eliminación para bucket events" ON storage.objects FOR DELETE USING (bucket_id = 'events');`}
+              </pre>
+            </div>
+
+            <div className="p-4 border-t border-neutral-800 bg-[#18181c] flex items-center justify-between gap-3">
+              <span className="text-xs text-neutral-400">
+                Archivo disponible en: <code className="text-[#FFC200]">supabase_events_migration.sql</code>
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const code = `-- 1. Crear tabla de eventos
+CREATE TABLE IF NOT EXISTS public.events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title VARCHAR(150) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NULL,
+    time_text VARCHAR(50) NOT NULL DEFAULT '15:00 hs',
+    image_url TEXT NOT NULL,
+    is_special BOOLEAN NOT NULL DEFAULT FALSE,
+    special_text VARCHAR(80) NULL,
+    maps_url TEXT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 2. Índices
+CREATE INDEX IF NOT EXISTS idx_events_date ON public.events (start_date ASC);
+CREATE INDEX IF NOT EXISTS idx_events_active ON public.events (is_active);
+
+-- 3. Habilitar RLS
+ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
+
+-- 4. Políticas RLS
+DROP POLICY IF EXISTS "Lectura pública de eventos" ON public.events;
+CREATE POLICY "Lectura pública de eventos" ON public.events FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Operaciones autenticadas para administradores" ON public.events;
+DROP POLICY IF EXISTS "Operaciones completas para eventos" ON public.events;
+CREATE POLICY "Operaciones completas para eventos" ON public.events FOR ALL USING (true) WITH CHECK (true);
+
+-- 5. Bucket de Storage
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('events', 'events', true)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+-- 6. Políticas del bucket en storage.objects
+DROP POLICY IF EXISTS "Lectura pública de eventos" ON storage.objects;
+DROP POLICY IF EXISTS "Lectura pública bucket events" ON storage.objects;
+CREATE POLICY "Lectura pública bucket events" ON storage.objects FOR SELECT USING (bucket_id = 'events');
+
+DROP POLICY IF EXISTS "Subida para bucket events" ON storage.objects;
+CREATE POLICY "Subida para bucket events" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'events');
+
+DROP POLICY IF EXISTS "Actualización para bucket events" ON storage.objects;
+CREATE POLICY "Actualización para bucket events" ON storage.objects FOR UPDATE USING (bucket_id = 'events');
+
+DROP POLICY IF EXISTS "Eliminación para bucket events" ON storage.objects;
+CREATE POLICY "Eliminación para bucket events" ON storage.objects FOR DELETE USING (bucket_id = 'events');`;
+                    navigator.clipboard.writeText(code);
+                    setCopiedSql(true);
+                    setTimeout(() => setCopiedSql(false), 3000);
+                  }}
+                  className="px-4 py-2 bg-[#FFC200] hover:bg-[#e6af00] text-black font-display-hero uppercase font-black text-xs rounded-xl flex items-center gap-1.5 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-sm">
+                    {copiedSql ? 'check' : 'content_copy'}
+                  </span>
+                  <span>{copiedSql ? '¡Copiado al Portapapeles!' : 'Copiar Código SQL'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowSqlModal(false)}
+                  className="px-3 py-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs rounded-xl"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Telemetry KPI Strip */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 mb-6 sm:mb-8">

@@ -163,27 +163,42 @@ CREATE INDEX IF NOT EXISTS idx_events_active ON public.events (is_active);
 
 ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Lectura pública de eventos" ON public.events;
 CREATE POLICY "Lectura pública de eventos"
 ON public.events FOR SELECT
 USING (true);
 
-CREATE POLICY "Operaciones autenticadas para administradores"
+DROP POLICY IF EXISTS "Operaciones autenticadas para administradores" ON public.events;
+DROP POLICY IF EXISTS "Operaciones completas para eventos" ON public.events;
+CREATE POLICY "Operaciones completas para eventos"
 ON public.events FOR ALL
-TO authenticated
 USING (true)
 WITH CHECK (true);
 
 -- Bucket de Storage para eventos
 INSERT INTO storage.buckets (id, name, public) 
 VALUES ('events', 'events', true)
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET public = true;
 
-CREATE POLICY "Lectura pública de eventos storage"
+DROP POLICY IF EXISTS "Lectura pública de eventos storage" ON storage.objects;
+DROP POLICY IF EXISTS "Lectura pública bucket events" ON storage.objects;
+CREATE POLICY "Lectura pública bucket events"
 ON storage.objects FOR SELECT
 USING (bucket_id = 'events');
 
-CREATE POLICY "Subida autenticada para administradores storage"
+DROP POLICY IF EXISTS "Subida autenticada para administradores storage" ON storage.objects;
+DROP POLICY IF EXISTS "Subida para bucket events" ON storage.objects;
+CREATE POLICY "Subida para bucket events"
 ON storage.objects FOR INSERT
-TO authenticated
 WITH CHECK (bucket_id = 'events');
+
+DROP POLICY IF EXISTS "Actualización para bucket events" ON storage.objects;
+CREATE POLICY "Actualización para bucket events"
+ON storage.objects FOR UPDATE
+USING (bucket_id = 'events');
+
+DROP POLICY IF EXISTS "Eliminación para bucket events" ON storage.objects;
+CREATE POLICY "Eliminación para bucket events"
+ON storage.objects FOR DELETE
+USING (bucket_id = 'events');
 
