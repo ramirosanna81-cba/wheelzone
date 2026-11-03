@@ -11,21 +11,6 @@ export async function GET(request: NextRequest) {
   const resource = searchParams.get('resource');
 
   try {
-    if (resource === 'debug_fs') {
-      const fs = require('fs');
-      const path = require('path');
-      const cwd = process.cwd();
-      const uploadDir = path.join(cwd, 'public', 'images', 'vps-uploads');
-      return NextResponse.json({
-        cwd,
-        uploadDir,
-        uploadDirExists: fs.existsSync(uploadDir),
-        uploadDirFiles: fs.existsSync(uploadDir) ? fs.readdirSync(uploadDir) : [],
-        parentPublic: path.join(cwd, 'public'),
-        parentPublicFiles: fs.existsSync(path.join(cwd, 'public')) ? fs.readdirSync(path.join(cwd, 'public')) : []
-      });
-    }
-
     if (resource === 'products') {
       const res = await pool.query('SELECT * FROM public.products ORDER BY created_at DESC;');
       const products = res.rows.map((p: any) => ({
