@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
         const keys = Object.keys(cleanUpdates);
         if (keys.length === 0) return NextResponse.json({ success: true });
 
-        const setClause = keys.map((k, idx) => `"${k}" = ${idx + 2}`).join(', ');
+        const setClause = keys.map((k, idx) => '"' + k + '" = $' + (idx + 2)).join(', ');
         const values = [id, ...keys.map(k => cleanUpdates[k])];
         const res = await pool.query(
           `UPDATE public.products SET ${setClause}, updated_at = NOW() WHERE id = $1 RETURNING *;`,
@@ -168,7 +168,7 @@ export async function POST(request: NextRequest) {
         const keys = Object.keys(cleanUpdates);
         if (keys.length === 0) return NextResponse.json({ success: true });
 
-        const setClause = keys.map((k, idx) => `"${k}" = ${idx + 2}`).join(', ');
+        const setClause = keys.map((k, idx) => '"' + k + '" = $' + (idx + 2)).join(', ');
         const values = [id, ...keys.map(k => cleanUpdates[k])];
         const res = await pool.query(
           `UPDATE public.events SET ${setClause}, updated_at = NOW() WHERE id = $1 RETURNING *;`,
