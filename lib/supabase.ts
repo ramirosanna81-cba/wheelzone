@@ -143,32 +143,30 @@ export async function updateProduct(
   id: string,
   updates: Partial<Product>
 ): Promise<{ success: boolean; product?: Product; error?: string }> {
-  if (isSupabaseConfigured && supabase) {
+  // 1. Prioridad: Actualizar directo en el VPS PostgreSQL
+  if (typeof window !== 'undefined') {
     try {
-      const { data, error } = await supabase
-        .from('products')
-        .update({ ...updates, updated_at: new Date().toISOString() })
-        .eq('id', id)
-        .select()
-        .single();
-
-      if (!error && data) {
+      const res = await fetch('/api/db', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resource: 'products', action: 'update', payload: { id, updates } })
+      });
+      if (res.ok) {
+        const json = await res.json();
         const current = getLocalData<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
-        const updatedList = current.map((p) => (p.id === id ? { ...p, ...(data as Product) } : p));
+        const updatedList = current.map((p) => (p.id === id ? { ...p, ...updates } : p));
         setLocalData(STORAGE_KEYS.PRODUCTS, updatedList);
-        return { success: true, product: data as Product };
+        return { success: true, product: json.product || updatedList.find(p => p.id === id) };
+      } else {
+        const errJson = await res.json().catch(() => null);
+        console.warn('VPS update product returned error:', errJson);
       }
-
-      if (error) {
-        console.warn('Supabase update product error:', error);
-        return { success: false, error: error.message };
-      }
-    } catch (err: any) {
-      console.warn('Supabase update product exception:', err);
-      return { success: false, error: err.message || 'Error al actualizar producto' };
+    } catch (e: any) {
+      console.warn('VPS updateProduct network error:', e);
     }
   }
 
+  // 2. Fallback local sin llamar a Supabase
   const current = getLocalData<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
   const updated = current.map((p) => (p.id === id ? { ...p, ...updates } : p));
   setLocalData(STORAGE_KEYS.PRODUCTS, updated);
