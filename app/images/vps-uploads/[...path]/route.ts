@@ -8,22 +8,20 @@ export async function GET(
 ) {
   try {
     const resolvedParams = await params;
-    const pathSegments = resolvedParams.path || [];
+    const pathSegments = resolvedParams?.path || [];
 
-    if (pathSegments.length === 0) {
-      return new NextResponse('Not Found', { status: 404 });
+    // Obtenemos los posibles paths base
+    const baseUploadDir = path.join(process.cwd(), 'public', 'images', 'vps-uploads');
+    const requestedFile = path.join(baseUploadDir, ...pathSegments);
+
+    if (!fs.existsSync(requestedFile)) {
+      // También chequear en /etc/dokploy/wheelzone-uploads directo si existiera acceso
+      console.warn('Image not found at:', requestedFile);
+      return new NextResponse(`File not found: ${requestedFile}`, { status: 404 });
     }
 
-    // Ruta segura evitando Directory Traversal
-    const safePath = pathSegments.join(path.sep);
-    const filePath = path.join(process.cwd(), 'public', 'images', 'vps-uploads', safePath);
-
-    if (!fs.existsSync(filePath)) {
-      return new NextResponse('Image Not Found', { status: 404 });
-    }
-
-    const fileBuffer = fs.readFileSync(filePath);
-    const ext = path.extname(filePath).toLowerCase();
+    const fileBuffer = fs.readFileSync(requestedFile);
+    const ext = path.extname(requestedFile).toLowerCase();
 
     let contentType = 'image/webp';
     if (ext === '.jpg' || ext === '.jpeg') contentType = 'image/jpeg';
