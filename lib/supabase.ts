@@ -49,6 +49,23 @@ function setLocalData<T>(key: string, value: T): void {
 // DATA SERVICES: PRODUCTS
 // ==============================================================================
 export async function fetchProducts(): Promise<Product[]> {
+  // 1. Intentar API interna conectada a PostgreSQL del VPS
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/db?resource=products');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setLocalData(STORAGE_KEYS.PRODUCTS, data);
+          return data as Product[];
+        }
+      }
+    } catch {
+      // Continuar al siguiente fallback
+    }
+  }
+
+  // 2. Intentar Supabase si está disponible y sin cuota excedida
   if (isSupabaseConfigured && supabase) {
     try {
       const { data, error } = await supabase
@@ -528,7 +545,28 @@ export async function uploadImageToStorage(file: File, bucket = 'diecast-media')
         return data.publicUrl;
       }
     } catch (err) {
-      console.warn('Supabase Storage upload error, falling back to base64 preview:', err);
+      console.warn('Supabase Storage upload error, falling back to local server upload:', err);
+    }
+  }
+
+  // Si Supabase falla o no está configurado, subir al servidor VPS vía /api/upload
+  if (typeof window !== 'undefined') {
+    try {
+      const formData = new FormData();
+      formData.append('file', blob, `image.${ext}`);
+      formData.append('folder', bucket);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.url) {
+          return json.url;
+        }
+      }
+    } catch (uploadErr) {
+      console.warn('Local VPS upload failed, fallback to base64:', uploadErr);
     }
   }
 
@@ -546,6 +584,25 @@ export async function uploadImageToStorage(file: File, bucket = 'diecast-media')
 // DATA SERVICES: EVENTS (AGENDA DE FERIAS Y EVENTOS DIECAST)
 // ==============================================================================
 export async function fetchEvents(activeOnly = false): Promise<DiecastEvent[]> {
+  // 1. Intentar API interna conectada a PostgreSQL del VPS
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch(`/api/db?resource=events${activeOnly ? '&activeOnly=true' : ''}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          if (!activeOnly) {
+            setLocalData(STORAGE_KEYS.EVENTS, data);
+          }
+          return data as DiecastEvent[];
+        }
+      }
+    } catch {
+      // Continuar al siguiente fallback
+    }
+  }
+
+  // 2. Intentar Supabase si está disponible
   if (isSupabaseConfigured && supabase) {
     try {
       let query = supabase
