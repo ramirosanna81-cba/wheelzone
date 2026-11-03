@@ -94,17 +94,17 @@ export default function ProductCard({ product, onOpenModal, priority = false }: 
         <div className="flex flex-col gap-2 pt-2 border-t border-surface-container">
           <div className="flex items-baseline justify-between">
             <span className="font-label-price text-lg sm:text-2xl text-primary-container">
-              ${product.precio.toLocaleString('es-AR')}
+              ${Number(product.precio || 0).toLocaleString('es-AR')}
             </span>
             <span className="font-label-telemetry text-[10px] sm:text-xs text-outline">
-              {product.stock > 0 ? `STOCK: ${product.stock}` : 'AGOTADO'}
+              {Number(product.stock || 0) > 0 ? `STOCK: ${product.stock}` : 'AGOTADO'}
             </span>
           </div>
 
           {/* 3 Cuotas Sin Interés */}
           <div className="flex items-center gap-1 text-[11px] font-label-telemetry text-cyan-400 font-bold">
             <span className="material-symbols-outlined text-xs">credit_card</span>
-            <span>3 cuotas sin interés de ${Math.round(product.precio / 3).toLocaleString('es-AR')}</span>
+            <span>3 cuotas sin interés de ${Math.round(Number(product.precio || 0) / 3).toLocaleString('es-AR')}</span>
           </div>
 
           <div className="grid grid-cols-2 gap-1.5 sm:gap-2">

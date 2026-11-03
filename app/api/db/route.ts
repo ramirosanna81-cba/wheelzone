@@ -13,7 +13,12 @@ export async function GET(request: NextRequest) {
   try {
     if (resource === 'products') {
       const res = await pool.query('SELECT * FROM public.products ORDER BY created_at DESC;');
-      return NextResponse.json(res.rows);
+      const products = res.rows.map((p: any) => ({
+        ...p,
+        precio: typeof p.precio === 'string' ? parseFloat(p.precio) : Number(p.precio) || 0,
+        stock: typeof p.stock === 'string' ? parseInt(p.stock, 10) : Number(p.stock) || 0,
+      }));
+      return NextResponse.json(products);
     }
 
     if (resource === 'events') {
@@ -134,3 +139,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
+

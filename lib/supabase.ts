@@ -56,8 +56,13 @@ export async function fetchProducts(): Promise<Product[]> {
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
-          setLocalData(STORAGE_KEYS.PRODUCTS, data);
-          return data as Product[];
+          const sanitized = data.map((p: any) => ({
+            ...p,
+            precio: typeof p.precio === 'string' ? parseFloat(p.precio) : Number(p.precio) || 0,
+            stock: typeof p.stock === 'string' ? parseInt(p.stock, 10) : Number(p.stock) || 0,
+          }));
+          setLocalData(STORAGE_KEYS.PRODUCTS, sanitized);
+          return sanitized as Product[];
         }
       }
     } catch {
