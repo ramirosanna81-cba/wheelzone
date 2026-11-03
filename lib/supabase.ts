@@ -532,6 +532,28 @@ export async function uploadImageToStorage(file: File, bucket = 'diecast-media')
   // Comprimir y convertir automáticamente a WebP antes de enviar
   const { blob, ext } = await compressImageToWebP(file, 1200, 0.85);
 
+  // 1. PRIORIDAD: Subir directamente al almacenamiento persistente del VPS vía /api/upload
+  if (typeof window !== 'undefined') {
+    try {
+      const formData = new FormData();
+      formData.append('file', blob, `image.${ext}`);
+      formData.append('folder', bucket);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.url) {
+          return json.url;
+        }
+      }
+    } catch (uploadErr) {
+      console.warn('Local VPS upload failed, checking fallback:', uploadErr);
+    }
+  }
+
+  // 2. Fallback secundario a Supabase (solo si el endpoint del VPS no respondiera)
   if (isSupabaseConfigured && supabase) {
     try {
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${ext}`;
@@ -550,28 +572,7 @@ export async function uploadImageToStorage(file: File, bucket = 'diecast-media')
         return data.publicUrl;
       }
     } catch (err) {
-      console.warn('Supabase Storage upload error, falling back to local server upload:', err);
-    }
-  }
-
-  // Si Supabase falla o no está configurado, subir al servidor VPS vía /api/upload
-  if (typeof window !== 'undefined') {
-    try {
-      const formData = new FormData();
-      formData.append('file', blob, `image.${ext}`);
-      formData.append('folder', bucket);
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      if (res.ok) {
-        const json = await res.json();
-        if (json.url) {
-          return json.url;
-        }
-      }
-    } catch (uploadErr) {
-      console.warn('Local VPS upload failed, fallback to base64:', uploadErr);
+      console.warn('Supabase Storage upload error:', err);
     }
   }
 
