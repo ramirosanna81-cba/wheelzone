@@ -92,6 +92,25 @@ export async function fetchProducts(): Promise<Product[]> {
 }
 
 export async function createProduct(product: Omit<Product, 'id' | 'created_at'>): Promise<Product> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/db', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resource: 'products', action: 'create', payload: product })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.product) {
+          const current = getLocalData<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+          setLocalData(STORAGE_KEYS.PRODUCTS, [json.product, ...current]);
+          return json.product as Product;
+        }
+      }
+    } catch (e) {
+      console.warn('VPS createProduct fallback:', e);
+    }
+  }
   const newProduct: Product = {
     ...product,
     id: `prod-${Date.now()}`,
@@ -158,6 +177,22 @@ export async function updateProduct(
 }
 
 export async function deleteProduct(id: string): Promise<{ success: boolean; error?: string }> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/db', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resource: 'products', action: 'delete', payload: { id } })
+      });
+      if (res.ok) {
+        const current = getLocalData<Product[]>(STORAGE_KEYS.PRODUCTS, INITIAL_PRODUCTS);
+        setLocalData(STORAGE_KEYS.PRODUCTS, current.filter((p) => p.id !== id));
+        return { success: true };
+      }
+    } catch (e) {
+      console.warn('VPS deleteProduct fallback:', e);
+    }
+  }
   if (isSupabaseConfigured && supabase) {
     try {
       // Intentar borrado en Supabase
@@ -733,6 +768,22 @@ export async function updateEvent(
 }
 
 export async function deleteEvent(id: string): Promise<{ success: boolean; error?: string }> {
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/db', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resource: 'events', action: 'delete', payload: { id } })
+      });
+      if (res.ok) {
+        const current = getLocalData<DiecastEvent[]>(STORAGE_KEYS.EVENTS, INITIAL_EVENTS);
+        setLocalData(STORAGE_KEYS.EVENTS, current.filter((e) => e.id !== id));
+        return { success: true };
+      }
+    } catch (e) {
+      console.warn('VPS deleteEvent fallback:', e);
+    }
+  }
   if (isSupabaseConfigured && supabase) {
     try {
       const { data, error } = await supabase
