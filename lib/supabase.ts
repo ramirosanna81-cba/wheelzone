@@ -52,7 +52,7 @@ export async function fetchProducts(): Promise<Product[]> {
   // 1. Intentar API interna conectada a PostgreSQL del VPS
   if (typeof window !== 'undefined') {
     try {
-      const res = await fetch('/api/db?resource=products');
+      const res = await fetch('/api/db?resource=products', { cache: 'no-store' });
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
